@@ -64,6 +64,27 @@ const tools = [
   ["IA asistida", "Narrativa ejecutiva y remediación sugerida, sujeta a revisión técnica."],
 ];
 
+
+const scanModes = [
+  ["Sin ZAP activo", "Reconocimiento y validaciones controladas de menor impacto relativo, sin activar ZAP activo."],
+  ["Solo Web", "Foco en portales, aplicaciones y superficie HTTP/HTTPS dentro del scope autorizado."],
+  ["Completo", "Análisis más amplio, incluyendo revisión web con ZAP cuando existe autorización válida."],
+];
+
+const moduleIcons: Record<string, string> = {
+  "Scopes autorizados": "◎",
+  "Ownership verification": "✓",
+  "Approval Gate": "▣",
+  "Auditoría y trazabilidad": "≡",
+  "Scan Wizard": "▶",
+  "Motor de escaneo": "⚙",
+  "Hallazgos priorizados": "!",
+  "Dashboard ejecutivo": "◫",
+  "Reportes ejecutivos y técnicos": "▤",
+  "Equipo y roles": "◉",
+  "API Keys y Webhooks": "{}",
+};
+
 const faqs = [
   ["¿TCDX ThreatWatch reemplaza a un pentester?", "No. Apoya reconocimiento, escaneo, análisis, priorización y reportabilidad. Los resultados deben ser revisados por responsables técnicos o especialistas de seguridad."],
   ["¿Garantiza que mi empresa queda segura?", "No. Ninguna herramienta puede garantizar ausencia total de vulnerabilidades. La plataforma mejora visibilidad, priorización y seguimiento dentro del alcance autorizado."],
@@ -276,6 +297,29 @@ export default function Page() {
         />
       </section>
 
+      <section className="section approval-report-section">
+        <div className="approval-card visual-card-large">
+          <div>
+            <p className="eyebrow">Approval Gate</p>
+            <h2>El scan no parte si falta alcance, ownership o aprobación válida.</h2>
+            <p>
+              El diferencial de ThreatWatch está en controlar el proceso antes de ejecutar. La plataforma está diseñada para bloquear revisiones sensibles si no existe autorización trazable.
+            </p>
+          </div>
+          <img src="/visual-approval-gate.svg" alt="Flujo visual de approval gate con scope, ownership y token de aprobación" loading="lazy" />
+        </div>
+        <div className="report-card visual-card-large">
+          <div>
+            <p className="eyebrow">Reporte ejecutivo</p>
+            <h2>De hallazgos técnicos a una lectura ejecutiva para priorizar.</h2>
+            <p>
+              El reporte resume severidades, exposición, evidencia y próximos pasos para facilitar conversación entre dirección, TI, seguridad y cumplimiento.
+            </p>
+          </div>
+          <img src="/visual-executive-report.svg" alt="Mockup de reporte ejecutivo con severidades y remediación" loading="lazy" />
+        </div>
+      </section>
+
       <section className="section exec-tech-section">
         <SectionTitle
           eyebrow="Dos niveles de lectura"
@@ -334,7 +378,8 @@ export default function Page() {
               <h3>{group.group}</h3>
               <div className="cards compact-cards">
                 {group.items.map(([title, text, tag]) => (
-                  <article className="card" key={title}>
+                  <article className="card module-card" key={title}>
+                    <div className="module-icon" aria-hidden="true">{moduleIcons[title] ?? "•"}</div>
                     <span>{tag}</span>
                     <h3>{title}</h3>
                     <p>{text}</p>
@@ -373,6 +418,37 @@ export default function Page() {
               <span>{text}</span>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="section scan-modes-section">
+        <SectionTitle
+          eyebrow="Modos de evaluación"
+          title="Tres formas de revisar, siempre sujetas a alcance y autorización."
+          text="La selección del modo permite ajustar profundidad técnica, impacto relativo y controles de ejecución según el activo evaluado."
+        />
+        <div className="scan-mode-cards">
+          {scanModes.map(([title, text]) => (
+            <article key={title}>
+              <span>{title}</span>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section remediation-strip-section">
+        <div className="remediation-strip">
+          <p className="eyebrow">Seguimiento</p>
+          <h2>Del hallazgo a la remediación.</h2>
+          <div className="remediation-flow" aria-label="Flujo de remediación">
+            <span>Detectar</span><i />
+            <span>Priorizar</span><i />
+            <span>Explicar</span><i />
+            <span>Reportar</span><i />
+            <span>Remediar</span><i />
+            <span>Revalidar</span>
+          </div>
         </div>
       </section>
 
