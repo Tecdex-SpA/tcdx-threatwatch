@@ -12,15 +12,15 @@ const moduleGroups = [
     group: "Ejecución técnica",
     items: [
       ["Scan Wizard", "Creación guiada con confirmación ética, modo de evaluación y alcance permitido.", "Operación"],
-      ["Motor de escaneo", "Pipeline con Subfinder, Nmap, Nuclei, OWASP ZAP y Nikto según autorización.", "Pipeline"],
-      ["Hallazgos priorizados", "Severidad, CVE/CWE, evidencia, impacto técnico, impacto de negocio y remediación.", "Riesgo"],
+      ["Motor de escaneo", "Orquestación de reconocimiento, validaciones web y revisión de exposición según autorización.", "Pipeline"],
+      ["Hallazgos priorizados", "Severidad, severidad, evidencia, impacto técnico, impacto de negocio y remediación.", "Riesgo"],
     ],
   },
   {
     group: "Operación y reportabilidad",
     items: [
       ["Dashboard ejecutivo", "Métricas de scans, severidades, actividad reciente y evolución de exposición.", "Visibilidad"],
-      ["Reportes ejecutivos y técnicos", "Material para dirección, TI, seguridad y seguimiento en HTML, PDF o Markdown.", "Reporte"],
+      ["Reportes ejecutivos y técnicos", "Material para dirección, TI, seguridad y seguimiento en formatos exportables según plan.", "Reporte"],
       ["Equipo y roles", "Roles owner, admin, analyst y viewer para operación multi-tenant.", "SaaS B2B"],
       ["API Keys y Webhooks", "Integraciones y acceso programático según plan, madurez y alcance comercial.", "Integración"],
     ],
@@ -32,7 +32,7 @@ const steps = [
   ["02", "Valide ownership", "Confirme propiedad o autorización mediante DNS TXT o evidencia revisable."],
   ["03", "Apruebe el scan", "Genere aprobación controlada antes de ejecutar pruebas sensibles."],
   ["04", "Ejecute con control", "Seleccione modo de scan y restricciones según el scope permitido."],
-  ["05", "Priorice hallazgos", "Revise severidad, evidencia, impacto, CVE/CWE y contexto técnico."],
+  ["05", "Priorice hallazgos", "Revise severidad, evidencia, impacto, evidencia, severidad y contexto técnico."],
   ["06", "Reporte y siga", "Genere reportes ejecutivos/técnicos y mantenga seguimiento histórico."],
 ];
 
@@ -54,14 +54,12 @@ const benefits = [
   "Seguimiento histórico para remediación, hardening y consultoría.",
 ];
 
-const tools = [
-  ["Subfinder", "Reconocimiento de subdominios y superficie pública."],
-  ["Nmap", "Identificación de puertos, protocolos y servicios expuestos."],
-  ["Nuclei", "Detección basada en templates y patrones conocidos."],
-  ["OWASP ZAP", "Análisis web pasivo/activo bajo autorización explícita."],
-  ["Nikto", "Revisión web de configuraciones, archivos conocidos y exposición básica."],
-  ["NVD / OSV / CVE / CWE", "Enriquecimiento contextual de hallazgos cuando aplica."],
-  ["IA asistida", "Narrativa ejecutiva y remediación sugerida, sujeta a revisión técnica."],
+const capabilityLayers = [
+  ["Reconocimiento controlado", "Identificación de superficie pública dentro de scopes autorizados, sin ampliar el alcance definido."],
+  ["Validación técnica", "Pruebas configuradas según modo, autorización y sensibilidad del activo evaluado."],
+  ["Correlación y priorización", "Agrupación de señales, severidades, evidencia y contexto para reducir ruido operativo."],
+  ["Enriquecimiento contextual", "Referencias CVE/CWE/OWASP y contexto técnico cuando aplica, sin asumir cobertura total."],
+  ["Narrativa asistida", "Resumen ejecutivo y remediación sugerida, siempre sujeto a revisión técnica."],
 ];
 
 
@@ -92,7 +90,7 @@ const faqs = [
   ["¿Qué necesito para comenzar?", "Definir activos a evaluar, confirmar ownership o autorización, acordar un scope inicial y ejecutar una demo controlada con TECDEX."],
   ["¿Qué reportes genera?", "Reportes ejecutivos y técnicos con hallazgos, severidad, evidencia, impacto y recomendaciones de remediación, según alcance y configuración."],
   ["¿Sirve para gerencia?", "Sí. Traduce hallazgos técnicos en información priorizada para apoyar decisiones de riesgo, inversión y remediación."],
-  ["¿Sirve para equipos técnicos?", "Sí. Los hallazgos pueden incluir evidencia, servicios afectados, severidad, CVE/CWE, impacto técnico y pasos de validación o remediación."],
+  ["¿Sirve para equipos técnicos?", "Sí. Los hallazgos pueden incluir evidencia, servicios afectados, severidad, referencias técnicas, impacto, evidencia y pasos de validación o remediación."],
   ["¿Se conecta con herramientas externas?", "El producto contempla API Keys y Webhooks como capacidades de integración, sujetas al plan y nivel de madurez del despliegue."],
   ["¿Requiere autorización?", "Sí. Todo scan debe ejecutarse sobre activos propios o autorizados, con alcance controlado y trazabilidad."],
   ["¿Qué diferencia hay entre Sin ZAP, Completo y Solo Web?", "Sin ZAP evita ZAP activo y usa reconocimiento/validación controlada. Completo incorpora análisis web con ZAP según autorización. Solo Web se orienta a superficie web."],
@@ -320,6 +318,37 @@ export default function Page() {
         </div>
       </section>
 
+      <section className="section safe-ops-section">
+        <SectionTitle
+          eyebrow="Exposición pública controlada"
+          title="Mostramos el modelo operativo sin publicar detalles sensibles del pipeline."
+          text="La landing pública debe explicar el enfoque —alcance, autorización, evidencia y reporte— sin entregar una guía técnica completa de ejecución. El detalle de herramientas, parámetros y profundidad se revisa en demo técnica o propuesta bajo alcance acordado."
+        />
+        <div className="safe-visual-grid">
+          <VisualFigure
+            src="/visual-control-layers.svg"
+            alt="Capas de control de TCDX ThreatWatch: scope, ownership, aprobación, ejecución y reporte"
+            label="Capas de control"
+            title="Autorización antes de ejecución"
+            text="El foco público está en gobierno del proceso y trazabilidad, no en exponer una receta operacional."
+          />
+          <VisualFigure
+            src="/visual-risk-priority.svg"
+            alt="Priorización de riesgo con severidades y evidencia"
+            label="Priorización"
+            title="Severidad, evidencia y contexto"
+            text="La propuesta se entiende mejor mostrando cómo se prioriza, no listando cada herramienta interna."
+          />
+          <VisualFigure
+            src="/visual-operation-model.svg"
+            alt="Modelo de servicio SaaS y servicio gestionado TECDEX"
+            label="Modelo de operación"
+            title="SaaS o servicio gestionado"
+            text="La plataforma puede operar con equipo interno, consultores o acompañamiento gestionado por TECDEX."
+          />
+        </div>
+      </section>
+
       <section className="section exec-tech-section">
         <SectionTitle
           eyebrow="Dos niveles de lectura"
@@ -332,7 +361,7 @@ export default function Page() {
           </article>
           <article>
             <h3>Para equipos técnicos</h3>
-            <p>Host, puerto, servicio, CVE, CWE, OWASP, evidencia, raw output, impacto técnico y pasos de validación o remediación cuando existan.</p>
+            <p>Host, puerto, servicio, evidencia, referencias técnicas, impacto, contexto del servicio afectado y pasos de validación o remediación cuando existan.</p>
           </article>
         </div>
       </section>
@@ -394,9 +423,9 @@ export default function Page() {
       <section id="tecnico" className="section technical-section">
         <div>
           <p className="eyebrow">Motor técnico</p>
-          <h2>Herramientas reconocidas, orquestadas con alcance y autorización.</h2>
+          <h2>Motor técnico explicado por capacidades, no por exposición innecesaria de operación.</h2>
           <p>
-            El pipeline combina reconocimiento, validaciones controladas, deduplicación, enriquecimiento y narrativa asistida. El uso de pruebas activas se comunica y controla según autorización explícita y configuración del scope.
+            La plataforma combina reconocimiento, validación controlada, correlación, enriquecimiento y reportabilidad. En la landing pública se comunica el método de trabajo a nivel de capacidades; el detalle de herramientas, parámetros y profundidad queda para una demo técnica bajo alcance autorizado.
           </p>
           <div className="mode-grid">
             <div><strong>Sin ZAP</strong><span>Reconocimiento y pruebas controladas sin ZAP activo.</span></div>
@@ -408,13 +437,13 @@ export default function Page() {
             alt="Modos de escaneo controlado sin ZAP, solo web y completo"
             label="Modos de ejecución"
             title="Cada revisión se ajusta al alcance autorizado"
-            text="La visualización evita convertir herramientas internas en promesas absolutas y mantiene foco en control."
+            text="La explicación pública prioriza controles, alcance y resultados, evitando exponer detalles operativos sensibles."
           />
         </div>
-        <div className="tool-list">
-          {tools.map(([tool, text]) => (
-            <div key={tool}>
-              <strong>{tool}</strong>
+        <div className="tool-list capability-list">
+          {capabilityLayers.map(([layer, text]) => (
+            <div key={layer}>
+              <strong>{layer}</strong>
               <span>{text}</span>
             </div>
           ))}

@@ -590,3 +590,22 @@ details,
   .scan-mode-cards { grid-template-columns: 1fr; }
   .remediation-flow i { display: none; }
 }
+
+/* v7 safer public messaging and additional visuals */
+.safe-ops-section .section-title {
+  max-width: 860px;
+}
+.safe-visual-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.safe-visual-grid .visual-figure {
+  min-height: 100%;
+}
+.capability-list div {
+  background: linear-gradient(180deg, rgba(34,211,238,0.065), rgba(6,17,31,0.55));
+}
+@media (max-width: 1120px) {
+  .safe-visual-grid { grid-template-columns: 1fr; }
+}
