@@ -54,6 +54,34 @@ const benefits = [
   "Seguimiento histórico para remediación, hardening y consultoría.",
 ];
 
+const initialReviewItems = [
+  "Scope inicial definido y autorizado.",
+  "Validación de ownership o evidencia de autorización.",
+  "Revisión controlada según modo acordado.",
+  "Hallazgos priorizados por severidad e impacto.",
+  "Resumen ejecutivo para dirección.",
+  "Detalle técnico para TI, seguridad o consultores.",
+  "Recomendaciones de remediación y próximos pasos.",
+  "Opción de seguimiento o servicio gestionado TECDEX.",
+];
+
+const selfAssessmentItems = [
+  "Tienes sitio web, portal o API pública.",
+  "Usas subdominios para ambientes, clientes o integraciones.",
+  "Tienes servicios publicados hacia internet.",
+  "Has migrado sistemas o cambiado proveedores recientemente.",
+  "Necesitas reportar riesgos a gerencia.",
+  "Tienes auditorías, compliance o clientes que exigen evidencia.",
+];
+
+const useCases = [
+  ["SaaS", "Revisar portales, APIs, subdominios y servicios expuestos antes o después de despliegues relevantes."],
+  ["Fintech", "Apoyar controles de exposición, evidencia técnica y seguimiento de remediación sobre activos autorizados."],
+  ["Educación", "Revisar sitios, portales, plataformas y servicios públicos con enfoque de continuidad y protección de datos."],
+  ["Pymes", "Obtener una visión clara de exposición pública sin depender solo de revisiones manuales ocasionales."],
+  ["Consultores", "Generar reportabilidad, seguimiento y evidencia para clientes bajo alcance autorizado."],
+];
+
 const capabilityLayers = [
   ["Reconocimiento controlado", "Identificación de superficie pública dentro de scopes autorizados, sin ampliar el alcance definido."],
   ["Validación técnica", "Pruebas configuradas según modo, autorización y sensibilidad del activo evaluado."],
@@ -171,8 +199,8 @@ export default function Page() {
             <span>Se trata de controlar alcance, autorización, evidencia, hallazgos, trazabilidad y reportes para tomar mejores decisiones de seguridad.</span>
           </div>
           <div className="cta-row">
-            <a className="button primary" href="#demo">Solicitar demo controlada</a>
-            <a className="button secondary" href="#funciona">Ver cómo funciona</a>
+            <a className="button primary" href="#demo">Evaluar mis activos expuestos</a>
+            <a className="button secondary" href="#reporte-ejemplo">Ver ejemplo de reporte</a>
           </div>
           <div className="trust-row" aria-label="Puntos de control principales">
             <span>Scopes autorizados</span>
@@ -293,7 +321,35 @@ export default function Page() {
         />
       </section>
 
-      <section className="section approval-report-section">
+      <section className="section initial-review-section">
+        <SectionTitle
+          eyebrow="Resultado esperado"
+          title="Qué recibe una empresa en una revisión inicial."
+          text="La demo controlada busca entregar una primera lectura útil, con alcance acordado y material accionable para decidir próximos pasos."
+        />
+        <div className="initial-review-grid">
+          {initialReviewItems.map((item) => (
+            <div key={item}>{item}</div>
+          ))}
+        </div>
+      </section>
+
+      <section className="section self-assessment-section">
+        <div className="self-assessment-card">
+          <div>
+            <p className="eyebrow">Autodiagnóstico</p>
+            <h2>¿Tiene sentido revisar tu superficie expuesta?</h2>
+            <p>Si tu organización cumple dos o más de estas condiciones, una revisión controlada puede ayudar a ordenar visibilidad, evidencia y priorización.</p>
+          </div>
+          <div className="assessment-list">
+            {selfAssessmentItems.map((item) => (
+              <span key={item}>{item}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="reporte-ejemplo" className="section approval-report-section">
         <div className="approval-card visual-card-large">
           <div>
             <p className="eyebrow">Approval Gate</p>
@@ -518,15 +574,31 @@ export default function Page() {
         </div>
       </section>
 
+      <section className="section use-cases-section">
+        <SectionTitle
+          eyebrow="Casos de uso"
+          title="Aplicable a organizaciones con activos públicos, APIs, portales o exigencias de reporte."
+        />
+        <div className="use-case-grid">
+          {useCases.map(([title, text]) => (
+            <article key={title}>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section className="section managed-strip-section">
-        <div className="managed-strip">
+        <div className="managed-strip managed-strip-strong">
           <div>
             <p className="eyebrow">Servicio gestionado TECDEX</p>
-            <h2>También puede operar como servicio acompañado.</h2>
+            <h2>No necesitas operar todo internamente.</h2>
           </div>
           <p>
-            TECDEX puede operar la plataforma, revisar hallazgos, entregar reportes y acompañar la remediación según el alcance comercial acordado.
+            TECDEX puede acompañar el proceso completo: definición de scope, validación, ejecución controlada, revisión de hallazgos, reporte ejecutivo/técnico y plan de remediación. Es una opción adecuada para empresas que necesitan visibilidad periódica sin formar un equipo interno de pentesting.
           </p>
+          <a className="button secondary" href="#demo">Quiero servicio gestionado</a>
         </div>
       </section>
 
@@ -578,6 +650,24 @@ export default function Page() {
               <option>Empresa regulada</option>
               <option>Consultoría de seguridad</option>
               <option>Otra</option>
+            </select>
+          </label>
+          <label>Qué necesitas resolver
+            <select name="necesidad">
+              <option>Revisar superficie expuesta</option>
+              <option>Obtener reporte para gerencia</option>
+              <option>Preparar auditoría o cumplimiento</option>
+              <option>Revisar portal o API</option>
+              <option>Evaluar servicio gestionado</option>
+              <option>Otro</option>
+            </select>
+          </label>
+          <label>Urgencia estimada
+            <select name="urgencia">
+              <option>Esta semana</option>
+              <option>Este mes</option>
+              <option>Próximo trimestre</option>
+              <option>Solo explorando</option>
             </select>
           </label>
           <label>Mensaje<textarea name="mensaje" rows={4} /></label>
