@@ -318,9 +318,9 @@ export default function Page() {
 
       <section className="section safe-ops-section">
         <SectionTitle
-          eyebrow="Exposición pública controlada"
-          title="Comunicamos el modelo operativo sin publicar detalles sensibles."
-          text="La página explica cómo se gobierna el proceso —alcance, autorización, evidencia y reporte— dejando herramientas, parámetros y profundidad para una demo técnica bajo alcance acordado."
+          eyebrow="Gobierno del proceso"
+          title="Cada revisión debe tener alcance, autorización y evidencia."
+          text="La plataforma ayuda a definir qué activos pueden evaluarse, validar autorización, ejecutar revisiones controladas y transformar hallazgos en reportes útiles para dirección y equipos técnicos."
         />
         <div className="safe-visual-grid">
           <VisualFigure
