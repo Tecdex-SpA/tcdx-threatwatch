@@ -1,48 +1,29 @@
-const modules = [
+const moduleGroups = [
   {
-    title: "Dashboard ejecutivo",
-    text: "Vista de exposición, severidades, actividad reciente y evolución de scans para dirección, TI y seguridad.",
-    tag: "Visibilidad",
+    group: "Gobierno y autorización",
+    items: [
+      ["Scopes autorizados", "Dominios, IPs, CIDR y activos permitidos antes de iniciar revisiones.", "Alcance"],
+      ["Ownership verification", "Validación DNS TXT o evidencia manual para respaldar propiedad o autorización.", "Control"],
+      ["Approval Gate", "Bloqueo preventivo si no existe scope, ownership y aprobación válida.", "Autorización"],
+      ["Auditoría y trazabilidad", "Registro de aprobaciones, verificaciones, tokens y acciones relevantes.", "Evidencia"],
+    ],
   },
   {
-    title: "Scopes autorizados",
-    text: "Registro formal de dominios, IPs, CIDR y activos permitidos antes de iniciar cualquier revisión.",
-    tag: "Alcance",
+    group: "Ejecución técnica",
+    items: [
+      ["Scan Wizard", "Creación guiada con confirmación ética, modo de evaluación y alcance permitido.", "Operación"],
+      ["Motor de escaneo", "Pipeline con Subfinder, Nmap, Nuclei, OWASP ZAP y Nikto según autorización.", "Pipeline"],
+      ["Hallazgos priorizados", "Severidad, CVE/CWE, evidencia, impacto técnico, impacto de negocio y remediación.", "Riesgo"],
+    ],
   },
   {
-    title: "Ownership verification",
-    text: "Validación mediante DNS TXT o evidencia manual para respaldar propiedad, autorización y trazabilidad.",
-    tag: "Control",
-  },
-  {
-    title: "Approval Gate",
-    text: "Bloqueo preventivo si no existe scope, ownership vigente y aprobación válida asociada al tenant y target.",
-    tag: "Autorización",
-  },
-  {
-    title: "Scan Wizard",
-    text: "Creación guiada de scans con confirmación ética, modo de evaluación y alcance permitido.",
-    tag: "Operación",
-  },
-  {
-    title: "Motor técnico",
-    text: "Pipeline con Subfinder, Nmap, Nuclei, OWASP ZAP y Nikto, aplicado según autorización y configuración.",
-    tag: "Pipeline",
-  },
-  {
-    title: "Hallazgos priorizados",
-    text: "Severidad, CVE/CWE, evidencia, impacto técnico, impacto de negocio y remediación sugerida.",
-    tag: "Riesgo",
-  },
-  {
-    title: "Reportes ejecutivos y técnicos",
-    text: "Material para dirección, equipos TI, seguridad y seguimiento interno en formatos HTML, PDF o Markdown.",
-    tag: "Reporte",
-  },
-  {
-    title: "Equipo, API y trazabilidad",
-    text: "Roles por organización, API Keys e integraciones según plan, con auditoría de acciones relevantes.",
-    tag: "SaaS B2B",
+    group: "Operación y reportabilidad",
+    items: [
+      ["Dashboard ejecutivo", "Métricas de scans, severidades, actividad reciente y evolución de exposición.", "Visibilidad"],
+      ["Reportes ejecutivos y técnicos", "Material para dirección, TI, seguridad y seguimiento en HTML, PDF o Markdown.", "Reporte"],
+      ["Equipo y roles", "Roles owner, admin, analyst y viewer para operación multi-tenant.", "SaaS B2B"],
+      ["API Keys y Webhooks", "Integraciones y acceso programático según plan, madurez y alcance comercial.", "Integración"],
+    ],
   },
 ];
 
@@ -122,6 +103,20 @@ function SeverityBadge({ label }: { label: string }) {
   return <span className={`severity severity-${label.toLowerCase()}`}>{label}</span>;
 }
 
+
+function VisualFigure({ src, alt, label, title, text }: { src: string; alt: string; label: string; title: string; text: string }) {
+  return (
+    <figure className="visual-figure">
+      <img src={src} alt={alt} loading="lazy" />
+      <figcaption>
+        <span>{label}</span>
+        <strong>{title}</strong>
+        <p>{text}</p>
+      </figcaption>
+    </figure>
+  );
+}
+
 function SectionTitle({ eyebrow, title, text }: { eyebrow: string; title: string; text?: string }) {
   return (
     <div className="section-title">
@@ -150,10 +145,14 @@ export default function Page() {
       <section className="hero">
         <div className="hero-copy">
           <div className="badge">Pentesting continuo y gestión de superficie expuesta</div>
-          <h1>Controle alcance, autorización y reportes antes de escanear.</h1>
+          <h1>Pentesting continuo para activos expuestos, con alcance autorizado y reportes claros.</h1>
           <p className="lead">
-            TCDX ThreatWatch by TECDEX ayuda a empresas a revisar activos expuestos con scopes autorizados, validación de ownership, approval gate, hallazgos priorizados y reportabilidad ejecutiva/técnica.
+            TCDX ThreatWatch by TECDEX ayuda a empresas a revisar periódicamente dominios, subdominios, APIs y servicios publicados, con scopes autorizados, validación de ownership, hallazgos priorizados y reportabilidad ejecutiva/técnica.
           </p>
+          <div className="positioning-note">
+            <strong>No se trata solo de escanear.</strong>
+            <span>Se trata de controlar alcance, autorización, evidencia, hallazgos, trazabilidad y reportes para tomar mejores decisiones de seguridad.</span>
+          </div>
           <div className="cta-row">
             <a className="button primary" href="#demo">Solicitar demo controlada</a>
             <a className="button secondary" href="#funciona">Ver cómo funciona</a>
@@ -193,7 +192,7 @@ export default function Page() {
                 <div><strong>92%</strong><span>Scopes OK</span></div>
               </div>
               <div className="pipeline-mini">
-                {['Scope','Ownership','Approval','Scan','Findings','Reporte'].map((item) => <span key={item}>{item}</span>)}
+                <span>Scope</span><span>Ownership</span><span>Approval</span><span>Scan</span><span>Findings</span><span>Reporte</span>
               </div>
               <div className="finding-card">
                 <div>
@@ -228,11 +227,20 @@ export default function Page() {
             Dominios, subdominios, APIs, portales, puertos y servicios públicos pueden quedar expuestos por cambios operativos, integraciones, despliegues o configuraciones heredadas. El problema no es solo detectar hallazgos: es saber qué estaba autorizado, qué se revisó, qué evidencia existe y qué debe priorizarse.
           </p>
         </div>
-        <div className="pain-grid">
-          <div>Escaneos manuales esporádicos</div>
-          <div>Reportes técnicos difíciles para gerencia</div>
-          <div>Hallazgos sin seguimiento histórico</div>
-          <div>Scope y autorización poco trazables</div>
+        <div className="problem-visual-stack">
+          <div className="pain-grid compact-pain">
+            <div>Superficie pública difícil de mantener visible</div>
+            <div>Revisiones manuales esporádicas</div>
+            <div>Reportes técnicos difíciles de llevar a gerencia</div>
+            <div>Hallazgos sin trazabilidad ni seguimiento</div>
+          </div>
+          <VisualFigure
+            src="/visual-exposure-map.svg"
+            alt="Mapa conceptual de superficie expuesta con dominios, APIs y servicios publicados"
+            label="Superficie expuesta"
+            title="Dominios, APIs y servicios en una vista controlada"
+            text="Una representación visual ayuda a explicar exposición y priorización sin saturar la lectura técnica."
+          />
         </div>
       </section>
 
@@ -242,12 +250,46 @@ export default function Page() {
           title="Una plataforma para controlar el ciclo completo: alcance, ownership, aprobación, evidencia y reporte."
           text="TCDX ThreatWatch no se posiciona como un scanner aislado. Ordena el proceso de revisión sobre activos propios o autorizados, entrega evidencia técnica y convierte resultados en material accionable para dirección y equipos técnicos."
         />
-        <div className="value-strip">
-          <span>Reconocimiento automatizado</span>
-          <span>Escaneo controlado</span>
-          <span>Hallazgos priorizados</span>
-          <span>Reportabilidad ejecutiva</span>
-          <span>Seguimiento histórico</span>
+        <div className="pillar-grid">
+          <article>
+            <span>01</span>
+            <h3>Alcance controlado</h3>
+            <p>Scopes, ownership y approval gate antes de ejecutar revisiones.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Hallazgos con evidencia</h3>
+            <p>Severidad, CVE/CWE, impacto, evidencia y remediación sugerida.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Reportabilidad accionable</h3>
+            <p>Reportes ejecutivos y técnicos para priorizar decisiones.</p>
+          </article>
+        </div>
+        <VisualFigure
+          src="/visual-report-flow.svg"
+          alt="Flujo desde hallazgos técnicos a reporte ejecutivo y seguimiento"
+          label="Reporte accionable"
+          title="De evidencia técnica a decisión ejecutiva"
+          text="El objetivo visual es reforzar que la plataforma conecta hallazgos, priorización, remediación y seguimiento."
+        />
+      </section>
+
+      <section className="section exec-tech-section">
+        <SectionTitle
+          eyebrow="Dos niveles de lectura"
+          title="Información clara para dirección y útil para equipos técnicos."
+        />
+        <div className="exec-tech-grid">
+          <article>
+            <h3>Para dirección</h3>
+            <p>Riesgo priorizado, tendencia de severidades, exposición visible, avance de remediación y material de apoyo para decisiones de inversión.</p>
+          </article>
+          <article>
+            <h3>Para equipos técnicos</h3>
+            <p>Host, puerto, servicio, CVE, CWE, OWASP, evidencia, raw output, impacto técnico y pasos de validación o remediación cuando existan.</p>
+          </article>
         </div>
       </section>
 
@@ -265,21 +307,41 @@ export default function Page() {
             </article>
           ))}
         </div>
+        <div className="pipeline-band" aria-label="Pipeline de control de ThreatWatch">
+          <span>Scope</span>
+          <i />
+          <span>Ownership</span>
+          <i />
+          <span>Approval</span>
+          <i />
+          <span>Scan</span>
+          <i />
+          <span>Findings</span>
+          <i />
+          <span>Reporte</span>
+        </div>
       </section>
 
       <section id="modulos" className="section">
         <SectionTitle
           eyebrow="Módulos"
-          title="Componentes comerciales y técnicos para una operación SaaS B2B controlada."
-          text="Cada módulo está orientado a reducir ambigüedad operativa: quién autorizó, qué activo se revisó, cómo se ejecutó, qué se encontró y cómo se reportó."
+          title="Componentes agrupados por gobierno, ejecución y reportabilidad."
+          text="La plataforma reduce ambigüedad operativa: quién autorizó, qué activo se revisó, cómo se ejecutó, qué se encontró y cómo se reportó."
         />
-        <div className="cards">
-          {modules.map((module) => (
-            <article className="card" key={module.title}>
-              <span>{module.tag}</span>
-              <h3>{module.title}</h3>
-              <p>{module.text}</p>
-            </article>
+        <div className="module-groups">
+          {moduleGroups.map((group) => (
+            <section className="module-group" key={group.group}>
+              <h3>{group.group}</h3>
+              <div className="cards compact-cards">
+                {group.items.map(([title, text, tag]) => (
+                  <article className="card" key={title}>
+                    <span>{tag}</span>
+                    <h3>{title}</h3>
+                    <p>{text}</p>
+                  </article>
+                ))}
+              </div>
+            </section>
           ))}
         </div>
       </section>
@@ -296,6 +358,13 @@ export default function Page() {
             <div><strong>Solo Web</strong><span>Foco en superficie web según alcance autorizado.</span></div>
             <div><strong>Completo</strong><span>Incluye análisis web con ZAP cuando existe autorización válida.</span></div>
           </div>
+          <VisualFigure
+            src="/visual-scan-modes.svg"
+            alt="Modos de escaneo controlado sin ZAP, solo web y completo"
+            label="Modos de ejecución"
+            title="Cada revisión se ajusta al alcance autorizado"
+            text="La visualización evita convertir herramientas internas en promesas absolutas y mantiene foco en control."
+          />
         </div>
         <div className="tool-list">
           {tools.map(([tool, text]) => (
@@ -351,6 +420,18 @@ export default function Page() {
         </div>
       </section>
 
+      <section className="section managed-strip-section">
+        <div className="managed-strip">
+          <div>
+            <p className="eyebrow">Servicio gestionado TECDEX</p>
+            <h2>También puede operar como servicio acompañado.</h2>
+          </div>
+          <p>
+            TECDEX puede operar la plataforma, revisar hallazgos, entregar reportes y acompañar la remediación según el alcance comercial acordado.
+          </p>
+        </div>
+      </section>
+
       <section className="section transparency">
         <p className="eyebrow">Transparencia y uso responsable</p>
         <blockquote>
@@ -382,8 +463,8 @@ export default function Page() {
           </div>
         </div>
         <form className="form" action="mailto:contacto@tecdex.cl" method="post" encType="text/plain">
-          <h3>Solicitar demo controlada</h3>
-          <p className="microcopy">Un especialista de TECDEX revisará tu caso y propondrá un alcance inicial seguro.</p>
+          <h3>Agenda una demo controlada</h3>
+          <p className="microcopy">Cuéntanos qué activos necesitas evaluar. TECDEX revisará el caso y propondrá un alcance inicial seguro.</p>
           <label>Empresa<input name="empresa" required /></label>
           <label>Nombre<input name="nombre" required /></label>
           <label>Cargo<input name="cargo" /></label>
@@ -404,6 +485,7 @@ export default function Page() {
           <label>Mensaje<textarea name="mensaje" rows={4} /></label>
           <label className="check"><input type="checkbox" required /> <span>Declaro que solicito información para evaluar activos propios o autorizados.</span></label>
           <button className="button primary" type="submit">Solicitar demo controlada</button>
+          <p className="microcopy">La demo no ejecuta scans automáticamente. Primero se valida alcance, ownership y autorización.</p>
         </form>
       </section>
 
