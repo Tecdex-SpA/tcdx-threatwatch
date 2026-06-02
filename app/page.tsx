@@ -71,6 +71,16 @@ function ShieldLogo() {
   );
 }
 
+function HeaderLogo() {
+  return (
+    <img
+      className="header-logo"
+      src="/logo-threatwatch-header.png"
+      alt="TCDX ThreatWatch by TECDEX"
+    />
+  );
+}
+
 function SeverityBadge({ label }: { label: string }) {
   return <span className={`severity severity-${label.toLowerCase()}`}>{label}</span>;
 }
@@ -79,9 +89,8 @@ export default function Page() {
   return (
     <main>
       <header className="nav">
-        <a href="#top" className="brand" aria-label="TCDX ThreatWatch by TECDEX">
-          <ShieldLogo />
-          <span>TCDX ThreatWatch <small>by TECDEX</small></span>
+        <a href="#top" className="brand brand-logo-only" aria-label="TCDX ThreatWatch by TECDEX">
+          <HeaderLogo />
         </a>
         <nav>
           <a href="#funciona">Cómo funciona</a>
