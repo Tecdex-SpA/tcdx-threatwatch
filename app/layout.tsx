@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     description: siteConfig.ogDescription,
     images: [
       {
-        url: "/og-threatwatch.svg",
+        url: "/og.png",
         width: 1200,
         height: 630,
         alt: "TCDX ThreatWatch by TECDEX - Pentesting continuo y gestión de exposición",
@@ -49,14 +49,12 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteConfig.ogTitle,
     description: siteConfig.ogDescription,
-    images: ["/og-threatwatch.svg"],
+    images: ["/og.png"],
   },
   icons: {
-    icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/logo-threatwatch-header.png", type: "image/png" },
-    ],
-    apple: [{ url: "/logo-threatwatch-header.png" }],
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    shortcut: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/favicon.svg", type: "image/svg+xml" }],
   },
   manifest: "/manifest.webmanifest",
 };
@@ -64,8 +62,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#06111f",
-  colorScheme: "dark",
+  themeColor: "#2B3944",
+  colorScheme: "light",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

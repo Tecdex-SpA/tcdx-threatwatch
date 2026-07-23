@@ -1,700 +1,428 @@
-const moduleGroups = [
-  {
-    group: "Gobierno y autorización",
-    items: [
-      ["Scopes autorizados", "Dominios, IPs, CIDR y activos permitidos antes de iniciar revisiones.", "Alcance"],
-      ["Ownership verification", "Validación DNS TXT o evidencia manual para respaldar propiedad o autorización.", "Control"],
-      ["Approval Gate", "Bloqueo preventivo si no existe scope, ownership y aprobación válida.", "Autorización"],
-      ["Auditoría y trazabilidad", "Registro de aprobaciones, verificaciones, tokens y acciones relevantes.", "Evidencia"],
-    ],
-  },
-  {
-    group: "Ejecución técnica",
-    items: [
-      ["Scan Wizard", "Creación guiada con confirmación ética, modo de evaluación y alcance permitido.", "Operación"],
-      ["Motor de escaneo", "Orquestación de reconocimiento, validaciones web y revisión de exposición según autorización.", "Pipeline"],
-      ["Hallazgos priorizados", "Severidad, evidencia, impacto técnico, impacto de negocio y remediación.", "Riesgo"],
-    ],
-  },
-  {
-    group: "Operación y reportabilidad",
-    items: [
-      ["Dashboard ejecutivo", "Métricas de scans, severidades, actividad reciente y evolución de exposición.", "Visibilidad"],
-      ["Reportes ejecutivos y técnicos", "Material para dirección, TI, seguridad y seguimiento en formatos exportables según plan.", "Reporte"],
-      ["Equipo y roles", "Roles owner, admin, analyst y viewer para operación multi-tenant.", "SaaS B2B"],
-      ["API Keys y Webhooks", "Integraciones y acceso programático según plan, madurez y alcance comercial.", "Integración"],
-    ],
-  },
+const controlSteps = [
+  ["01", "Definir el alcance", "Registramos dominios, IPs, APIs y servicios que pueden ser evaluados."],
+  ["02", "Validar autorización", "Confirmamos ownership o evidencia verificable antes de cualquier revisión."],
+  ["03", "Ejecutar con control", "Aplicamos el modo de evaluación acordado y respetamos el scope aprobado."],
+  ["04", "Priorizar y reportar", "Convertimos evidencia técnica en decisiones claras y próximos pasos."],
 ];
 
-const steps = [
-  ["01", "Defina alcance", "Registre dominios, IPs, CIDR o activos que pueden ser evaluados."],
-  ["02", "Valide ownership", "Confirme propiedad o autorización mediante DNS TXT o evidencia revisable."],
-  ["03", "Apruebe el scan", "Genere aprobación controlada antes de ejecutar pruebas sensibles."],
-  ["04", "Ejecute con control", "Seleccione modo de scan y restricciones según el scope permitido."],
-  ["05", "Priorice hallazgos", "Revise severidad, evidencia, impacto y contexto técnico."],
-  ["06", "Reporte y siga", "Genere reportes ejecutivos/técnicos y mantenga seguimiento histórico."],
+const capabilities = [
+  {
+    number: "01",
+    title: "Superficie expuesta",
+    text: "Visibilidad continua sobre dominios, subdominios, portales, APIs y servicios publicados.",
+    detail: "Inventario controlado",
+  },
+  {
+    number: "02",
+    title: "Gobierno del scan",
+    text: "Scopes, ownership verification y Approval Gate antes de ejecutar revisiones sensibles.",
+    detail: "Autorización trazable",
+  },
+  {
+    number: "03",
+    title: "Hallazgos accionables",
+    text: "Severidad, evidencia, impacto técnico, contexto de negocio y remediación sugerida.",
+    detail: "Menos ruido operativo",
+  },
+  {
+    number: "04",
+    title: "Reportabilidad",
+    text: "Una lectura ejecutiva para dirección y detalle útil para TI, seguridad y cumplimiento.",
+    detail: "Decisiones informadas",
+  },
 ];
 
 const audiences = [
-  ["Gerencia general", "Información ejecutiva para decidir inversión, riesgo y continuidad sin depender de lenguaje puramente técnico."],
-  ["Gerencia TI", "Visibilidad periódica de activos expuestos, servicios, puertos, aplicaciones y hallazgos priorizados."],
-  ["Seguridad / CISO", "Trazabilidad de autorización, evidencia técnica, seguimiento histórico y priorización de remediación."],
-  ["Cumplimiento", "Apoyo documental para auditorías internas, gestión de riesgos y revisión de controles."],
-  ["SaaS, fintech y educación", "Supervisión recurrente de portales, APIs, dominios, subdominios y servicios publicados."],
-  ["Consultores y DevSecOps", "Reportabilidad, evidencia y operación repetible para apoyar entregables y mejora continua."],
+  ["Gerencia", "Riesgo priorizado y una lectura clara para decidir inversión y continuidad."],
+  ["TI y seguridad", "Evidencia técnica, servicios afectados y seguimiento de remediación."],
+  ["Cumplimiento", "Trazabilidad del alcance, autorizaciones y resultados para apoyar auditorías."],
 ];
-
-const benefits = [
-  "Mayor visibilidad de superficie expuesta.",
-  "Alcance controlado antes de ejecutar revisiones.",
-  "Evidencia de ownership, autorización y aprobación.",
-  "Hallazgos priorizados con impacto técnico y de negocio.",
-  "Reportes entendibles para dirección y útiles para equipos técnicos.",
-  "Seguimiento histórico para remediación, hardening y consultoría.",
-];
-
-const initialReviewItems = [
-  "Scope inicial definido y autorizado.",
-  "Validación de ownership o evidencia de autorización.",
-  "Revisión controlada según modo acordado.",
-  "Hallazgos priorizados por severidad e impacto.",
-  "Resumen ejecutivo para dirección.",
-  "Detalle técnico para TI, seguridad o consultores.",
-  "Recomendaciones de remediación y próximos pasos.",
-  "Opción de seguimiento o servicio gestionado TECDEX.",
-];
-
-const selfAssessmentItems = [
-  "Tienes sitio web, portal o API pública.",
-  "Usas subdominios para ambientes, clientes o integraciones.",
-  "Tienes servicios publicados hacia internet.",
-  "Has migrado sistemas o cambiado proveedores recientemente.",
-  "Necesitas reportar riesgos a gerencia.",
-  "Tienes auditorías, compliance o clientes que exigen evidencia.",
-];
-
-const useCases = [
-  ["SaaS", "Revisar portales, APIs, subdominios y servicios expuestos antes o después de despliegues relevantes."],
-  ["Fintech", "Apoyar controles de exposición, evidencia técnica y seguimiento de remediación sobre activos autorizados."],
-  ["Educación", "Revisar sitios, portales, plataformas y servicios públicos con enfoque de continuidad y protección de datos."],
-  ["Pymes", "Obtener una visión clara de exposición pública sin depender solo de revisiones manuales ocasionales."],
-  ["Consultores", "Generar reportabilidad, seguimiento y evidencia para clientes bajo alcance autorizado."],
-];
-
-const capabilityLayers = [
-  ["Reconocimiento controlado", "Identificación de superficie pública dentro de scopes autorizados, sin ampliar el alcance definido."],
-  ["Validación técnica", "Pruebas configuradas según modo, autorización y sensibilidad del activo evaluado."],
-  ["Correlación y priorización", "Agrupación de señales, severidades, evidencia y contexto para reducir ruido operativo."],
-  ["Enriquecimiento contextual", "Referencias CVE/CWE/OWASP y contexto técnico cuando aplica, sin asumir cobertura total."],
-  ["Narrativa asistida", "Resumen ejecutivo y remediación sugerida, siempre sujeto a revisión técnica."],
-];
-
-const scanModes = [
-  ["Sin ZAP activo", "Reconocimiento y validaciones controladas de menor impacto relativo, sin activar ZAP activo."],
-  ["Solo Web", "Foco en portales, aplicaciones y superficie HTTP/HTTPS dentro del scope autorizado."],
-  ["Completo", "Análisis más amplio, incluyendo revisión web con ZAP cuando existe autorización válida."],
-];
-
-const moduleIcons: Record<string, string> = {
-  "Scopes autorizados": "◎",
-  "Ownership verification": "✓",
-  "Approval Gate": "▣",
-  "Auditoría y trazabilidad": "≡",
-  "Scan Wizard": "▶",
-  "Motor de escaneo": "⚙",
-  "Hallazgos priorizados": "!",
-  "Dashboard ejecutivo": "◫",
-  "Reportes ejecutivos y técnicos": "▤",
-  "Equipo y roles": "◉",
-  "API Keys y Webhooks": "{}",
-};
 
 const faqs = [
-  ["¿TCDX ThreatWatch reemplaza a un pentester?", "No. Apoya reconocimiento, escaneo, análisis, priorización y reportabilidad. Los resultados deben ser revisados por responsables técnicos o especialistas de seguridad."],
-  ["¿Garantiza que mi empresa queda segura?", "No. Ninguna herramienta puede garantizar ausencia total de vulnerabilidades. La plataforma mejora visibilidad, priorización y seguimiento dentro del alcance autorizado."],
-  ["¿Puede escanear cualquier dominio?", "No. Debe usarse únicamente sobre activos propios o autorizados, con scopes, ownership verification y approval gate."],
-  ["¿Qué necesito para comenzar?", "Definir activos a evaluar, confirmar ownership o autorización, acordar un scope inicial y ejecutar una demo controlada con TECDEX."],
-  ["¿Qué reportes genera?", "Reportes ejecutivos y técnicos con hallazgos, severidad, evidencia, impacto y recomendaciones de remediación, según alcance y configuración."],
-  ["¿Sirve para gerencia?", "Sí. Traduce hallazgos técnicos en información priorizada para apoyar decisiones de riesgo, inversión y remediación."],
-  ["¿Sirve para equipos técnicos?", "Sí. Los hallazgos pueden incluir servicios afectados, severidad, referencias técnicas, impacto, evidencia y pasos de validación o remediación."],
-  ["¿Se conecta con herramientas externas?", "El producto contempla API Keys y Webhooks como capacidades de integración, sujetas al plan y nivel de madurez del despliegue."],
-  ["¿Requiere autorización?", "Sí. Todo scan debe ejecutarse sobre activos propios o autorizados, con alcance controlado y trazabilidad."],
-  ["¿Qué diferencia hay entre Sin ZAP, Completo y Solo Web?", "Sin ZAP evita ZAP activo y usa reconocimiento/validación controlada. Completo incorpora análisis web con ZAP según autorización. Solo Web se orienta a superficie web."],
-  ["¿Qué ocurre si no tengo ownership validado?", "El sistema debe bloquear la ejecución de scans sensibles hasta que exista verificación o evidencia de autorización válida."],
-  ["¿Puede TECDEX acompañar la remediación?", "Sí. TECDEX puede ofrecer servicio gestionado, revisión de hallazgos, priorización, hardening y acompañamiento según alcance comercial."],
+  [
+    "¿ThreatWatch reemplaza un pentest?",
+    "No. Complementa el trabajo de especialistas con revisiones recurrentes, evidencia y seguimiento. Los resultados siempre deben ser revisados por responsables técnicos.",
+  ],
+  [
+    "¿Puede revisar cualquier dominio?",
+    "No. Solo se evalúan activos propios o expresamente autorizados. El flujo exige scope, validación de ownership y aprobación.",
+  ],
+  [
+    "¿Qué recibe mi empresa?",
+    "Un resumen ejecutivo, hallazgos técnicos priorizados, evidencia disponible, recomendaciones y una propuesta de próximos pasos según el alcance acordado.",
+  ],
+  [
+    "¿TECDEX puede acompañar la remediación?",
+    "Sí. TECDEX puede revisar hallazgos, apoyar la priorización, acompañar hardening y revalidar correcciones como servicio gestionado.",
+  ],
 ];
 
-const plans = [
-  ["Starter", "Pocos dominios, scans limitados y reporte base."],
-  ["Professional", "Scans periódicos, reporte ejecutivo/técnico y priorización."],
-  ["Business / Advanced", "Múltiples scopes, active scan autorizado, historial y seguimiento."],
-  ["Enterprise / Compliance", "API, webhooks, soporte, reportes personalizados y revisión manual."],
-  ["Servicio gestionado", "TECDEX opera, revisa, reporta y acompaña remediación."],
-];
-
-function HeaderLogo() {
-  return <img className="header-logo" src="/logo-threatwatch-header.png" alt="TCDX ThreatWatch by TECDEX" />;
-}
-
-function ShieldLogo() {
+function TecdexLogo({ className = "" }: { className?: string }) {
   return (
-    <div className="shield" aria-label="TCDX shield logo">
-      <div className="shield-inner">T</div>
-    </div>
+    <img
+      className={className}
+      src="https://tecdex.net/wp-content/uploads/2019/08/logo-luz.svg"
+      alt="TECDEX"
+      width="300"
+      height="79"
+    />
   );
 }
 
-function SeverityBadge({ label }: { label: string }) {
-  return <span className={`severity severity-${label.toLowerCase()}`}>{label}</span>;
+function CheckIcon() {
+  return <span className="check-icon" aria-hidden="true">✓</span>;
 }
 
-function VisualFigure({ src, alt, label, title, text }: { src: string; alt: string; label: string; title: string; text: string }) {
+function ProductPreview() {
   return (
-    <figure className="visual-figure">
-      <img src={src} alt={alt} loading="lazy" />
-      <figcaption>
-        <span>{label}</span>
-        <strong>{title}</strong>
-        <p>{text}</p>
-      </figcaption>
-    </figure>
-  );
-}
+    <div className="product-preview" aria-label="Vista referencial del panel TCDX ThreatWatch">
+      <div className="preview-topbar">
+        <div className="preview-brand">
+          <span className="preview-mark">TW</span>
+          <div>
+            <strong>ThreatWatch</strong>
+            <small>Superficie expuesta</small>
+          </div>
+        </div>
+        <span className="live-status"><i /> Monitoreo activo</span>
+      </div>
 
-function SectionTitle({ eyebrow, title, text }: { eyebrow: string; title: string; text?: string }) {
-  return (
-    <div className="section-title">
-      <p className="eyebrow">{eyebrow}</p>
-      <h2>{title}</h2>
-      {text ? <p>{text}</p> : null}
+      <div className="preview-body">
+        <aside className="preview-nav" aria-hidden="true">
+          <span className="is-active">Resumen</span>
+          <span>Activos</span>
+          <span>Revisiones</span>
+          <span>Hallazgos</span>
+          <span>Reportes</span>
+        </aside>
+
+        <div className="preview-content">
+          <div className="preview-heading">
+            <div>
+              <small>Organización</small>
+              <strong>Panorama de exposición</strong>
+            </div>
+            <span>Últimos 30 días</span>
+          </div>
+
+          <div className="metric-row">
+            <div><span>Activos</span><strong>24</strong><small>23 autorizados</small></div>
+            <div><span>Hallazgos</span><strong>12</strong><small>4 requieren atención</small></div>
+            <div><span>Controles</span><strong>96%</strong><small>scope verificado</small></div>
+          </div>
+
+          <div className="exposure-card">
+            <div className="exposure-card__top">
+              <div>
+                <span className="card-kicker">Prioridad de remediación</span>
+                <strong>Exposición por severidad</strong>
+              </div>
+              <span className="trend">↓ 18%</span>
+            </div>
+            <div className="bar-chart" aria-hidden="true">
+              <span style={{ height: "32%" }} />
+              <span style={{ height: "54%" }} />
+              <span style={{ height: "38%" }} />
+              <span style={{ height: "72%" }} />
+              <span style={{ height: "46%" }} />
+              <span style={{ height: "83%" }} />
+              <span style={{ height: "62%" }} />
+              <span style={{ height: "42%" }} />
+            </div>
+            <div className="chart-legend"><span>Sem 1</span><span>Sem 2</span><span>Sem 3</span><span>Hoy</span></div>
+          </div>
+
+          <div className="finding-row">
+            <span className="finding-dot high" />
+            <div><strong>Servicio público requiere revisión</strong><small>api.empresa.cl · evidencia disponible</small></div>
+            <span className="severity-label">Alta</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
 export default function Page() {
   return (
-    <main id="top">
-      <header className="nav">
-        <a href="#top" className="brand" aria-label="TCDX ThreatWatch by TECDEX">
-          <HeaderLogo />
-        </a>
-        <nav>
-          <a href="#funciona">Cómo funciona</a>
-          <a href="#modulos">Módulos</a>
-          <a href="#tecnico">Motor técnico</a>
-          <a href="#demo" className="nav-cta">Demo</a>
-        </nav>
+    <main id="inicio">
+      <header className="site-header">
+        <div className="header-contact">
+          <div className="container header-contact__inner">
+            <span>Soluciones TI y ciberseguridad para empresas</span>
+            <div>
+              <a href="tel:+56233046291">+56 2 3304 6291</a>
+              <a href="mailto:contacto@tecdex.net">contacto@tecdex.net</a>
+            </div>
+          </div>
+        </div>
+
+        <div className="container header-main">
+          <a className="brand" href="#inicio" aria-label="TCDX ThreatWatch, volver al inicio">
+            <TecdexLogo className="header-logo" />
+            <span className="brand-divider" />
+            <span className="product-name">ThreatWatch</span>
+          </a>
+
+          <nav className="desktop-nav" aria-label="Navegación principal">
+            <a href="#solucion">Solución</a>
+            <a href="#como-funciona">Cómo funciona</a>
+            <a href="#para-quien">Para quién</a>
+            <a href="#preguntas">Preguntas</a>
+            <a className="nav-button" href="#demo">Solicitar demo</a>
+          </nav>
+
+          <details className="mobile-nav">
+            <summary aria-label="Abrir menú"><span /><span /><span /></summary>
+            <nav aria-label="Navegación móvil">
+              <a href="#solucion">Solución</a>
+              <a href="#como-funciona">Cómo funciona</a>
+              <a href="#para-quien">Para quién</a>
+              <a href="#preguntas">Preguntas</a>
+              <a href="#demo">Solicitar demo</a>
+            </nav>
+          </details>
+        </div>
       </header>
 
       <section className="hero">
-        <div className="hero-copy">
-          <div className="badge">Pentesting continuo y gestión de superficie expuesta</div>
-          <h1>Pentesting continuo para activos expuestos, con alcance autorizado y reportes claros.</h1>
-          <p className="lead">
-            TCDX ThreatWatch by TECDEX ayuda a empresas a revisar periódicamente dominios, subdominios, APIs y servicios publicados, con scopes autorizados, validación de ownership, hallazgos priorizados y reportabilidad ejecutiva/técnica.
-          </p>
-          <div className="positioning-note">
-            <strong>No se trata solo de escanear.</strong>
-            <span>Se trata de controlar alcance, autorización, evidencia, hallazgos, trazabilidad y reportes para tomar mejores decisiones de seguridad.</span>
-          </div>
-          <div className="cta-row">
-            <a className="button primary" href="#demo">Evaluar mis activos expuestos</a>
-            <a className="button secondary" href="#reporte-ejemplo">Ver ejemplo de reporte</a>
-          </div>
-          <div className="trust-row" aria-label="Puntos de control principales">
-            <span>Scopes autorizados</span>
-            <span>Ownership verification</span>
-            <span>Approval Gate</span>
-            <span>Reportes ejecutivos</span>
-          </div>
-          <p className="ethic-note">Uso exclusivo sobre activos propios o autorizados.</p>
-        </div>
-
-        <div className="hero-panel" aria-label="Mockup dashboard TCDX ThreatWatch">
-          <div className="panel-glow" />
-          <div className="console-window">
-            <aside className="console-sidebar">
-              <ShieldLogo />
-              <span className="active">Dashboard</span>
-              <span>Scopes</span>
-              <span>Scans</span>
-              <span>Findings</span>
-              <span>Reports</span>
-            </aside>
-            <div className="console-content">
-              <div className="console-top">
-                <div>
-                  <strong>ThreatWatch Console</strong>
-                  <small>tenant: empresa-demo</small>
-                </div>
-                <span className="status verified">Verificado</span>
-              </div>
-              <div className="metric-grid">
-                <div><strong>24</strong><span>Scans</span></div>
-                <div><strong>7</strong><span>High</span></div>
-                <div><strong>18</strong><span>Medium</span></div>
-                <div><strong>92%</strong><span>Scopes OK</span></div>
-              </div>
-              <div className="pipeline-mini">
-                <span>Scope</span><span>Ownership</span><span>Approval</span><span>Scan</span><span>Findings</span><span>Reporte</span>
-              </div>
-              <div className="finding-card">
-                <div>
-                  <strong>Exposición de servicio web</strong>
-                  <p>api.cliente.cl · puerto 443 · evidencia adjunta</p>
-                </div>
-                <SeverityBadge label="High" />
-              </div>
-              <div className="finding-card">
-                <div>
-                  <strong>Header de seguridad ausente</strong>
-                  <p>OWASP · CWE · validación técnica requerida</p>
-                </div>
-                <SeverityBadge label="Medium" />
-              </div>
-              <div className="status-row">
-                <span className="status completed">Completado</span>
-                <span className="status progress">En curso</span>
-                <span className="status failed">Fallido</span>
-                <span className="status pending">Pendiente</span>
-              </div>
+        <div className="hero-orbit orbit-one" />
+        <div className="hero-orbit orbit-two" />
+        <div className="container hero-grid">
+          <div className="hero-copy">
+            <p className="eyebrow light">TCDX ThreatWatch · by TECDEX</p>
+            <h1>Conoce tu superficie expuesta antes que se convierta en un incidente.</h1>
+            <p className="hero-lead">
+              Pentesting continuo para dominios, APIs y servicios públicos, con alcance autorizado,
+              hallazgos priorizados y reportes que conectan seguridad con negocio.
+            </p>
+            <div className="hero-actions">
+              <a className="button primary" href="#demo">Evaluar mis activos</a>
+              <a className="button ghost" href="#como-funciona">Ver cómo funciona <span aria-hidden="true">→</span></a>
+            </div>
+            <div className="hero-trust">
+              <span><CheckIcon /> Activos autorizados</span>
+              <span><CheckIcon /> Evidencia trazable</span>
+              <span><CheckIcon /> Acompañamiento TECDEX</span>
             </div>
           </div>
+          <ProductPreview />
         </div>
       </section>
 
-      <section className="section problem-section">
-        <div className="problem-copy">
-          <p className="eyebrow">Problema</p>
-          <h2>La superficie expuesta cambia más rápido que los ciclos tradicionales de revisión.</h2>
-          <p>
-            Dominios, subdominios, APIs, portales, puertos y servicios públicos pueden quedar expuestos por cambios operativos, integraciones, despliegues o configuraciones heredadas. El problema no es solo detectar hallazgos: es saber qué estaba autorizado, qué se revisó, qué evidencia existe y qué debe priorizarse.
-          </p>
+      <section className="context-strip" aria-label="Resumen de propuesta de valor">
+        <div className="container context-grid">
+          <p>Una operación de seguridad más clara, recurrente y controlada.</p>
+          <div><strong>Visibilidad</strong><span>de activos públicos</span></div>
+          <div><strong>Gobierno</strong><span>antes de ejecutar</span></div>
+          <div><strong>Prioridad</strong><span>para remediar</span></div>
+          <div><strong>Reporte</strong><span>para decidir</span></div>
         </div>
-        <div className="problem-visual-stack">
-          <div className="pain-grid compact-pain">
-            <div>Superficie pública difícil de mantener visible</div>
-            <div>Revisiones manuales esporádicas</div>
-            <div>Reportes técnicos difíciles de llevar a gerencia</div>
-            <div>Hallazgos sin trazabilidad ni seguimiento</div>
+      </section>
+
+      <section id="solucion" className="section section-light">
+        <div className="container">
+          <div className="section-heading split-heading">
+            <div>
+              <p className="eyebrow">La solución</p>
+              <h2>No es solo detectar. Es entender qué importa y actuar con control.</h2>
+            </div>
+            <p>
+              ThreatWatch organiza el ciclo completo de una revisión: alcance, autorización,
+              ejecución, evidencia, priorización y seguimiento.
+            </p>
           </div>
-          <VisualFigure
-            src="/visual-exposure-map.svg"
-            alt="Mapa conceptual de superficie expuesta con dominios, APIs y servicios publicados"
-            label="Superficie expuesta"
-            title="Dominios, APIs y servicios en una vista controlada"
-            text="Una representación visual ayuda a explicar exposición y priorización sin saturar la lectura técnica."
-          />
-        </div>
-      </section>
 
-      <section className="section solution-section">
-        <SectionTitle
-          eyebrow="Solución"
-          title="Una plataforma para controlar el ciclo completo: alcance, ownership, aprobación, evidencia y reporte."
-          text="TCDX ThreatWatch no se posiciona como un scanner aislado. Ordena el proceso de revisión sobre activos propios o autorizados, entrega evidencia técnica y convierte resultados en material accionable para dirección y equipos técnicos."
-        />
-        <div className="pillar-grid">
-          <article>
-            <span>01</span>
-            <h3>Alcance controlado</h3>
-            <p>Scopes, ownership y approval gate antes de ejecutar revisiones.</p>
-          </article>
-          <article>
-            <span>02</span>
-            <h3>Hallazgos con evidencia</h3>
-            <p>Severidad, CVE/CWE, impacto, evidencia y remediación sugerida.</p>
-          </article>
-          <article>
-            <span>03</span>
-            <h3>Reportabilidad accionable</h3>
-            <p>Reportes ejecutivos y técnicos para priorizar decisiones.</p>
-          </article>
-        </div>
-        <VisualFigure
-          src="/visual-report-flow.svg"
-          alt="Flujo desde hallazgos técnicos a reporte ejecutivo y seguimiento"
-          label="Reporte accionable"
-          title="De evidencia técnica a decisión ejecutiva"
-          text="El objetivo visual es reforzar que la plataforma conecta hallazgos, priorización, remediación y seguimiento."
-        />
-      </section>
-
-      <section className="section initial-review-section">
-        <SectionTitle
-          eyebrow="Resultado esperado"
-          title="Qué recibe una empresa en una revisión inicial."
-          text="La demo controlada busca entregar una primera lectura útil, con alcance acordado y material accionable para decidir próximos pasos."
-        />
-        <div className="initial-review-grid">
-          {initialReviewItems.map((item) => (
-            <div key={item}>{item}</div>
-          ))}
-        </div>
-      </section>
-
-      <section className="section self-assessment-section">
-        <div className="self-assessment-card">
-          <div>
-            <p className="eyebrow">Autodiagnóstico</p>
-            <h2>¿Tiene sentido revisar tu superficie expuesta?</h2>
-            <p>Si tu organización cumple dos o más de estas condiciones, una revisión controlada puede ayudar a ordenar visibilidad, evidencia y priorización.</p>
-          </div>
-          <div className="assessment-list">
-            {selfAssessmentItems.map((item) => (
-              <span key={item}>{item}</span>
+          <div className="capability-grid">
+            {capabilities.map((item) => (
+              <article className="capability-card" key={item.number}>
+                <span className="card-number">{item.number}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+                <small>{item.detail}</small>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="reporte-ejemplo" className="section approval-report-section">
-        <div className="approval-card visual-card-large">
-          <div>
-            <p className="eyebrow">Approval Gate</p>
-            <h2>El scan no parte si falta alcance, ownership o aprobación válida.</h2>
+      <section id="como-funciona" className="section governance-section">
+        <div className="container governance-grid">
+          <div className="governance-copy">
+            <p className="eyebrow light">Control por diseño</p>
+            <h2>Cada revisión comienza con autorización, no con un scan.</h2>
             <p>
-              El diferencial de ThreatWatch está en controlar el proceso antes de ejecutar. La plataforma está diseñada para bloquear revisiones sensibles si no existe autorización trazable.
+              Los controles de scope, ownership y aprobación ayudan a mantener cada evaluación
+              dentro de límites claros y trazables.
             </p>
-          </div>
-          <img src="/visual-approval-gate.svg" alt="Flujo visual de approval gate con scope, ownership y token de aprobación" loading="lazy" />
-        </div>
-        <div className="report-card visual-card-large">
-          <div>
-            <p className="eyebrow">Reporte ejecutivo</p>
-            <h2>De hallazgos técnicos a una lectura ejecutiva para priorizar.</h2>
-            <p>
-              El reporte resume severidades, exposición, evidencia y próximos pasos para facilitar conversación entre dirección, TI, seguridad y cumplimiento.
-            </p>
-          </div>
-          <img src="/visual-executive-report.svg" alt="Mockup de reporte ejecutivo con severidades y remediación" loading="lazy" />
-        </div>
-      </section>
-
-      <section className="section safe-ops-section">
-        <SectionTitle
-          eyebrow="Gobierno del proceso"
-          title="Cada revisión debe tener alcance, autorización y evidencia."
-          text="La plataforma ayuda a definir qué activos pueden evaluarse, validar autorización, ejecutar revisiones controladas y transformar hallazgos en reportes útiles para dirección y equipos técnicos."
-        />
-        <div className="safe-visual-grid">
-          <VisualFigure
-            src="/visual-control-layers.svg"
-            alt="Capas de control de TCDX ThreatWatch: scope, ownership, aprobación, ejecución y reporte"
-            label="Capas de control"
-            title="Autorización antes de ejecución"
-            text="El foco público está en gobierno del proceso y trazabilidad, no en exponer una receta operacional."
-          />
-          <VisualFigure
-            src="/visual-risk-priority.svg"
-            alt="Priorización de riesgo con severidades y evidencia"
-            label="Priorización"
-            title="Severidad, evidencia y contexto"
-            text="La propuesta se entiende mejor mostrando cómo se prioriza, no listando cada herramienta interna."
-          />
-          <VisualFigure
-            src="/visual-operation-model.svg"
-            alt="Modelo operativo controlado de TCDX ThreatWatch"
-            label="Modelo operativo"
-            title="Operación controlada por alcance"
-            text="La plataforma puede ser utilizada por equipos internos, consultores o en modalidad acompañada por TECDEX."
-          />
-        </div>
-      </section>
-
-      <section className="section exec-tech-section">
-        <SectionTitle
-          eyebrow="Dos niveles de lectura"
-          title="Información clara para dirección y útil para equipos técnicos."
-        />
-        <div className="exec-tech-grid">
-          <article>
-            <h3>Para dirección</h3>
-            <p>Riesgo priorizado, tendencia de severidades, exposición visible, avance de remediación y material de apoyo para decisiones de inversión.</p>
-          </article>
-          <article>
-            <h3>Para equipos técnicos</h3>
-            <p>Host, puerto, servicio, evidencia, referencias técnicas, impacto, contexto del servicio afectado y pasos de validación o remediación cuando existan.</p>
-          </article>
-        </div>
-      </section>
-
-      <section id="funciona" className="section">
-        <SectionTitle
-          eyebrow="Cómo funciona"
-          title="Del scope autorizado al reporte ejecutivo, con controles antes de ejecutar."
-        />
-        <div className="steps">
-          {steps.map(([number, title, text]) => (
-            <article className="step" key={number}>
-              <b>{number}</b>
-              <h3>{title}</h3>
-              <p>{text}</p>
-            </article>
-          ))}
-        </div>
-        <div className="pipeline-band" aria-label="Pipeline de control de ThreatWatch">
-          <span>Scope</span>
-          <i />
-          <span>Ownership</span>
-          <i />
-          <span>Approval</span>
-          <i />
-          <span>Scan</span>
-          <i />
-          <span>Findings</span>
-          <i />
-          <span>Reporte</span>
-        </div>
-      </section>
-
-      <section id="modulos" className="section">
-        <SectionTitle
-          eyebrow="Módulos"
-          title="Componentes agrupados por gobierno, ejecución y reportabilidad."
-          text="La plataforma reduce ambigüedad operativa: quién autorizó, qué activo se revisó, cómo se ejecutó, qué se encontró y cómo se reportó."
-        />
-        <div className="module-groups">
-          {moduleGroups.map((group) => (
-            <section className="module-group" key={group.group}>
-              <h3>{group.group}</h3>
-              <div className="cards compact-cards">
-                {group.items.map(([title, text, tag]) => (
-                  <article className="card module-card" key={title}>
-                    <div className="module-icon" aria-hidden="true">{moduleIcons[title] ?? "•"}</div>
-                    <span>{tag}</span>
-                    <h3>{title}</h3>
-                    <p>{text}</p>
-                  </article>
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
-      </section>
-
-      <section id="tecnico" className="section technical-section">
-        <div>
-          <p className="eyebrow">Motor técnico</p>
-          <h2>Motor técnico explicado por capacidades, no por exposición innecesaria de operación.</h2>
-          <p>
-            La plataforma combina reconocimiento, validación controlada, correlación, enriquecimiento y reportabilidad. En la landing pública se comunica el método de trabajo a nivel de capacidades; el detalle de herramientas, parámetros y profundidad queda para una demo técnica bajo alcance autorizado.
-          </p>
-          <VisualFigure
-            src="/visual-scan-modes.svg"
-            alt="Modos de escaneo controlado sin ZAP, solo web y completo"
-            label="Modos de ejecución"
-            title="Cada revisión se ajusta al alcance autorizado"
-            text="La explicación pública prioriza controles, alcance y resultados, evitando exponer detalles operativos sensibles."
-          />
-        </div>
-        <div className="tool-list capability-list">
-          {capabilityLayers.map(([layer, text]) => (
-            <div key={layer}>
-              <strong>{layer}</strong>
-              <span>{text}</span>
+            <div className="approval-seal">
+              <span className="seal-icon">✓</span>
+              <div><strong>Approval Gate</strong><small>Listo para evaluación controlada</small></div>
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
 
-      <section className="section scan-modes-section">
-        <SectionTitle
-          eyebrow="Modos de evaluación"
-          title="Tres formas de revisar, siempre sujetas a alcance y autorización."
-          text="La selección del modo permite ajustar profundidad técnica, impacto relativo y controles de ejecución según el activo evaluado."
-        />
-        <div className="scan-mode-cards">
-          {scanModes.map(([title, text]) => (
-            <article key={title}>
-              <span>{title}</span>
-              <p>{text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="section remediation-strip-section">
-        <div className="remediation-strip">
-          <p className="eyebrow">Seguimiento</p>
-          <h2>Del hallazgo a la remediación.</h2>
-          <div className="remediation-flow" aria-label="Flujo de remediación">
-            <span>Detectar</span><i />
-            <span>Priorizar</span><i />
-            <span>Explicar</span><i />
-            <span>Reportar</span><i />
-            <span>Remediar</span><i />
-            <span>Revalidar</span>
+          <div className="steps-list">
+            {controlSteps.map(([number, title, text]) => (
+              <article key={number}>
+                <span>{number}</span>
+                <div><h3>{title}</h3><p>{text}</p></div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="section audience-section">
-        <SectionTitle
-          eyebrow="Para quién es"
-          title="Diseñado para venta consultiva, operación TI y gobierno de seguridad."
-        />
-        <div className="audience-grid">
-          {audiences.map(([title, text]) => (
-            <article key={title}>
-              <h3>{title}</h3>
-              <p>{text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="section benefits-section">
-        <div className="benefit-copy">
-          <p className="eyebrow">Beneficios</p>
-          <h2>Más visibilidad, mejor priorización y reportes más claros para actuar.</h2>
-        </div>
-        <div className="benefit-grid">
-          {benefits.map((benefit) => <div key={benefit}>{benefit}</div>)}
-        </div>
-      </section>
-
-      <section className="section differentiation">
-        <p className="eyebrow">Diferenciación</p>
-        <h2>No es solo un scanner. Es una capa de gobierno y reportabilidad para revisiones autorizadas.</h2>
-        <div className="difference-grid">
-          <div>
-            <strong>Gobierno del alcance</strong>
-            <p>Define qué activos pueden evaluarse y bajo qué condiciones.</p>
+      <section id="para-quien" className="section section-surface">
+        <div className="container">
+          <div className="section-heading centered">
+            <p className="eyebrow">Una plataforma, dos niveles de lectura</p>
+            <h2>Información útil para quienes deciden y para quienes resuelven.</h2>
+            <p>La misma evidencia se presenta con el nivel de detalle que cada rol necesita.</p>
           </div>
-          <div>
-            <strong>Evidencia accionable</strong>
-            <p>Conecta hallazgos, contexto técnico y priorización de riesgo.</p>
-          </div>
-          <div>
-            <strong>Reporte para decidir</strong>
-            <p>Entrega una lectura ejecutiva y técnica para seguimiento de remediación.</p>
+          <div className="audience-grid">
+            {audiences.map(([title, text], index) => (
+              <article key={title}>
+                <span className={`audience-icon icon-${index + 1}`} aria-hidden="true">{index === 0 ? "↗" : index === 1 ? "⌁" : "✓"}</span>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="section use-cases-section">
-        <SectionTitle
-          eyebrow="Casos de uso"
-          title="Aplicable a organizaciones con activos públicos, APIs, portales o exigencias de reporte."
-        />
-        <div className="use-case-grid">
-          {useCases.map(([title, text]) => (
-            <article key={title}>
-              <h3>{title}</h3>
-              <p>{text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="section managed-strip-section">
-        <div className="managed-strip managed-strip-strong">
+      <section className="managed-section">
+        <div className="container managed-card">
           <div>
-            <p className="eyebrow">Servicio gestionado TECDEX</p>
+            <p className="eyebrow light">Servicio gestionado TECDEX</p>
             <h2>No necesitas operar todo internamente.</h2>
           </div>
           <p>
-            TECDEX puede acompañar el proceso completo: definición de scope, validación, ejecución controlada, revisión de hallazgos, reporte ejecutivo/técnico y plan de remediación. Es una opción adecuada para empresas que necesitan visibilidad periódica sin formar un equipo interno de pentesting.
+            Podemos acompañar la definición de scope, ejecutar la revisión controlada,
+            validar hallazgos y trabajar contigo en un plan de remediación.
           </p>
-          <a className="button secondary" href="#demo">Quiero servicio gestionado</a>
+          <a className="button primary" href="#demo">Conversemos</a>
         </div>
       </section>
 
-      <section className="section transparency">
-        <p className="eyebrow">Transparencia y uso responsable</p>
-        <blockquote>
-          TCDX ThreatWatch no reemplaza una evaluación de seguridad humana, no garantiza ausencia de vulnerabilidades y debe utilizarse únicamente sobre activos propios o autorizados. La plataforma entrega apoyo para reconocimiento, escaneo, análisis y reportabilidad, sujeto a revisión por responsables técnicos.
-        </blockquote>
-        <ul>
-          <li>Solo activos propios o autorizados.</li>
-          <li>Active scan requiere autorización explícita.</li>
-          <li>Resultados sujetos a revisión técnica.</li>
-          <li>No reemplaza auditorías formales.</li>
-          <li>No garantiza ausencia total de vulnerabilidades.</li>
-        </ul>
+      <section id="demo" className="section contact-section">
+        <div className="container contact-grid">
+          <div className="contact-copy">
+            <p className="eyebrow">Demo controlada</p>
+            <h2>Obtén una primera lectura de tu exposición.</h2>
+            <p className="contact-lead">
+              Cuéntanos qué activos necesitas revisar. Un especialista TECDEX evaluará el caso
+              y propondrá un alcance inicial seguro.
+            </p>
+            <ul className="contact-benefits">
+              <li><CheckIcon /><span>Definición de scope inicial</span></li>
+              <li><CheckIcon /><span>Validación de ownership o autorización</span></li>
+              <li><CheckIcon /><span>Resumen ejecutivo y detalle técnico</span></li>
+              <li><CheckIcon /><span>Recomendaciones y próximos pasos</span></li>
+            </ul>
+            <div className="direct-contact">
+              <span>¿Prefieres contacto directo?</span>
+              <a href="mailto:contacto@tecdex.net">contacto@tecdex.net</a>
+              <a href="https://wa.me/56989995290" target="_blank" rel="noreferrer">WhatsApp +56 9 8999 5290</a>
+            </div>
+          </div>
+
+          <form className="contact-form" action="mailto:contacto@tecdex.net" method="post" encType="text/plain">
+            <div className="form-heading">
+              <span>Paso 1 de 1</span>
+              <h3>Solicita una demo</h3>
+              <p>Te responderemos para coordinar el alcance. No se ejecutará ningún scan automáticamente.</p>
+            </div>
+            <div className="form-row">
+              <label>Nombre<input name="nombre" autoComplete="name" required placeholder="Tu nombre" /></label>
+              <label>Empresa<input name="empresa" autoComplete="organization" required placeholder="Nombre de empresa" /></label>
+            </div>
+            <div className="form-row">
+              <label>Correo corporativo<input name="correo" type="email" autoComplete="email" required placeholder="nombre@empresa.cl" /></label>
+              <label>Teléfono<input name="telefono" type="tel" autoComplete="tel" placeholder="+56 9..." /></label>
+            </div>
+            <label>Activo o dominio a evaluar<input name="activo" placeholder="empresa.cl / api.empresa.cl" /></label>
+            <label>¿Qué necesitas?
+              <select name="necesidad" defaultValue="">
+                <option value="" disabled>Selecciona una opción</option>
+                <option>Revisar superficie expuesta</option>
+                <option>Obtener un reporte para gerencia</option>
+                <option>Preparar una auditoría</option>
+                <option>Revisar un portal o API</option>
+                <option>Evaluar servicio gestionado</option>
+              </select>
+            </label>
+            <label>Contexto adicional<textarea name="mensaje" rows={3} placeholder="Cuéntanos brevemente qué quieres revisar." /></label>
+            <label className="form-check">
+              <input type="checkbox" required />
+              <span>Solicito información para evaluar activos propios o expresamente autorizados.</span>
+            </label>
+            <button className="button primary form-submit" type="submit">Solicitar evaluación</button>
+            <p className="privacy-note">Tus datos serán utilizados únicamente para responder esta solicitud comercial.</p>
+          </form>
+        </div>
       </section>
 
-      <section id="demo" className="section founder-section">
-        <div className="founder-copy">
-          <p className="eyebrow">Demo comercial</p>
-          <h2>Programa fundador TCDX ThreatWatch</h2>
-          <p>
-            Cupos iniciales para empresas que quieran validar la plataforma con onboarding asistido, definición de scope controlado, primera ejecución autorizada, reporte ejecutivo/técnico y revisión conjunta de hallazgos.
-          </p>
-          <div className="plans">
-            {plans.map(([name, desc]) => (
-              <div key={name}>
-                <strong>{name}</strong>
-                <span>{desc}</span>
-              </div>
+      <section id="preguntas" className="section faq-section">
+        <div className="container faq-grid">
+          <div className="section-heading">
+            <p className="eyebrow">Preguntas frecuentes</p>
+            <h2>Lo esencial antes de comenzar.</h2>
+            <p>ThreatWatch está diseñado para revisiones responsables sobre activos propios o autorizados.</p>
+          </div>
+          <div className="faq-list">
+            {faqs.map(([question, answer]) => (
+              <details key={question}>
+                <summary>{question}<span aria-hidden="true">+</span></summary>
+                <p>{answer}</p>
+              </details>
             ))}
           </div>
         </div>
-        <form className="form" action="mailto:contacto@tecdex.cl" method="post" encType="text/plain">
-          <h3>Agenda una demo controlada</h3>
-          <p className="microcopy">Cuéntanos qué activos necesitas evaluar. TECDEX revisará el caso y propondrá un alcance inicial seguro.</p>
-          <label>Empresa<input name="empresa" required /></label>
-          <label>Nombre<input name="nombre" required /></label>
-          <label>Cargo<input name="cargo" /></label>
-          <label>Correo<input name="correo" type="email" required /></label>
-          <label>Teléfono<input name="telefono" /></label>
-          <label>Dominio / activo a evaluar<input name="activo" placeholder="ejemplo.cl / api.ejemplo.cl" /></label>
-          <label>Tipo de empresa
-            <select name="tipo_empresa">
-              <option>Pyme con activos públicos</option>
-              <option>Empresa SaaS</option>
-              <option>Fintech</option>
-              <option>Educación</option>
-              <option>Empresa regulada</option>
-              <option>Consultoría de seguridad</option>
-              <option>Otra</option>
-            </select>
-          </label>
-          <label>Qué necesitas resolver
-            <select name="necesidad">
-              <option>Revisar superficie expuesta</option>
-              <option>Obtener reporte para gerencia</option>
-              <option>Preparar auditoría o cumplimiento</option>
-              <option>Revisar portal o API</option>
-              <option>Evaluar servicio gestionado</option>
-              <option>Otro</option>
-            </select>
-          </label>
-          <label>Urgencia estimada
-            <select name="urgencia">
-              <option>Esta semana</option>
-              <option>Este mes</option>
-              <option>Próximo trimestre</option>
-              <option>Solo explorando</option>
-            </select>
-          </label>
-          <label>Mensaje<textarea name="mensaje" rows={4} /></label>
-          <label className="check"><input type="checkbox" required /> <span>Declaro que solicito información para evaluar activos propios o autorizados.</span></label>
-          <button className="button primary" type="submit">Solicitar demo controlada</button>
-          <p className="microcopy">La demo no ejecuta scans automáticamente. Primero se valida alcance, ownership y autorización.</p>
-        </form>
       </section>
 
-      <section className="section faq-section">
-        <SectionTitle eyebrow="FAQ" title="Preguntas frecuentes" />
-        <div className="faq-grid">
-          {faqs.map(([question, answer]) => (
-            <details key={question}>
-              <summary>{question}</summary>
-              <p>{answer}</p>
-            </details>
-          ))}
+      <section className="responsible-use">
+        <div className="container responsible-use__inner">
+          <strong>Uso responsable</strong>
+          <p>
+            TCDX ThreatWatch no garantiza la ausencia total de vulnerabilidades ni reemplaza una
+            evaluación humana. Los resultados requieren revisión técnica y solo deben obtenerse
+            sobre activos propios o autorizados.
+          </p>
         </div>
       </section>
 
       <footer className="footer">
-        <strong>TCDX ThreatWatch by TECDEX</strong>
-        <span>Pentesting continuo y gestión de superficie expuesta.</span>
-        <div>
-          <a href="#demo">Solicitar demo</a>
-          <a href="#top">Volver arriba</a>
+        <div className="container footer-grid">
+          <div className="footer-brand">
+            <TecdexLogo className="footer-logo" />
+            <p>ThreatWatch</p>
+            <span>Pentesting continuo y gestión de superficie expuesta.</span>
+          </div>
+          <div>
+            <h3>Producto</h3>
+            <a href="#solucion">Solución</a>
+            <a href="#como-funciona">Cómo funciona</a>
+            <a href="#para-quien">Para quién</a>
+            <a href="#demo">Solicitar demo</a>
+          </div>
+          <div>
+            <h3>TECDEX</h3>
+            <a href="https://tecdex.net/quienes-somos/" target="_blank" rel="noreferrer">Quiénes somos</a>
+            <a href="https://tecdex.net/soluciones-de-seguridad-informatica-para-empresas/" target="_blank" rel="noreferrer">Seguridad informática</a>
+            <a href="https://tecdex.net/politicas-de-privacidad/" target="_blank" rel="noreferrer">Políticas de privacidad</a>
+          </div>
+          <div>
+            <h3>Hablemos</h3>
+            <a href="tel:+56233046291">+56 2 3304 6291</a>
+            <a href="https://wa.me/56989995290" target="_blank" rel="noreferrer">WhatsApp +56 9 8999 5290</a>
+            <a href="mailto:contacto@tecdex.net">contacto@tecdex.net</a>
+            <address>Guardia Vieja 181, Of. 506<br />Providencia, Santiago</address>
+          </div>
+        </div>
+        <div className="container footer-bottom">
+          <span>© {new Date().getFullYear()} TECDEX SpA. Todos los derechos reservados.</span>
+          <a href="#inicio">Volver arriba ↑</a>
         </div>
       </footer>
     </main>

@@ -1,7 +1,7 @@
 export const siteConfig = {
   name: "TCDX ThreatWatch by TECDEX",
   shortName: "TCDX ThreatWatch",
-  domain: "https://tcdx-threatwatch.vercel.app",
+  domain: "https://vulnera.tecdex.net",
   description:
     "Plataforma SaaS chilena para apoyar pentesting continuo, gestión de superficie expuesta, escaneos controlados, hallazgos priorizados, evidencia técnica y reportes ejecutivos/técnicos sobre activos propios o autorizados.",
   ogTitle: "TCDX ThreatWatch by TECDEX — Pentesting continuo y gestión de exposición",
