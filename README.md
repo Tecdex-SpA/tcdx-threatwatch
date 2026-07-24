@@ -1,6 +1,6 @@
-# TCDX ThreatWatch by TECDEX — Landing page
+# VULNERA by TECDEX — Landing page
 
-Landing comercial SaaS B2B para TCDX ThreatWatch by TECDEX.
+Landing comercial SaaS B2B para VULNERA by TECDEX.
 
 ## Ejecutar localmente
 

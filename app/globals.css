@@ -16,6 +16,7 @@
   --container: 1140px;
   --font-heading: Roboto, -apple-system, "Segoe UI", Arial, sans-serif;
   --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-nav: var(--font-inter), Inter, -apple-system, "Segoe UI", Arial, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -62,7 +63,8 @@ p { line-height: 1.7; }
   top: 0;
   z-index: 50;
   background: var(--navy);
-  border-bottom: 1px solid rgba(101, 152, 204, 0.72);
+  border-bottom: 1px solid rgba(101, 155, 208, 0.55);
+  font-family: var(--font-nav);
 }
 .header-contact { background: #23313c; color: rgba(255,255,255,.76); font-size: 12px; }
 .header-contact__inner {
@@ -76,13 +78,13 @@ p { line-height: 1.7; }
 .header-contact a:hover { color: var(--white); }
 .header-main { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
 .brand { display: flex; align-items: center; gap: 15px; flex-shrink: 0; }
-.header-logo { width: 168px; height: auto; display: block; }
+.header-logo { width: 220px; height: auto; display: block; }
 .brand-divider { width: 1px; height: 34px; background: rgba(255,255,255,.26); }
 .product-name {
   color: var(--white);
-  font-family: var(--font-heading);
+  font-family: var(--font-nav);
   font-size: 17px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: .02em;
 }
 .desktop-nav { display: flex; align-items: stretch; align-self: stretch; gap: 0; }
@@ -92,11 +94,10 @@ p { line-height: 1.7; }
   place-items: center;
   padding: 0 15px;
   color: rgba(255,255,255,.86);
-  font-family: var(--font-heading);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: .045em;
-  text-transform: uppercase;
+  font-family: var(--font-nav);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .0035em;
   transition: color .18s ease;
 }
 .desktop-nav > a:not(.nav-button)::after {
@@ -118,7 +119,7 @@ p { line-height: 1.7; }
   min-height: 42px;
   margin-left: 12px;
   padding: 0 22px;
-  border-radius: 25px;
+  border-radius: 9999px;
   color: var(--white);
   background: var(--primary);
   font-weight: 600;
@@ -149,7 +150,7 @@ p { line-height: 1.7; }
   border: 1px solid rgba(101,152,204,.7);
   box-shadow: 0 14px 40px rgba(0,0,0,.22);
 }
-.mobile-nav nav a { display: block; padding: 13px 14px; color: var(--white); font-size: 13px; text-transform: uppercase; }
+.mobile-nav nav a { display: block; padding: 13px 14px; color: var(--white); font-family: var(--font-nav); font-size: 14px; font-weight: 600; }
 .mobile-nav nav a:last-child { margin-top: 6px; border-radius: 25px; text-align: center; background: var(--primary); }
 
 .hero {
@@ -431,7 +432,7 @@ textarea { resize: vertical; }
   .container { width: min(100% - 32px, var(--container)); }
   .header-contact { display: none; }
   .header-main { min-height: 72px; }
-  .header-logo { width: 132px; }
+  .header-logo { width: 172px; }
   .brand-divider { height: 28px; }
   .product-name { font-size: 14px; }
   .hero-grid { min-height: auto; padding-top: 56px; padding-bottom: 58px; }
@@ -468,6 +469,24 @@ textarea { resize: vertical; }
   .footer-grid { grid-template-columns: 1fr; gap: 38px; }
   .footer-bottom { align-items: flex-start; flex-direction: column; }
 }
+
+.whatsapp-float {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 9999px;
+  color: var(--white);
+  background: #25d366;
+  box-shadow: 0 10px 24px rgba(0,0,0,.22);
+  transition: transform .18s ease, background .18s ease;
+}
+.whatsapp-float:hover { background: #20bd5a; transform: translateY(-2px); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "TCDX ThreatWatch by TECDEX",
-    short_name: "ThreatWatch",
+    name: "VULNERA by TECDEX",
+    short_name: "VULNERA",
     description:
       "Pentesting continuo y gestión de superficie expuesta para activos propios o autorizados.",
     start_url: "/",

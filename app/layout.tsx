@@ -1,12 +1,15 @@
 import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "../lib/site";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.domain),
   title: {
-    default: "TCDX ThreatWatch by TECDEX | Pentesting continuo y gestión de superficie expuesta",
-    template: "%s | TCDX ThreatWatch by TECDEX",
+    default: "VULNERA by TECDEX | Pentesting continuo y gestión de superficie expuesta",
+    template: "%s | VULNERA by TECDEX",
   },
   description: siteConfig.description,
   applicationName: siteConfig.name,
@@ -41,7 +44,7 @@ export const metadata: Metadata = {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "TCDX ThreatWatch by TECDEX - Pentesting continuo y gestión de exposición",
+        alt: "VULNERA by TECDEX - Pentesting continuo y gestión de exposición",
       },
     ],
   },
@@ -68,7 +71,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-CL">
+    <html lang="es-CL" className={inter.variable}>
       <body>{children}</body>
     </html>
   );

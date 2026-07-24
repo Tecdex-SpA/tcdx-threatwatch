@@ -1,10 +1,10 @@
 export const siteConfig = {
-  name: "TCDX ThreatWatch by TECDEX",
-  shortName: "TCDX ThreatWatch",
+  name: "VULNERA by TECDEX",
+  shortName: "VULNERA",
   domain: "https://vulnera.tecdex.net",
   description:
     "Plataforma SaaS chilena para apoyar pentesting continuo, gestión de superficie expuesta, escaneos controlados, hallazgos priorizados, evidencia técnica y reportes ejecutivos/técnicos sobre activos propios o autorizados.",
-  ogTitle: "TCDX ThreatWatch by TECDEX — Pentesting continuo y gestión de exposición",
+  ogTitle: "VULNERA by TECDEX — Pentesting continuo y gestión de exposición",
   ogDescription:
     "Controle scopes, valide ownership, ejecute scans autorizados y genere reportes ejecutivos/técnicos para priorizar riesgos de seguridad.",
   keywords: [
