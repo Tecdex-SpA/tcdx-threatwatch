@@ -163,16 +163,6 @@ export default function Page() {
   return (
     <main id="inicio">
       <header className="site-header">
-        <div className="header-contact">
-          <div className="container header-contact__inner">
-            <span>Soluciones TI y ciberseguridad para empresas</span>
-            <div>
-              <a href="tel:+56233046291">+56 2 3304 6291</a>
-              <a href="mailto:contacto@tecdex.net">contacto@tecdex.net</a>
-            </div>
-          </div>
-        </div>
-
         <div className="container header-main">
           <a className="brand" href="#inicio" aria-label="VULNERA, volver al inicio">
             <TecdexLogo className="header-logo" />
