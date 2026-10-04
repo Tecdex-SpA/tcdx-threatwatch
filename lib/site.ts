@@ -76,6 +76,15 @@ export const features = {
   salesPublic: env("FEATURE_SALES_PUBLIC") === "true",
 };
 
+/**
+ * Rutas publicadas. `lastModified` es la fecha del último cambio de contenido
+ * de cada ruta (no la del build): actualizarla al modificar esa página.
+ * Con `trailingSlash: true` toda ruta termina en "/" (canonical == sitemap).
+ */
+export const routes: { path: string; lastModified: string; priority: number }[] = [
+  { path: "/", lastModified: "2026-10-04", priority: 1 },
+];
+
 export function absoluteUrl(path = "/"): string {
   return `${siteConfig.domain}${path.startsWith("/") ? path : `/${path}`}`;
 }
