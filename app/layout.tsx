@@ -1,21 +1,21 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { siteConfig } from "../lib/site";
+import { organization, siteConfig } from "../lib/site";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.domain),
   title: {
-    default: "VULNERA by TECDEX | Pentesting continuo y gestión de superficie expuesta",
-    template: "%s | VULNERA by TECDEX",
+    default: siteConfig.title,
+    template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
   applicationName: siteConfig.name,
-  authors: [{ name: "TECDEX" }],
-  creator: "TECDEX",
-  publisher: "TECDEX",
+  authors: [{ name: organization.name, url: organization.website }],
+  creator: organization.name,
+  publisher: organization.name,
   category: "Cybersecurity",
   keywords: siteConfig.keywords,
   alternates: {
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "VULNERA by TECDEX - Pentesting continuo y gestión de exposición",
+        alt: siteConfig.ogImageAlt,
       },
     ],
   },
@@ -65,13 +65,13 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#2B3944",
+  themeColor: siteConfig.themeColor,
   colorScheme: "light",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-CL" className={inter.variable}>
+    <html lang={siteConfig.defaultLocale} className={inter.variable}>
       <body>{children}</body>
     </html>
   );

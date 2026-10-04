@@ -1,16 +1,16 @@
 import type { MetadataRoute } from "next";
+import { siteConfig } from "../lib/site";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "VULNERA by TECDEX",
-    short_name: "VULNERA",
-    description:
-      "Pentesting continuo y gestión de superficie expuesta para activos propios o autorizados.",
+    name: siteConfig.name,
+    short_name: siteConfig.shortName,
+    description: siteConfig.manifestDescription,
     start_url: "/",
     display: "standalone",
-    background_color: "#2B3944",
-    theme_color: "#2B3944",
-    lang: "es-CL",
+    background_color: siteConfig.themeColor,
+    theme_color: siteConfig.themeColor,
+    lang: siteConfig.defaultLocale,
     icons: [
       {
         src: "/favicon.svg",
