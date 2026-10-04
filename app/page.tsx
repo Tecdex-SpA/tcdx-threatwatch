@@ -1,4 +1,5 @@
 import { contact, siteConfig } from "../lib/site";
+import { ProductStatus } from "./components/ProductStatus";
 
 // Copy aprobado: doc 48 (VULNERA_CONTENIDO_FUENTE_WEB_2026-10-04). No reescribir claims.
 
@@ -267,6 +268,12 @@ export default function Page() {
         </div>
       </section>
 
+      <section className="status-section" aria-label="Estado del producto">
+        <div className="container">
+          <ProductStatus />
+        </div>
+      </section>
+
       <section id="auditoria" className="audit-section">
         <div className="container audit-card">
           <div>
@@ -377,6 +384,7 @@ export default function Page() {
             <h3>Producto</h3>
             <a href="#solucion">Solución</a>
             <a href="#como-funciona">Cómo funciona</a>
+            <a href="#estado">Estado del producto</a>
             <a href="#demo">Solicitar demo</a>
           </div>
           <div>
