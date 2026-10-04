@@ -17,7 +17,6 @@ export const metadata: Metadata = {
   creator: organization.name,
   publisher: organization.name,
   category: "Cybersecurity",
-  keywords: siteConfig.keywords,
   alternates: {
     canonical: "/",
   },
@@ -37,8 +36,8 @@ export const metadata: Metadata = {
     locale: siteConfig.locale,
     url: "/",
     siteName: siteConfig.name,
-    title: siteConfig.ogTitle,
-    description: siteConfig.ogDescription,
+    title: siteConfig.title,
+    description: siteConfig.description,
     images: [
       {
         url: "/og.png",
@@ -50,8 +49,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: siteConfig.ogTitle,
-    description: siteConfig.ogDescription,
+    title: siteConfig.title,
+    description: siteConfig.description,
     images: ["/og.png"],
   },
   icons: {

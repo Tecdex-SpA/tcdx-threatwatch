@@ -1,61 +1,73 @@
-const controlSteps = [
-  ["01", "Definir el alcance", "Registramos dominios, IPs, APIs y servicios que pueden ser evaluados."],
-  ["02", "Validar autorización", "Confirmamos ownership o evidencia verificable antes de cualquier revisión."],
-  ["03", "Ejecutar con control", "Aplicamos el modo de evaluación acordado y respetamos el scope aprobado."],
-  ["04", "Priorizar y reportar", "Convertimos evidencia técnica en decisiones claras y próximos pasos."],
+import { contact, siteConfig } from "../lib/site";
+
+// Copy aprobado: doc 48 (VULNERA_CONTENIDO_FUENTE_WEB_2026-10-04). No reescribir claims.
+
+const problemWithout = [
+  "Un pentest al año y una planilla que nadie actualiza.",
+  "Hallazgos sueltos, sin responsable ni fecha de cierre.",
+  "Distancia entre el informe técnico y la acción correctiva.",
+  "Nada que mostrar cuando la auditoría pide evidencia de avance.",
 ];
 
-const capabilities = [
-  {
-    number: "01",
-    title: "Superficie expuesta",
-    text: "Visibilidad continua sobre dominios, subdominios, portales, APIs y servicios publicados.",
-    detail: "Inventario controlado",
-  },
-  {
-    number: "02",
-    title: "Gobierno del scan",
-    text: "Scopes, ownership verification y Approval Gate antes de ejecutar revisiones sensibles.",
-    detail: "Autorización trazable",
-  },
-  {
-    number: "03",
-    title: "Hallazgos accionables",
-    text: "Severidad, evidencia, impacto técnico, contexto de negocio y remediación sugerida.",
-    detail: "Menos ruido operativo",
-  },
-  {
-    number: "04",
-    title: "Reportabilidad",
-    text: "Una lectura ejecutiva para dirección y detalle útil para TI, seguridad y cumplimiento.",
-    detail: "Decisiones informadas",
-  },
+const problemWith = [
+  "Un lugar para el alcance, los hallazgos y su corrección.",
+  "Cada hallazgo con severidad, evidencia y recomendación.",
+  "Responsables y seguimiento hasta el cierre comprobado.",
+  "Trazabilidad del alcance, las autorizaciones y los resultados.",
+];
+
+const controlSteps = [
+  ["01", "Definir el alcance", "Registras dominios, IPs, APIs y servicios que se pueden evaluar."],
+  ["02", "Validar autorización", "Se confirma propiedad o evidencia verificable antes de cualquier revisión."],
+  ["03", "Evaluar con control", "Se aplica el perfil acordado, respetando el alcance aprobado."],
+  ["04", "Priorizar y cerrar", "La evidencia se convierte en decisiones, responsables y seguimiento."],
 ];
 
 const audiences = [
-  ["Gerencia", "Riesgo priorizado y una lectura clara para decidir inversión y continuidad."],
-  ["TI y seguridad", "Evidencia técnica, servicios afectados y seguimiento de remediación."],
-  ["Cumplimiento", "Trazabilidad del alcance, autorizaciones y resultados para apoyar auditorías."],
+  ["Gerencia", "Para decidir", "Riesgo priorizado y una lectura clara para decidir inversión y continuidad."],
+  ["TI y seguridad", "Para resolver", "Evidencia técnica, servicios afectados y recomendación de remediación."],
+  ["Cumplimiento", "Para auditar", "Trazabilidad del alcance, las autorizaciones y los resultados."],
 ];
 
 const faqs = [
   [
     "¿VULNERA reemplaza un pentest?",
-    "No. Complementa el trabajo de especialistas con revisiones recurrentes, evidencia y seguimiento. Los resultados siempre deben ser revisados por responsables técnicos.",
+    "No. Complementa el trabajo de especialistas con una forma ordenada de gestionar hallazgos, evidencia y seguimiento. Los resultados siempre deben ser revisados por responsables técnicos.",
   ],
   [
     "¿Puede revisar cualquier dominio?",
-    "No. Solo se evalúan activos propios o expresamente autorizados. El flujo exige scope, validación de ownership y aprobación.",
+    "No. Solo se evalúan activos propios o expresamente autorizados. El flujo exige alcance, validación de propiedad y aprobación explícita antes de cualquier revisión.",
   ],
   [
     "¿Qué recibe mi empresa?",
-    "Un resumen ejecutivo, hallazgos técnicos priorizados, evidencia disponible, recomendaciones y una propuesta de próximos pasos según el alcance acordado.",
+    "Un resumen ejecutivo para gerencia y el detalle técnico para TI, con evidencia y recomendaciones asociadas a cada hallazgo. Durante la demo, sobre datos de ejemplo.",
+  ],
+  [
+    "¿Está disponible para contratar hoy?",
+    "El producto está en desarrollo. Hoy ofrecemos demostraciones guiadas. Revisa el estado del producto para ver qué está disponible y qué estamos construyendo.",
   ],
   [
     "¿TECDEX puede acompañar la remediación?",
-    "Sí. TECDEX puede revisar hallazgos, apoyar la priorización, acompañar hardening y revalidar correcciones como servicio gestionado.",
+    "TECDEX puede ayudar a definir el alcance e interpretar los hallazgos. El seguimiento de remediación y el retest dentro de la plataforma están en desarrollo.",
   ],
 ];
+
+const needOptions = [
+  "Revisar mi superficie expuesta",
+  "Un reporte para gerencia",
+  "Preparar una auditoría",
+  "Revisar un portal o API",
+  "Otro",
+];
+
+const demoSeverities = [
+  ["Crítica", "critical", 32, 2],
+  ["Alta", "high", 48, 3],
+  ["Media", "medium", 64, 5],
+  ["Baja", "low", 28, 2],
+] as const;
+
+const whatsappUrl = `https://wa.me/${contact.whatsapp}`;
 
 function TecdexLogo({ className = "" }: { className?: string }) {
   return (
@@ -77,7 +89,7 @@ function WhatsAppFloat() {
   return (
     <a
       className="whatsapp-float"
-      href="https://wa.me/56989995290?text=Hola%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20VULNERA."
+      href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Escríbenos por WhatsApp"
@@ -91,16 +103,13 @@ function WhatsAppFloat() {
 
 function ProductPreview() {
   return (
-    <div className="product-preview" aria-label="Vista referencial del panel VULNERA">
+    <div className="product-preview" aria-label="Vista de demostración de la plataforma">
       <div className="preview-topbar">
         <div className="preview-brand">
           <span className="preview-mark">VU</span>
-          <div>
-            <strong>VULNERA</strong>
-            <small>Superficie expuesta</small>
-          </div>
+          <strong>VULNERA</strong>
         </div>
-        <span className="live-status"><i /> Monitoreo activo</span>
+        <span className="demo-label">Vista de demostración · datos ilustrativos</span>
       </div>
 
       <div className="preview-body">
@@ -113,39 +122,20 @@ function ProductPreview() {
         </aside>
 
         <div className="preview-content">
-          <div className="preview-heading">
-            <div>
-              <small>Organización</small>
-              <strong>Panorama de exposición</strong>
-            </div>
-            <span>Últimos 30 días</span>
-          </div>
-
           <div className="metric-row">
             <div><span>Activos</span><strong>24</strong><small>23 autorizados</small></div>
-            <div><span>Hallazgos</span><strong>12</strong><small>4 requieren atención</small></div>
-            <div><span>Controles</span><strong>96%</strong><small>scope verificado</small></div>
+            <div><span>Hallazgos</span><strong>12</strong><small>4 por revisar</small></div>
+            <div><span>Scope</span><strong>96%</strong><small>verificado</small></div>
           </div>
 
-          <div className="exposure-card">
-            <div className="exposure-card__top">
-              <div>
-                <span className="card-kicker">Prioridad de remediación</span>
-                <strong>Exposición por severidad</strong>
+          <div className="severity-card">
+            {demoSeverities.map(([label, level, width, count]) => (
+              <div className="severity-row" key={level}>
+                <span className="severity-name">{label}</span>
+                <span className={`severity-bar severity-${level}`} style={{ width: `${width}%` }} />
+                <span className="severity-count">{count}</span>
               </div>
-              <span className="trend">↓ 18%</span>
-            </div>
-            <div className="bar-chart" aria-hidden="true">
-              <span style={{ height: "32%" }} />
-              <span style={{ height: "54%" }} />
-              <span style={{ height: "38%" }} />
-              <span style={{ height: "72%" }} />
-              <span style={{ height: "46%" }} />
-              <span style={{ height: "83%" }} />
-              <span style={{ height: "62%" }} />
-              <span style={{ height: "42%" }} />
-            </div>
-            <div className="chart-legend"><span>Sem 1</span><span>Sem 2</span><span>Sem 3</span><span>Hoy</span></div>
+            ))}
           </div>
 
           <div className="finding-row">
@@ -196,18 +186,18 @@ export default function Page() {
         <div className="hero-orbit orbit-two" />
         <div className="container hero-grid">
           <div className="hero-copy">
-            <p className="eyebrow light">VULNERA · by TECDEX</p>
-            <h1>Conoce tu superficie expuesta antes que se convierta en un incidente.</h1>
+            <p className="eyebrow light">Gestión de vulnerabilidades · Chile</p>
+            <h1>Del hallazgo al cierre comprobado, no solo al informe.</h1>
             <p className="hero-lead">
-              Pentesting continuo para dominios, APIs y servicios públicos, con alcance autorizado,
-              hallazgos priorizados y reportes que conectan seguridad con negocio.
+              Evaluaciones controladas sobre dominios, aplicaciones web y APIs que tu organización
+              autoriza, con hallazgos priorizados e informes para gerencia y TI.
             </p>
             <div className="hero-actions">
-              <a className="button primary" href="#demo">Evaluar mis activos</a>
+              <a className="button primary" href="#demo">Solicitar demo guiada</a>
               <a className="button ghost" href="#como-funciona">Ver cómo funciona <span aria-hidden="true">→</span></a>
             </div>
             <div className="hero-trust">
-              <span><CheckIcon /> Activos autorizados</span>
+              <span><CheckIcon /> Solo activos propios o autorizados</span>
               <span><CheckIcon /> Evidencia trazable</span>
               <span><CheckIcon /> Acompañamiento TECDEX</span>
             </div>
@@ -216,38 +206,26 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="context-strip" aria-label="Resumen de propuesta de valor">
-        <div className="container context-grid">
-          <p>Una operación de seguridad más clara, recurrente y controlada.</p>
-          <div><strong>Visibilidad</strong><span>de activos públicos</span></div>
-          <div><strong>Gobierno</strong><span>antes de ejecutar</span></div>
-          <div><strong>Prioridad</strong><span>para remediar</span></div>
-          <div><strong>Reporte</strong><span>para decidir</span></div>
-        </div>
-      </section>
-
       <section id="solucion" className="section section-light">
         <div className="container">
-          <div className="section-heading split-heading">
-            <div>
-              <p className="eyebrow">La solución</p>
-              <h2>No es solo detectar. Es entender qué importa y actuar con control.</h2>
-            </div>
-            <p>
-              VULNERA organiza el ciclo completo de una revisión: alcance, autorización,
-              ejecución, evidencia, priorización y seguimiento.
-            </p>
+          <div className="section-heading">
+            <p className="eyebrow">El problema</p>
+            <h2>Tienes informes de seguridad. Lo que no tienes es la certeza de que se corrigieron.</h2>
           </div>
 
-          <div className="capability-grid">
-            {capabilities.map((item) => (
-              <article className="capability-card" key={item.number}>
-                <span className="card-number">{item.number}</span>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-                <small>{item.detail}</small>
-              </article>
-            ))}
+          <div className="problem-grid">
+            <div>
+              <h3 className="problem-title problem-title--without">Sin VULNERA</h3>
+              <ul className="problem-list problem-list--without">
+                {problemWithout.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </div>
+            <div>
+              <h3 className="problem-title problem-title--with">Con VULNERA</h3>
+              <ul className="problem-list problem-list--with">
+                {problemWith.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -256,15 +234,7 @@ export default function Page() {
         <div className="container governance-grid">
           <div className="governance-copy">
             <p className="eyebrow light">Control por diseño</p>
-            <h2>Cada revisión comienza con autorización, no con un scan.</h2>
-            <p>
-              Los controles de scope, ownership y aprobación ayudan a mantener cada evaluación
-              dentro de límites claros y trazables.
-            </p>
-            <div className="approval-seal">
-              <span className="seal-icon">✓</span>
-              <div><strong>Approval Gate</strong><small>Listo para evaluación controlada</small></div>
-            </div>
+            <h2>Cada evaluación empieza con una autorización, no con un escaneo.</h2>
           </div>
 
           <div className="steps-list">
@@ -281,14 +251,14 @@ export default function Page() {
       <section id="para-quien" className="section section-surface">
         <div className="container">
           <div className="section-heading centered">
-            <p className="eyebrow">Una plataforma, dos niveles de lectura</p>
-            <h2>Información útil para quienes deciden y para quienes resuelven.</h2>
-            <p>La misma evidencia se presenta con el nivel de detalle que cada rol necesita.</p>
+            <p className="eyebrow">Una plataforma, dos lecturas</p>
+            <h2>La misma evidencia, con el detalle que cada rol necesita.</h2>
           </div>
           <div className="audience-grid">
-            {audiences.map(([title, text], index) => (
-              <article key={title}>
+            {audiences.map(([role, title, text], index) => (
+              <article key={role}>
                 <span className={`audience-icon icon-${index + 1}`} aria-hidden="true">{index === 0 ? "↗" : index === 1 ? "⌁" : "✓"}</span>
+                <p className="audience-role">{role}</p>
                 <h3>{title}</h3>
                 <p>{text}</p>
               </article>
@@ -297,48 +267,47 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="managed-section">
-        <div className="container managed-card">
+      <section id="auditoria" className="audit-section">
+        <div className="container audit-card">
           <div>
-            <p className="eyebrow light">Servicio gestionado TECDEX</p>
-            <h2>No necesitas operar todo internamente.</h2>
+            <h2 className="eyebrow light">¿Lo necesitas para una auditoría?</h2>
+            <p>
+              Si tu objetivo es demostrar la gestión de vulnerabilidades técnicas ante una auditoría
+              —por ejemplo, el control 8.8 de ISO 27001 o las exigencias de la Ley 21.663—, el sistema
+              de gestión vive en TECDEX Compliance. VULNERA aporta la evidencia técnica; TECDEX
+              Compliance la vincula a tus controles.
+            </p>
+            <small>VULNERA aporta evidencia; no sustituye una certificación ISO.</small>
           </div>
-          <p>
-            Podemos acompañar la definición de scope, ejecutar la revisión controlada,
-            validar hallazgos y trabajar contigo en un plan de remediación.
-          </p>
-          <a className="button primary" href="#demo">Conversemos</a>
+          <a className="button primary" href="https://isos.tecdex.net/" target="_blank" rel="noopener">
+            Conocer TECDEX Compliance <span aria-hidden="true">→</span>
+          </a>
         </div>
       </section>
 
       <section id="demo" className="section contact-section">
         <div className="container contact-grid">
           <div className="contact-copy">
-            <p className="eyebrow">Demo controlada</p>
-            <h2>Obtén una primera lectura de tu exposición.</h2>
+            <p className="eyebrow">Demo guiada</p>
+            <h2>Obtén una primera lectura, sobre datos de ejemplo.</h2>
             <p className="contact-lead">
-              Cuéntanos qué activos necesitas revisar. Un especialista TECDEX evaluará el caso
+              Cuéntanos qué activos necesitas revisar. Un especialista de TECDEX evaluará el caso
               y propondrá un alcance inicial seguro.
             </p>
             <ul className="contact-benefits">
-              <li><CheckIcon /><span>Definición de scope inicial</span></li>
-              <li><CheckIcon /><span>Validación de ownership o autorización</span></li>
-              <li><CheckIcon /><span>Resumen ejecutivo y detalle técnico</span></li>
+              <li><CheckIcon /><span>Definición de alcance inicial</span></li>
+              <li><CheckIcon /><span>Validación de propiedad o autorización</span></li>
+              <li><CheckIcon /><span>Resumen ejecutivo y detalle técnico de ejemplo</span></li>
               <li><CheckIcon /><span>Recomendaciones y próximos pasos</span></li>
             </ul>
             <div className="direct-contact">
               <span>¿Prefieres contacto directo?</span>
-              <a href="mailto:contacto@tecdex.net">contacto@tecdex.net</a>
-              <a href="https://wa.me/56989995290" target="_blank" rel="noreferrer">WhatsApp +56 9 8999 5290</a>
+              <a href={`mailto:${contact.email}`}>{contact.email}</a>
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">WhatsApp {contact.whatsappLabel}</a>
             </div>
           </div>
 
-          <form className="contact-form" action="mailto:contacto@tecdex.net" method="post" encType="text/plain">
-            <div className="form-heading">
-              <span>Paso 1 de 1</span>
-              <h3>Solicita una demo</h3>
-              <p>Te responderemos para coordinar el alcance. No se ejecutará ningún scan automáticamente.</p>
-            </div>
+          <form className="contact-form" action={`mailto:${contact.email}`} method="post" encType="text/plain">
             <div className="form-row">
               <label>Nombre<input name="nombre" autoComplete="name" required placeholder="Tu nombre" /></label>
               <label>Empresa<input name="empresa" autoComplete="organization" required placeholder="Nombre de empresa" /></label>
@@ -351,20 +320,19 @@ export default function Page() {
             <label>¿Qué necesitas?
               <select name="necesidad" defaultValue="">
                 <option value="" disabled>Selecciona una opción</option>
-                <option>Revisar superficie expuesta</option>
-                <option>Obtener un reporte para gerencia</option>
-                <option>Preparar una auditoría</option>
-                <option>Revisar un portal o API</option>
-                <option>Evaluar servicio gestionado</option>
+                {needOptions.map((option) => <option key={option}>{option}</option>)}
               </select>
             </label>
             <label>Contexto adicional<textarea name="mensaje" rows={3} placeholder="Cuéntanos brevemente qué quieres revisar." /></label>
             <label className="form-check">
-              <input type="checkbox" required />
+              <input type="checkbox" name="activos_autorizados" required />
               <span>Solicito información para evaluar activos propios o expresamente autorizados.</span>
             </label>
-            <button className="button primary form-submit" type="submit">Solicitar evaluación</button>
-            <p className="privacy-note">Tus datos serán utilizados únicamente para responder esta solicitud comercial.</p>
+            <button className="button primary form-submit" type="submit">Solicitar demo guiada</button>
+            <p className="privacy-note">
+              No se ejecutará ningún escaneo automáticamente. Tus datos se usarán solo para responder
+              esta solicitud comercial.
+            </p>
           </form>
         </div>
       </section>
@@ -403,31 +371,28 @@ export default function Page() {
           <div className="footer-brand">
             <TecdexLogo className="footer-logo" />
             <p>VULNERA</p>
-            <span>Pentesting continuo y gestión de superficie expuesta.</span>
+            <span>{siteConfig.tagline}</span>
           </div>
           <div>
             <h3>Producto</h3>
             <a href="#solucion">Solución</a>
             <a href="#como-funciona">Cómo funciona</a>
-            <a href="#para-quien">Para quién</a>
             <a href="#demo">Solicitar demo</a>
           </div>
           <div>
             <h3>TECDEX</h3>
-            <a href="https://tecdex.net/quienes-somos/" target="_blank" rel="noreferrer">Quiénes somos</a>
-            <a href="https://tecdex.net/soluciones-de-seguridad-informatica-para-empresas/" target="_blank" rel="noreferrer">Seguridad informática</a>
-            <a href="https://tecdex.net/politicas-de-privacidad/" target="_blank" rel="noreferrer">Políticas de privacidad</a>
-          </div>
-          <div>
-            <h3>Hablemos</h3>
-            <a href="tel:+56233046291">+56 2 3304 6291</a>
-            <a href="https://wa.me/56989995290" target="_blank" rel="noreferrer">WhatsApp +56 9 8999 5290</a>
-            <a href="mailto:contacto@tecdex.net">contacto@tecdex.net</a>
-            <address>Guardia Vieja 181, Of. 506<br />Providencia, Santiago</address>
+            <a href="https://tecdex.net/quienes-somos/" target="_blank" rel="noopener">Quiénes somos</a>
+            <a href="https://tecdex.net/soluciones-de-seguridad-informatica-para-empresas/" target="_blank" rel="noopener">Seguridad informática</a>
+            <a href="https://tecdex.net/politicas-de-privacidad/" target="_blank" rel="noopener">Políticas de privacidad</a>
+            <a href={`mailto:${contact.email}`}>{contact.email}</a>
           </div>
         </div>
         <div className="container footer-bottom">
-          <span>© {new Date().getFullYear()} TECDEX SpA. Todos los derechos reservados.</span>
+          <span>
+            © {new Date().getFullYear()} TECDEX SpA · {contact.addressLines.join(", ")} ·{" "}
+            <a href={`tel:${contact.phone}`}>{contact.phoneLabel}</a> ·{" "}
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">WhatsApp {contact.whatsappLabel}</a>
+          </span>
           <a href="#inicio">Volver arriba ↑</a>
         </div>
       </footer>

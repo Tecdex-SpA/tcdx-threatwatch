@@ -18,29 +18,13 @@ export const siteConfig = {
   defaultLocale: "es-CL",
   /** Formato OpenGraph */
   locale: "es_CL",
-  title: "VULNERA by TECDEX | Pentesting continuo y gestión de superficie expuesta",
+  // Metadata de la home: doc 48 §0 (texto aprobado). OG replica title/description.
+  title: "Gestión de vulnerabilidades y remediación | VULNERA by TECDEX",
   description:
-    "Plataforma SaaS chilena para apoyar pentesting continuo, gestión de superficie expuesta, escaneos controlados, hallazgos priorizados, evidencia técnica y reportes ejecutivos/técnicos sobre activos propios o autorizados.",
-  ogTitle: "VULNERA by TECDEX — Pentesting continuo y gestión de exposición",
-  ogDescription:
-    "Controle scopes, valide ownership, ejecute scans autorizados y genere reportes ejecutivos/técnicos para priorizar riesgos de seguridad.",
-  ogImageAlt: "VULNERA by TECDEX - Pentesting continuo y gestión de exposición",
-  manifestDescription:
-    "Pentesting continuo y gestión de superficie expuesta para activos propios o autorizados.",
-  keywords: [
-    "pentesting continuo Chile",
-    "gestión de superficie expuesta",
-    "escaneo de vulnerabilidades autorizado",
-    "reportes de ciberseguridad ejecutivos",
-    "pentesting SaaS",
-    "seguridad para fintech",
-    "OWASP ZAP Chile",
-    "Nmap Nuclei ZAP reportes",
-    "auditoría de activos expuestos",
-    "TECDEX ciberseguridad",
-    "superficie de ataque externa",
-    "gestión de vulnerabilidades Chile",
-  ],
+    "Plataforma de TECDEX para evaluar activos propios o autorizados, entender cada hallazgo y gestionar su corrección, del hallazgo al cierre. En desarrollo: agenda una demo guiada.",
+  ogImageAlt: "VULNERA by TECDEX",
+  /** Bajada de marca del footer (doc 48 §1) */
+  tagline: "Gestión de vulnerabilidades con alcance autorizado, del hallazgo al cierre comprobado.",
   themeColor: "#2B3944",
 };
 
