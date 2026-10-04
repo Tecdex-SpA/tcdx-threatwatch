@@ -8,8 +8,8 @@ Registro de las tandas de la misión «web de VULNERA» (docs 47, 48 y 49 del pr
 
 ## Tanda P0 — Indexación, medición y claims · 2026-10-04
 
-**Estado:** commits en local, **sin push** (lo autoriza Mario tras revisar; el push a
-`main` despliega en producción en Vercel). Copy: doc 48, con las decisiones del doc 49.
+**Estado:** **desplegada en producción** el 2026-10-04 (push autorizado por Mario; ver
+«Despliegue en producción» al final de la tanda). Copy: doc 48, con las decisiones del doc 49.
 
 **Método de verificación:** `next build` + `next start -p 3100` y curl al HTML
 servido. «Antes» = build local de `3e29d84`, idéntico a producción (curl a
@@ -32,7 +32,8 @@ no es de esta misión. Se guardó en stash durante la tanda y se restauró sin c
 | 7 | `2352afd` | P0-7 · Consentimiento de cookies |
 | 8 | `571fb4a` | P0-4 · GA4 propio tras consentimiento |
 | 9 | `a960341` | P0-5 · Eventos de conversión + WhatsApp |
-| 10 | (este archivo) | P0 · Registro |
+| 10 | `47a6ec6` | P0 · Registro |
+| 11 | `c9300a6` | fix · Restaura `font-family` del body |
 
 ### P0-2 · Configuración centralizada (`e28e7d8`)
 
@@ -229,15 +230,64 @@ patrones prohibidos.
 
 Las cifras 24 / 12 / 96 % solo aparecen dentro del panel etiquetado «Vista de demostración · datos ilustrativos».
 
+### fix · Restaura `font-family` del body (`c9300a6`)
+
+- **Archivo:** `app/globals.css` (1 línea). Solo se commiteó esta línea; el cambio ajeno
+  de ancho de contenedor (1140→1280) sigue fuera de todos los commits.
+- **Causa:** `body, input, select, textarea, button { font: inherit; }` hacía que el body
+  heredara la fuente por defecto del navegador (Times) y anulaba `font-family: var(--font-body)`.
+- **Cambio:** se quita `body` del selector; los controles de formulario siguen heredando la fuente del body.
+- **CSS servido, antes:** `body,button,input,select,textarea{font:inherit}`.
+- **CSS servido, después:** `button,input,select,textarea{font:inherit}`.
+- **Fuente calculada del body, antes:** `Times`.
+- **Fuente calculada del body, después:** `-apple-system, "system-ui", "Segoe UI", Roboto, Arial, sans-serif` (navegador sobre producción).
+- **Revertir:** `git revert c9300a6`.
+
+### Despliegue en producción
+
+- **Push:** `git push origin main` (`3e29d84..c9300a6`, 11 commits), autorizado por Mario el 2026-10-04.
+- **Deploy de Vercel:**
+  - Commit desplegado: `c9300a6` (`c9300a661866997258d05f82ea0d8121a1aa2417`).
+  - Entorno: Production.
+  - Deployment GitHub: `6848397270`.
+  - Estado: `success` (READY) a las 2026-10-04T23:43:24Z.
+  - URL del deploy: `https://tcdx-threatwatch-ad54xqo2m-tecdex-projects.vercel.app`.
+  - Registro en Vercel: `https://vercel.com/tecdex-projects/tcdx-threatwatch/EFzikXpT7mw8FrmvxweRQNh99Rxk`.
+- **Variables de entorno en Vercel** (Production y Preview):
+  - `ANALYTICS_GA4_ID=G-4Q39F6MMQM`. El código lee exactamente ese nombre en el servidor, durante el build.
+  - `GSC_VERIFICATION` y `BING_VERIFICATION` quedan vacías a propósito: las propiedades se verificaron fuera del código.
+- **Verificación contra `https://vulnera.tecdex.net/`:** curl, más el navegador para la fuente y el consentimiento.
+
+  | Comprobación | Resultado |
+  |---|---|
+  | `<title>` | `Gestión de vulnerabilidades y remediación \| VULNERA by TECDEX` ✅ (= doc 48) |
+  | `<meta name="description">` | texto del doc 48 §0 ✅ |
+  | Canonical | `https://vulnera.tecdex.net/` ✅ (con barra) |
+  | `og:url` / `og:title` / `og:description` / `og:locale` | `/` con barra, iguales a title/description, `es_CL` ✅ |
+  | `sitemap.xml` | `HTTP/2 200` sin redirección; `loc` `https://vulnera.tecdex.net/` = canonical; `lastmod` `2026-10-04` ✅ |
+  | `robots.txt` | `HTTP/2 200` sin redirección; declara el sitemap ✅ |
+  | Barrido de claims prohibidos (doc 40 §11) | **0 claims**. Solo coinciden las 4 frases aprobadas (¹ ² ³ del barrido) ✅ |
+  | Etiqueta «Vista de demostración · datos ilustrativos» | presente ✅ |
+  | Estado del producto · Uso responsable · checkbox · «no se ejecutará ningún escaneo» | presentes ✅ |
+  | Meta-tags de verificación GSC/Bing | 0 (a propósito) ✅ |
+  | `G-4Q39F6MMQM` en el HTML servido | 1 (payload RSC: `{"gaId":"G-4Q39F6MMQM"}`) ✅ |
+  | `googletagmanager` en el HTML servido | 0: no se carga sin consentimiento ✅ |
+  | Sin decidir (banner visible) | `gtag/js` no solicitado, `gtag` undefined, sin cookies `_ga` ✅ |
+  | **Rechazar** + recargar | 0 peticiones a Google, `gtag` undefined, sin cookies `_ga` ✅ |
+  | Aceptar | carga `gtag/js?id=G-4Q39F6MMQM`, `config` G-4Q39F6MMQM, `g/collect` enviado, cookies `_ga` y `_ga_4Q39F6MMQM` ✅ |
+  | Revocar tras aceptar | `ga-disable-G-4Q39F6MMQM` = true, cookies `_ga` borradas ✅ |
+  | Fuente del body | sans-serif (`-apple-system, "system-ui", …`), ya no Times; CSS servido sin `body` en `font:inherit` ✅ |
+  | Assets ThreatWatch eliminados | `og-threatwatch.svg`, `logo-threatwatch.png` y `visual-exposure-map.svg` → 404; `og.png` y `favicon.svg` → 200 ✅ |
+
+  La prueba «Aceptar» envió **un page_view real** a G-4Q39F6MMQM desde el navegador de verificación (2026-10-04, ~23:46 UTC). Después se volvió a rechazar.
+
 ### Pendientes `ACCIÓN_MARIO` (P0)
 
-1. Search Console: propiedad de prefijo `https://vulnera.tecdex.net/`.
-2. Bing Webmaster Tools: propiedad del subdominio (se puede importar desde GSC).
-3. GA4: propiedad propia de VULNERA.
-4. Vercel: cargar `ANALYTICS_GA4_ID`, `GSC_VERIFICATION` y `BING_VERIFICATION`, y redeplegar.
-5. Tras el deploy: enviar `sitemap.xml` en GSC y Bing, pedir la indexación de la home y confirmar los eventos en DebugView.
+1. ~~Search Console~~ y ~~Bing Webmaster Tools~~: dados de alta y verificados (según Mario, 2026-10-04).
+2. ~~GA4 propio~~ y ~~variable en Vercel~~: hecho (`G-4Q39F6MMQM`).
+3. Confirmar en GSC y Bing que `sitemap.xml` está enviado y en estado «Correcto», y pedir la indexación de la home.
+4. Confirmar en GA4 (tiempo real o DebugView) el page_view de prueba y un evento de conversión.
 
-### Observaciones fuera de alcance (no tocadas)
+### Observaciones fuera de alcance
 
-- **Tipografía del cuerpo:** el cuerpo se renderiza en la serif por defecto del navegador (Times), también en producción. La causa es que `body, input, … { font: inherit; }` en `globals.css` pisa el `font-family` del body. Se resuelve con el rediseño de P2 (Inter en el cuerpo).
 - **Destino del formulario:** sigue siendo `mailto:` (P2-2: envío a Zoho CRM y página `/gracias`).
