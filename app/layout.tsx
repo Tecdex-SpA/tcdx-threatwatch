@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { integrations, organization, siteConfig } from "../lib/site";
+import { ConsentBanner } from "./components/ConsentBanner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -78,7 +79,11 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang={siteConfig.defaultLocale} className={inter.variable}>
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* Sin GA4 configurado no hay cookies no esenciales y no se muestra el banner. */}
+        {integrations.ga4Id ? <ConsentBanner privacyUrl={organization.privacyUrl} /> : null}
+      </body>
     </html>
   );
 }

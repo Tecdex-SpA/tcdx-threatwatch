@@ -34,6 +34,7 @@ export const organization = {
   id: "https://tecdex.net/#organization",
   productId: "https://tecdex.net/#vulnera",
   website: "https://tecdex.net/",
+  privacyUrl: "https://tecdex.net/politicas-de-privacidad/",
 };
 
 export const contact = {

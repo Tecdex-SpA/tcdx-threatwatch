@@ -1,4 +1,5 @@
-import { contact, siteConfig } from "../lib/site";
+import { contact, integrations, organization, siteConfig } from "../lib/site";
+import { CookiePreferencesButton } from "./components/ConsentBanner";
 import { ProductStatus } from "./components/ProductStatus";
 
 // Copy aprobado: doc 48 (VULNERA_CONTENIDO_FUENTE_WEB_2026-10-04). No reescribir claims.
@@ -391,7 +392,8 @@ export default function Page() {
             <h3>TECDEX</h3>
             <a href="https://tecdex.net/quienes-somos/" target="_blank" rel="noopener">Quiénes somos</a>
             <a href="https://tecdex.net/soluciones-de-seguridad-informatica-para-empresas/" target="_blank" rel="noopener">Seguridad informática</a>
-            <a href="https://tecdex.net/politicas-de-privacidad/" target="_blank" rel="noopener">Políticas de privacidad</a>
+            <a href={organization.privacyUrl} target="_blank" rel="noopener">Políticas de privacidad</a>
+            {integrations.ga4Id ? <CookiePreferencesButton /> : null}
             <a href={`mailto:${contact.email}`}>{contact.email}</a>
           </div>
         </div>
