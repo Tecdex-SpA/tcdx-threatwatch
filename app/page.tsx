@@ -1,4 +1,4 @@
-import { contact, integrations, organization, siteConfig } from "../lib/site";
+import { contact, integrations, organization, siteConfig, whatsappUrl } from "../lib/site";
 import { CookiePreferencesButton } from "./components/ConsentBanner";
 import { ProductStatus } from "./components/ProductStatus";
 
@@ -69,8 +69,6 @@ const demoSeverities = [
   ["Baja", "low", 28, 2],
 ] as const;
 
-const whatsappUrl = `https://wa.me/${contact.whatsapp}`;
-
 function TecdexLogo({ className = "" }: { className?: string }) {
   return (
     <img
@@ -91,6 +89,7 @@ function WhatsAppFloat() {
   return (
     <a
       className="whatsapp-float"
+      data-location="float"
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
@@ -154,7 +153,7 @@ function ProductPreview() {
 export default function Page() {
   return (
     <main id="inicio">
-      <header className="site-header">
+      <header className="site-header" data-location="nav">
         <div className="container header-main">
           <a className="brand" href="#inicio" aria-label="VULNERA, volver al inicio">
             <TecdexLogo className="header-logo" />
@@ -167,7 +166,7 @@ export default function Page() {
             <a href="#como-funciona">Cómo funciona</a>
             <a href="#para-quien">Para quién</a>
             <a href="#preguntas">Preguntas</a>
-            <a className="nav-button" href="#demo">Solicitar demo</a>
+            <a className="nav-button" href="#demo" data-cta="demo">Solicitar demo</a>
           </nav>
 
           <details className="mobile-nav">
@@ -177,13 +176,13 @@ export default function Page() {
               <a href="#como-funciona">Cómo funciona</a>
               <a href="#para-quien">Para quién</a>
               <a href="#preguntas">Preguntas</a>
-              <a href="#demo">Solicitar demo</a>
+              <a href="#demo" data-cta="demo">Solicitar demo</a>
             </nav>
           </details>
         </div>
       </header>
 
-      <section className="hero">
+      <section className="hero" data-location="hero">
         <div className="hero-orbit orbit-one" />
         <div className="hero-orbit orbit-two" />
         <div className="container hero-grid">
@@ -195,7 +194,7 @@ export default function Page() {
               autoriza, con hallazgos priorizados e informes para gerencia y TI.
             </p>
             <div className="hero-actions">
-              <a className="button primary" href="#demo">Solicitar demo guiada</a>
+              <a className="button primary" href="#demo" data-cta="demo">Solicitar demo guiada</a>
               <a className="button ghost" href="#como-funciona">Ver cómo funciona <span aria-hidden="true">→</span></a>
             </div>
             <div className="hero-trust">
@@ -293,7 +292,7 @@ export default function Page() {
         </div>
       </section>
 
-      <section id="demo" className="section contact-section">
+      <section id="demo" className="section contact-section" data-location="demo">
         <div className="container contact-grid">
           <div className="contact-copy">
             <p className="eyebrow">Demo guiada</p>
@@ -315,7 +314,7 @@ export default function Page() {
             </div>
           </div>
 
-          <form className="contact-form" action={`mailto:${contact.email}`} method="post" encType="text/plain">
+          <form className="contact-form" action={`mailto:${contact.email}`} method="post" encType="text/plain" data-lead-form>
             <div className="form-row">
               <label>Nombre<input name="nombre" autoComplete="name" required placeholder="Tu nombre" /></label>
               <label>Empresa<input name="empresa" autoComplete="organization" required placeholder="Nombre de empresa" /></label>
@@ -336,7 +335,7 @@ export default function Page() {
               <input type="checkbox" name="activos_autorizados" required />
               <span>Solicito información para evaluar activos propios o expresamente autorizados.</span>
             </label>
-            <button className="button primary form-submit" type="submit">Solicitar demo guiada</button>
+            <button className="button primary form-submit" type="submit" data-cta="demo">Solicitar demo guiada</button>
             <p className="privacy-note">
               No se ejecutará ningún escaneo automáticamente. Tus datos se usarán solo para responder
               esta solicitud comercial.
@@ -374,7 +373,7 @@ export default function Page() {
         </div>
       </section>
 
-      <footer className="footer">
+      <footer className="footer" data-location="footer">
         <div className="container footer-grid">
           <div className="footer-brand">
             <TecdexLogo className="footer-logo" />
@@ -386,7 +385,7 @@ export default function Page() {
             <a href="#solucion">Solución</a>
             <a href="#como-funciona">Cómo funciona</a>
             <a href="#estado">Estado del producto</a>
-            <a href="#demo">Solicitar demo</a>
+            <a href="#demo" data-cta="demo">Solicitar demo</a>
           </div>
           <div>
             <h3>TECDEX</h3>

@@ -42,6 +42,8 @@ export const contact = {
   /** E.164 sin "+" para wa.me */
   whatsapp: "56989995290",
   whatsappLabel: "+56 9 8999 5290",
+  /** Texto prellenado que identifica el origen (P0-5, aprobado 2026-10-04). */
+  whatsappMessage: "Hola, vengo de la web de VULNERA y quiero información.",
   phone: "+56233046291",
   phoneLabel: "+56 2 3304 6291",
   addressLines: ["Guardia Vieja 181, Of. 506", "Providencia, Santiago"],
@@ -69,6 +71,8 @@ export const features = {
 export const routes: { path: string; lastModified: string; priority: number }[] = [
   { path: "/", lastModified: "2026-10-04", priority: 1 },
 ];
+
+export const whatsappUrl = `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(contact.whatsappMessage)}`;
 
 export function absoluteUrl(path = "/"): string {
   return `${siteConfig.domain}${path.startsWith("/") ? path : `/${path}`}`;

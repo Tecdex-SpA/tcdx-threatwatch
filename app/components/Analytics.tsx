@@ -2,6 +2,7 @@
 
 import Script from "next/script";
 import { useEffect, useState } from "react";
+import { listenConversions } from "../../lib/analytics";
 import { CONSENT_CHANGE_EVENT, readConsent, type ConsentState } from "../../lib/consent";
 
 // GA4 propio de VULNERA (P0-4). gtag.js solo se solicita tras aceptar cookies.
@@ -24,7 +25,11 @@ export function Analytics({ gaId }: { gaId: string }) {
     setConsent(readConsent());
     const onChange = (event: Event) => setConsent((event as CustomEvent<ConsentState>).detail);
     window.addEventListener(CONSENT_CHANGE_EVENT, onChange);
-    return () => window.removeEventListener(CONSENT_CHANGE_EVENT, onChange);
+    const stopConversions = listenConversions();
+    return () => {
+      window.removeEventListener(CONSENT_CHANGE_EVENT, onChange);
+      stopConversions();
+    };
   }, []);
 
   useEffect(() => {
