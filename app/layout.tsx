@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { organization, siteConfig } from "../lib/site";
+import { integrations, organization, siteConfig } from "../lib/site";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -60,6 +60,13 @@ export const metadata: Metadata = {
     apple: [{ url: "/favicon.svg", type: "image/svg+xml" }],
   },
   manifest: "/manifest.webmanifest",
+  // P0-1: meta-tags de verificación; solo se emiten si la variable de entorno tiene valor.
+  verification: {
+    google: integrations.gscVerification,
+    other: integrations.bingVerification
+      ? { "msvalidate.01": integrations.bingVerification }
+      : undefined,
+  },
 };
 
 export const viewport: Viewport = {
