@@ -4,7 +4,7 @@ import { JsonLd } from "./components/JsonLd";
 import { cycleSteps } from "../lib/cycle";
 import { homeFaqs } from "../lib/faqs";
 import { pageMetadata } from "../lib/seo";
-import { contact, organization, pages, whatsappUrl } from "../lib/site";
+import { contact, integrations, organization, pages, whatsappUrl } from "../lib/site";
 import { AutomationTable } from "./components/AutomationTable";
 import { DashboardPreview } from "./components/DashboardPreview";
 import { DemoForm } from "./components/DemoForm";
@@ -200,7 +200,7 @@ export default function Page() {
             </div>
           </div>
 
-          <DemoForm whatsappUrl={whatsappUrl} privacyUrl={organization.privacyUrl} />
+          <DemoForm whatsappUrl={whatsappUrl} privacyUrl={organization.privacyUrl} gaId={integrations.ga4Id} />
         </div>
       </section>
 

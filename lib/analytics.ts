@@ -33,6 +33,22 @@ export function track(event: ConversionEvent, params: Record<string, string>): v
 }
 
 /**
+ * GA Client ID (P0-11): solo si gtag está cargado, es decir, con consentimiento aceptado.
+ * Resuelve "" si no hay gtag o no responde en `timeoutMs`.
+ */
+export function getGaClientId(gaId: string | undefined, timeoutMs = 1500): Promise<string> {
+  const gtag = getGtag();
+  if (!gtag || !gaId) return Promise.resolve("");
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => resolve(""), timeoutMs);
+    gtag("get", gaId, "client_id", (clientId: unknown) => {
+      clearTimeout(timer);
+      resolve(typeof clientId === "string" ? clientId : "");
+    });
+  });
+}
+
+/**
  * generate_lead (P0-10): solo cuando Zoho aceptó el lead. Espera a que gtag esté
  * disponible (hasta `waitMs`) y resuelve cuando GA4 confirma el envío o a los 1,2 s,
  * para poder navegar después sin perder el evento.

@@ -2,7 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { flushSync } from "react-dom";
-import { trackLead } from "../../lib/analytics";
+import { getGaClientId, trackLead } from "../../lib/analytics";
+import { attributionFields, getAttribution } from "../../lib/attribution";
+import { CONSENT_CHANGE_EVENT, readConsent } from "../../lib/consent";
 import { LEAD_OK_MESSAGE, setPendingLead, takePendingLead } from "../../lib/lead";
 import { freshCaptchaUrl, zohoForm } from "../../lib/zoho";
 
@@ -45,7 +47,48 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 type Attempt = { active: boolean; done: boolean; timers: number[] };
 
-export function DemoForm({ whatsappUrl, privacyUrl }: { whatsappUrl: string; privacyUrl: string }) {
+/** Los 14 campos ocultos de atribución (P0-11), en el orden del doc 53 §2. */
+const attributionNames = [
+  ...Object.values(attributionFields.first),
+  ...Object.values(attributionFields.last),
+  attributionFields.gaClientId,
+  attributionFields.gclid,
+];
+
+/** Rellena los campos de atribución justo antes del envío (como Description). */
+function fillAttribution(form: HTMLFormElement, gaClientId: string): void {
+  const consent = readConsent() === "granted";
+  const data = getAttribution(consent);
+  const set = (name: string, value: string) => {
+    const input = form.elements.namedItem(name) as HTMLInputElement | null;
+    if (input) input.value = value;
+  };
+  const { first, last } = attributionFields;
+  set(first.source, data?.first.source ?? "");
+  set(first.medium, data?.first.medium ?? "");
+  set(first.campaign, data?.first.campaign ?? "");
+  set(first.landing, data?.first.landing ?? "");
+  set(first.referrer, data?.first.referrer ?? "");
+  set(last.source, data?.last.source ?? "");
+  set(last.medium, data?.last.medium ?? "");
+  set(last.campaign, data?.last.campaign ?? "");
+  set(last.term, data?.last.term ?? "");
+  set(last.content, data?.last.content ?? "");
+  set(last.landing, data?.last.landing ?? "");
+  set(last.referrer, data?.last.referrer ?? "");
+  set(attributionFields.gaClientId, consent ? gaClientId : "");
+  set(attributionFields.gclid, data?.last.gclid ?? "");
+}
+
+export function DemoForm({
+  whatsappUrl,
+  privacyUrl,
+  gaId,
+}: {
+  whatsappUrl: string;
+  privacyUrl: string;
+  gaId?: string;
+}) {
   const formRef = useRef<HTMLFormElement>(null);
   const sinkRef = useRef<HTMLIFrameElement>(null);
   const descriptionRef = useRef<HTMLInputElement>(null);
@@ -53,6 +96,7 @@ export function DemoForm({ whatsappUrl, privacyUrl }: { whatsappUrl: string; pri
   const sinkUsed = useRef(false);
   const inFlight = useRef(false);
   const pendingSubmit = useRef(false);
+  const gaClientId = useRef("");
   const attempt = useRef<Attempt>({ active: false, done: false, timers: [] });
 
   const [jsReady, setJsReady] = useState(false);
@@ -154,6 +198,32 @@ export function DemoForm({ whatsappUrl, privacyUrl }: { whatsappUrl: string; pri
     };
   }, [onSuccess]);
 
+  // GA Client ID (P0-11): solo con consentimiento; se precarga cuando gtag está listo.
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      if (readConsent() !== "granted") {
+        gaClientId.current = "";
+        return;
+      }
+      for (let i = 0; i < 50 && !cancelled; i += 1) {
+        const id = await getGaClientId(gaId);
+        if (id) {
+          gaClientId.current = id;
+          return;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 200));
+      }
+    };
+    void load();
+    const onConsent = () => void load();
+    window.addEventListener(CONSENT_CHANGE_EVENT, onConsent);
+    return () => {
+      cancelled = true;
+      window.removeEventListener(CONSENT_CHANGE_EVENT, onConsent);
+    };
+  }, [gaId]);
+
   const validate = (form: HTMLFormElement): Errors => {
     const value = (name: string) => ((form.elements.namedItem(name) as HTMLInputElement | null)?.value ?? "").trim();
     const next: Errors = {};
@@ -204,6 +274,7 @@ export function DemoForm({ whatsappUrl, privacyUrl }: { whatsappUrl: string; pri
       descriptionRef.current.value = `Necesidad: ${need || "Sin especificar"}${context ? `\n${context}` : ""}`;
     }
 
+    fillAttribution(form, gaClientId.current);
     setPendingLead(need || "sin_especificar");
     clearTimers();
     attempt.current = { active: true, done: false, timers: [] };
@@ -295,6 +366,8 @@ export function DemoForm({ whatsappUrl, privacyUrl }: { whatsappUrl: string; pri
           {/* Sin JS se envía tal cual como Description; con JS se compone con la necesidad. */}
           <textarea id="demo-context" name={jsReady ? undefined : zohoForm.fields.description} rows={3} placeholder="Cuéntanos brevemente qué quieres revisar." />
         </label>
+        {/* Atribución de origen (P0-11): se rellena justo antes del envío; sin JS va vacía. */}
+        {attributionNames.map((name) => <input key={name} type="hidden" name={name} />)}
         {/* Sin value controlado: React no debe reescribirlo durante el envío. */}
         {jsReady ? <input ref={descriptionRef} type="hidden" name={zohoForm.fields.description} /> : null}
 
