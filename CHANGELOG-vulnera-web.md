@@ -902,3 +902,135 @@ autorizados es obligatorio, se valida en el cliente y **no** se envía a Zoho.
   texto de marca aprobado.
 - reCAPTCHA en lugar del captcha estándar: requiere registrar `vulnera.tecdex.net` en la
   consola de reCAPTCHA y que Mario cargue las claves en Zoho.
+
+### Despliegue en producción de P0-10 · 2026-10-05
+
+- **Push:** `git push origin main`, `634c9f1..927c49d` (`ecf0764` + P0-10), autorizado por Mario.
+- **Deploy de Vercel:**
+  - Commit desplegado: `927c49d` (`927c49de97ff764275ec7acb70880d884a8375d3`).
+  - Entorno: Production.
+  - Deployment GitHub: `6870661243`.
+  - Estado: `success` (READY) a las 2026-10-05T22:19:28Z.
+- **Verificación con curl contra `https://vulnera.tecdex.net/`:**
+  - todas las rutas responden 200;
+  - `/gracias/` va con `noindex` y fuera del sitemap;
+  - `/form-sink.html` responde 200;
+  - el formulario tiene 0 `mailto:`, el `action` `https://crm.zoho.com/crm/WebToLeadForm`, ningún `target` servido y los 16 `name` de Zoho;
+  - el iframe lleva `sandbox="allow-forms allow-scripts allow-same-origin"`;
+  - el barrido del doc 51 no cambia.
+- **Aviso «formulario no seguro»:** no apareció en Chrome al enfocar «Nombre». Se cumplen las condiciones: contexto seguro, `action` HTTPS y 0 formularios inseguros. El desplegable nativo de autocompletado no siempre se ve en las capturas; queda confirmado por condiciones.
+- **Lead de prueba:**
+  - Mario confirmó en el doc 53 que el primer lead real entró en Zoho.
+  - El registro instrumentado en el panel del navegador **no capturó el envío**: el panel estaba en la home y sin registro; el envío se hizo fuera de esa pestaña o la pestaña se recreó.
+  - Por eso **no hay datos medidos** de si Zoho respondió con 302 o con una página intermedia, ni del número de `generate_lead`.
+  - Se medirá en la prueba real de P0-11 con el mismo registro.
+- **Envío sin JS con captcha incorrecto:** pendiente; se hará junto con la prueba de P0-11.
+
+---
+
+## P0-11 · Atribución de origen en cada lead (Zoho CRM) · 2026-10-05
+
+**Estado:** commits en local, **sin push**; resultado mostrado a Mario antes del push.
+**Fuente:** doc 53. **Motivo:** el primer lead real entró con los campos de origen vacíos
+(antes los rellenaba el script de analítica de Zoho, excluido en P0-10).
+
+| # | Commit | Tarea |
+|---|---|---|
+| 1 | `84a39d5` | Módulo de atribución de origen: primer y último clic (`lib/attribution.ts`, `AttributionCapture`) |
+| 2 | `fe7acfc` | Los 14 campos de atribución en el formulario de Zoho |
+| 3 | (este registro) | CHANGELOG |
+
+### Campos en Zoho (doc 53 §2; integración GA Connector, configurada en Zoho)
+
+| Campo en Zoho | `name` | Qué se envía |
+|---|---|---|
+| First Click Source | `LEADCF13` | Fuente de la primera visita |
+| First Click Medium | `LEADCF14` | Medio de la primera visita |
+| First Click Campaign | `LEADCF17` | Campaña de la primera visita |
+| First Click Landing Page | `LEADCF19` | Página de entrada de la primera visita |
+| First Click Referrer | `LEADCF15` | Dominio de referencia de la primera visita |
+| Last Click Source | `LEADCF5` | Fuente de la visita actual |
+| Last Click Medium | `LEADCF6` | Medio de la visita actual |
+| Last Click Campaign | `LEADCF9` | Campaña de la visita actual |
+| Last Click Term | `LEADCF8` | `utm_term` de la visita actual |
+| Last Click Content | `LEADCF10` | `utm_content` de la visita actual |
+| Last Click Landing Page | `LEADCF11` | Página de entrada de la visita actual |
+| Last Click Referrer | `LEADCF7` | Dominio de referencia de la visita actual |
+| GA Client ID | `LEADCF20` | Client ID de GA4 (solo con consentimiento) |
+| GCLID (GA Connector) | `LEADCF31` | `gclid` si viene en la URL |
+
+### Reglas de clasificación (doc 53 §3)
+
+- **Con UTM:** `source`, `medium` y `campaign` salen de `utm_source`, `utm_medium` y `utm_campaign`, más `term` y `content`.
+- **Con `gclid` y sin UTM:** `google` / `cpc`.
+- **Sin UTM**, se deduce del referrer:
+
+  | Referrer | source | medium |
+  |---|---|---|
+  | google.\*, bing.com, duckduckgo.com, yahoo.\*, ecosia.org | `google`, `bing`, `duckduckgo`, `yahoo`, `ecosia` | `organic` |
+  | chatgpt.com, chat.openai.com, perplexity.ai, gemini.google.com, copilot.microsoft.com, claude.ai | `chatgpt`, `perplexity`, `gemini`, `copilot`, `claude` | `ai-referral` |
+  | linkedin.com / lnkd.in, facebook.com / fb.com / m.facebook.com, instagram.com / l.instagram.com, t.co / x.com | `linkedin`, `facebook`, `instagram`, `x` | `social` |
+  | tecdex.net, isos.tecdex.net, store.tecdex.net | ese dominio | `internal-referral` |
+  | otro dominio externo | el dominio | `referral` |
+  | sin referrer (o el propio sitio) | `(direct)` | `(none)` |
+
+  Los asistentes de IA se evalúan antes que los buscadores, para que gemini.google.com no cuente como google.
+- **Último clic:**
+  - es la visita actual, guardada en `sessionStorage`;
+  - se calcula al entrar y solo se reemplaza si llega una URL con UTM nuevos;
+  - la navegación interna no lo pisa.
+- **Primer clic:**
+  - se guarda en `localStorage` 90 días y no se sobrescribe;
+  - **solo con consentimiento de analítica**;
+  - si se acepta a mitad de sesión, se persiste en ese momento el primer clic de la sesión;
+  - si se rechaza, se borra;
+  - sin consentimiento, el primer clic se envía igual al último clic.
+- **Landing page:** solo la ruta más los `utm_*`. Ningún otro parámetro de la URL.
+- **Referrer:** solo el dominio.
+- **GA Client ID:** `gtag('get', '<ID GA4>', 'client_id')` solo con consentimiento; sin él, vacío.
+- **Límites:** cada valor se recorta a 255 caracteres; se descartan los que parecen correo o teléfono.
+- **Sin JavaScript:** los 14 campos van vacíos (aceptado).
+- **Lo visible no cambia:** el texto de la home es idéntico al de P0-10.
+- **Simulación de referrer para pruebas** (`?__test_referrer=`): solo en desarrollo; no existe en el bundle de producción (comprobado con grep).
+
+### Verificación local (doc 53 §5; `formdata` capturado y envío cancelado, sin crear leads)
+
+| # | Entrada | Primer clic (source / medium / campaign · landing · referrer) | Último clic | GA Client ID | Resultado |
+|---|---|---|---|---|---|
+| 1 | `/?utm_source=linkedin&utm_medium=social&utm_campaign=vulnera-lanzamiento` | linkedin / social / vulnera-lanzamiento · `/` + UTM | igual | presente | ✅ |
+| 2 | referrer `https://www.google.com/` | google / organic · `/` · `www.google.com` | igual | presente | ✅ |
+| 3 | referrer `https://chatgpt.com/` | chatgpt / ai-referral · `/` · `chatgpt.com` | igual | presente | ✅ |
+| 4 | sin referrer | (direct) / (none) · `/` | igual | presente | ✅ |
+| 5 | visita 1 con UTM, visita 2 directa (consentimiento **aceptado**) | linkedin / social / vulnera-lanzamiento | (direct) / (none) · `/` | presente | ✅ |
+| 6 | mismo caso, consentimiento **rechazado** | (direct) / (none) = último clic | (direct) / (none) | **vacío** | ✅ nada de atribución en `localStorage` |
+| 7 | `/?email=x@y.com&utm_source=test` | test · landing `/?utm_source=test` | igual | presente | ✅ el correo no aparece en ningún campo |
+| 8 | barrido del doc 51 | — | — | — | ✅ sin cambios (0; «garantiza» ×5, negaciones aprobadas) |
+
+**Comprobaciones extra:**
+
+| Caso | Resultado |
+|---|---|
+| `/?gclid=…` sin UTM | google / cpc; `LEADCF31` = gclid; landing `/` (sin gclid) ✅ |
+| Entrada en `/como-funciona/` con UTM y navegación interna a `/` | último clic sigue en linkedin; landing `/como-funciona/` + UTM ✅ |
+| Consentimiento aceptado a mitad de sesión y luego rechazado | al aceptar se guarda whatsapp / messaging / vulnera-202610; al rechazar se borra ✅ |
+
+En todos los envíos salieron los 16 campos anteriores más los 14 de atribución.
+
+**Pendiente en producción** (tras el OK de Mario; él resuelve el captcha):
+1. Lead real desde `https://vulnera.tecdex.net/?utm_source=prueba&utm_medium=qa&utm_campaign=p0-11`.
+   Comprobar en Zoho los 14 campos y medir la respuesta de Zoho (302 o página intermedia) y el
+   número de `generate_lead`, con el registro instrumentado.
+2. Envío sin JS con captcha incorrecto (pendiente de P0-10).
+
+### Convención de UTM para el equipo de contenidos (doc 53 §6)
+
+| Canal | utm_source | utm_medium | utm_campaign |
+|---|---|---|---|
+| LinkedIn orgánico | linkedin | social | `<tema>-<aaaamm>` |
+| Instagram / Facebook orgánico | instagram / facebook | social | `<tema>-<aaaamm>` |
+| WhatsApp (mensajes y estados) | whatsapp | messaging | `<tema>-<aaaamm>` |
+| Correo | email | email | `<tema>-<aaaamm>` |
+| Enlace desde tecdex.net / isos | tecdex / isos | internal-referral | `<sección>` |
+
+Todo en minúsculas y con guiones, sin tildes ni espacios. Ejemplo:
+`https://vulnera.tecdex.net/?utm_source=linkedin&utm_medium=social&utm_campaign=automatizacion-202610`
