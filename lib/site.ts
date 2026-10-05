@@ -99,6 +99,15 @@ export const pages = {
     lastModified: "2026-10-05",
     priority: 0.8,
   },
+  gestion: {
+    path: "/gestion-de-vulnerabilidades/",
+    name: "Gestión de vulnerabilidades",
+    title: "Qué es la gestión de vulnerabilidades y cómo hacerla | VULNERA",
+    description:
+      "Guía práctica de gestión de vulnerabilidades para empresas: del hallazgo a la remediación comprobada. Qué es, etapas, buenas prácticas y errores comunes.",
+    lastModified: "2026-10-05",
+    priority: 0.8,
+  },
 } satisfies Record<string, SitePage>;
 
 export const routes: SitePage[] = Object.values(pages);

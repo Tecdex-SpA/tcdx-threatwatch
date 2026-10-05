@@ -389,6 +389,12 @@ p { line-height: 1.7; }
 .content-table tbody tr:last-child > * { border-bottom: 0; }
 .status-section--page { padding: 0 0 56px; background: var(--white); }
 .related-section { padding: 0 0 56px; background: var(--white); }
+.byline { max-width: 860px; margin-bottom: 24px; padding: 18px 20px; border-left: 3px solid var(--secondary); background: var(--surface); color: var(--text); font-size: 14px; }
+.byline p { margin: 0; line-height: 1.7; }
+.byline p + p { margin-top: 6px; }
+.byline-label { color: var(--muted); font-weight: 600; }
+.byline a { color: var(--secondary-dark); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.byline a:hover { color: var(--primary); }
 .related-pages { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; max-width: 860px; padding-top: 24px; border-top: 1px solid var(--border); }
 .related-pages span { margin-right: 6px; color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .related-pages a { padding: 7px 14px; border: 1px solid var(--border); border-radius: 9999px; color: var(--secondary-dark); font-size: 14px; font-weight: 600; }
