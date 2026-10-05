@@ -1,16 +1,23 @@
 "use client";
 
 import { useEffect } from "react";
-import { isEmbedded, LEAD_OK_MESSAGE } from "../../lib/lead";
+import { trackLead } from "../../lib/analytics";
+import { isEmbedded, LEAD_OK_MESSAGE, takePendingLead } from "../../lib/lead";
 
-// En /gracias/: si la página se cargó dentro del iframe oculto del formulario (Zoho
-// redirige ahí tras aceptar el lead), avisa a la página padre. Como página principal
-// no hace nada: generate_lead lo dispara el formulario al recibir este aviso.
+// En /gracias/:
+// - Dentro del iframe oculto del formulario (Zoho redirige ahí al aceptar el lead): avisa
+//   a la página padre. No toca el flag ni dispara eventos.
+// - Como ventana principal: respaldo. Solo si existe el flag de envío (sessionStorage)
+//   dispara generate_lead una vez y lo borra; sin flag (recarga, visita directa o envío
+//   sin JS) no dispara nada.
 export function LeadFrameNotifier() {
   useEffect(() => {
     if (isEmbedded()) {
       window.parent.postMessage({ type: LEAD_OK_MESSAGE }, window.location.origin);
+      return;
     }
+    const pending = takePendingLead();
+    if (pending) void trackLead(pending.need, 5000);
   }, []);
   return null;
 }
