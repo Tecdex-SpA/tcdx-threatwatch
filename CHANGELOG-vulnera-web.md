@@ -402,3 +402,179 @@ línea acordada para VULNERA.
    - la tarjeta «Aporte por herramienta».
 
    Así las futuras miniaturas y las demos podrán ser capturas reales del producto, en lugar de recreaciones que se desfasan con cada cambio de UI.
+
+---
+
+## Tanda P1 — Estructura orgánica (SEO · AEO · GEO · LLMO) · 2026-10-05
+
+**Estado:** commits en local, **sin push**. Pendiente de la revisión de Mario. El primer push
+de P1 incluirá también `aef6b60` (registro del despliegue de P0-8). Copy: doc 48 §0, §2, §3,
+§6, §7 y §8. El cambio ajeno de `globals.css` (1140→1280) sigue fuera de todos los commits.
+
+| # | Commit | Tarea |
+|---|---|---|
+| 1 | `f8fd8de` | P1 · Cabecera, pie y uso responsable como componentes compartidos |
+| 2 | `223e099` | P1-1 · Metadata por ruta desde un registro único de páginas |
+| 3 | `dbb630d` | P1-3 · `/como-funciona/` (+ P1-2, bloque respuesta) |
+| 4 | `1016008` | P1-3 · `/gestion-de-vulnerabilidades/` (+ P1-2, P1-7) |
+| 5 | `c5a18d4` | P1-3 · `/preguntas-frecuentes/` (+ P1-2) |
+| 6 | `76f3773` | P1-4 · JSON-LD con los `@id` de tecdex.net |
+| 7 | `ef857aa` | P1-5 · `llms.txt` |
+| 8 | `e85db63` | P1-3 · Alineación de las secciones de texto |
+| 9 | (este registro) | P1 · CHANGELOG |
+
+**Método de verificación:** igual que en P0. `next build` + `next start`, curl al HTML
+servido de cada ruta (con `ANALYTICS_GA4_ID=G-4Q39F6MMQM`, como en Vercel) y revisión visual
+en escritorio (1440 px) y móvil (375 px).
+
+### P1 · Componentes compartidos (`f8fd8de`)
+
+- **Archivos:** `app/components/SiteChrome.tsx` (nuevo) y `app/page.tsx`.
+- **Qué:** `SiteHeader` y `SiteFooter` (este último incluye «Uso responsable», obligatorio en
+  todas las páginas, y el botón flotante de WhatsApp) salen de la home para reutilizarlos en
+  las rutas nuevas.
+- **HTML servido:** solo cambian los `href` a rutas absolutas (`#solucion` → `/#solucion`),
+  para que funcionen desde las subpáginas.
+- **Revertir:** `git revert f8fd8de`. Antes hay que revertir 3-8.
+
+### P1-1 · Metadata por ruta (`223e099`)
+
+- **Archivos:** `lib/site.ts` (registro `pages`), `lib/seo.ts` (`pageMetadata()`) y `app/page.tsx`.
+- **Qué:**
+  - Cada página declara su ruta con barra, nombre, `title`, `description` (doc 48 §0),
+    `lastModified` y `priority`.
+  - De ese registro salen el `<title>`, la description, el canonical, OpenGraph y Twitter
+    (con `og.png` global), el sitemap y las migas de pan.
+- **HTML servido de la home:** idéntico (diff vacío).
+- **Revertir:** `git revert 223e099`. Antes hay que revertir 3-8.
+
+### P1-3 / P1-2 · Rutas nuevas
+
+| Ruta | `<title>` (doc 48 §0) | H1 | Bloque respuesta (SSR) |
+|---|---|---|---|
+| `/como-funciona/` | Cómo funciona VULNERA: alcance, autorización y hallazgos \| TECDEX | Cómo funciona VULNERA | doc 48 §2, 55 palabras |
+| `/gestion-de-vulnerabilidades/` | Qué es la gestión de vulnerabilidades y cómo hacerla \| VULNERA | Gestión de vulnerabilidades: del hallazgo a la remediación comprobada | doc 48 §3, 55 palabras |
+| `/preguntas-frecuentes/` | Preguntas frecuentes sobre VULNERA \| TECDEX | Preguntas frecuentes sobre VULNERA | description de la ruta (doc 48 §0), 21 palabras ¹ |
+
+¹ El doc 48 no trae un bloque respuesta propio para esta página. Se usa la description
+aprobada en lugar de redactar uno nuevo. Queda por debajo de las 40-60 palabras de P1-2:
+**decisión de Mario** (ver «Pendiente de decisión»).
+
+- **Canonical y `og:url`:** con barra final en las tres rutas (`https://vulnera.tecdex.net/<ruta>/`).
+  La versión sin barra redirige con 308 (comprobado en `/como-funciona` → `/como-funciona/`).
+- **Plantilla** (`app/components/ContentPage.tsx`): H1, bloque respuesta, H2 del doc 48,
+  tabla, autoría/fuentes cuando aplica, «Páginas relacionadas» y una CTA «Solicitar demo
+  guiada» (`/#demo`) con `location` propio (`como-funciona`,
+  `gestion-de-vulnerabilidades`, `preguntas-frecuentes`).
+- **`/como-funciona/`:**
+  - Secciones «¿Qué se evalúa y qué no?» (con la nota «El catálogo definitivo de pruebas se
+    confirma por alcance»), «Las cuatro etapas» (tabla), «Qué recibes», «Control y
+    autorización» y el recuadro «Estado del producto».
+  - La tabla de etapas usa los textos aprobados del ciclo de la home, en dos columnas
+    (Etapa / Qué ocurre). Ver «Pendiente de decisión».
+- **`/gestion-de-vulnerabilidades/`** (pilar):
+  - Contenido del doc 48 §3 completo: por qué un informe no basta, la tabla de 5 etapas,
+    buenas prácticas, errores comunes, cumplimiento (deriva a TECDEX Compliance) y cómo
+    ayuda VULNERA, con el recuadro de estado para marcar lo que está en desarrollo.
+  - Las listas del doc 48, que venían separadas por punto y coma, se maquetan como viñetas
+    con mayúscula inicial y punto final, sin cambiar el texto.
+  - **P1-7:** autor TECDEX (enlace a quiénes somos), publicado y revisado el 5 de octubre de
+    2026 (`<time>`) y tres fuentes enlazadas:
+    - ISO/IEC 27001:2022 (A.8.8): `iso.org/standard/27001`, comprobado en el navegador
+      porque Cloudflare bloquea curl;
+    - Ley 21.663 (BCN): `idNorma=1202434`, comprobado que es la «LEY NÚM. 21.663, Ley Marco
+      de Ciberseguridad»;
+    - ANCI: `anci.gob.cl`.
+- **`/preguntas-frecuentes/`:** las 8 preguntas del doc 48 §6 visibles como H2 + respuesta.
+  `lib/faqs.ts` es la fuente única de este texto: la home muestra las 5 primeras (sin cambios)
+  y el JSON-LD usa el mismo texto.
+- **Navegación (P1-6):**
+  - «Cómo funciona» y «Preguntas» de la cabecera llevan a las rutas nuevas.
+  - El pie, columna Producto, añade «Gestión de vulnerabilidades» y «Preguntas frecuentes»
+    (nombres de página, sin copy nuevo).
+  - Grafo cerrado: cada página enlaza a las otras tres, a la demo y a tecdex.net. La pilar y
+    la home enlazan además a isos.tecdex.net.
+- **Sitemap:** las 4 URLs con barra y `lastmod` `2026-10-05`. La home también cambia de fecha,
+  por los cambios de navegación.
+- **Excluidas:** `/servicio-gestionado/`, `/precios/`, `/iso-27001-control-8-8/` y
+  `/ley-21663-vulnerabilidades/` devuelven 404.
+- **Revertir:** `git revert e85db63 c5a18d4 1016008 dbb630d`.
+
+### P1-4 · JSON-LD (`76f3773`)
+
+- **Archivos:** `lib/structured-data.ts`, `app/components/JsonLd.tsx` y las 4 páginas.
+- **Un `@graph` por página:**
+
+  | Ruta | Nodos |
+  |---|---|
+  | `/` | `Organization` (`https://tecdex.net/#organization`, solo `@id` + `name`) · `WebSite` (`https://vulnera.tecdex.net/#website`) · `SoftwareApplication` (`https://tecdex.net/#vulnera`) |
+  | `/como-funciona/`, `/gestion-de-vulnerabilidades/` | `Organization` (ref.) · `BreadcrumbList` Inicio → página |
+  | `/preguntas-frecuentes/` | `Organization` (ref.) · `BreadcrumbList` · `FAQPage` (8 preguntas) |
+
+- **Verificado sobre el HTML servido:**
+  - los `@id` coinciden con el JSON-LD vivo de tecdex.net;
+  - `SoftwareApplication` no lleva `offers`, `aggregateRating` ni `review`;
+  - el autor, el editor y el proveedor apuntan a `#organization`;
+  - el texto de `FAQPage` es idéntico al visible (comprobado por script);
+  - las URLs de las migas llevan barra final.
+- **Descripción de `#vulnera`:** la del doc 48 §8.2, con la tilde de «corrección», que el
+  bloque JSON del doc trae sin ella.
+- **Revertir:** `git revert 76f3773`.
+
+### P1-5 · `llms.txt` (`ef857aa`)
+
+- **Archivo:** `app/llms.txt/route.ts` (estático).
+- **Servido:** `200`, `text/plain; charset=utf-8`.
+- **Contenido:** idéntico al doc 48 §7 (diff por script). La única diferencia es la barra
+  final en las tres URLs de páginas, que se generan desde el registro de rutas. Está en ASCII,
+  como el `llms.txt` de tecdex.net. «TecDex» aparece solo en la razón social, igual que allí.
+- **Revertir:** `git revert ef857aa`.
+
+### Barrido de claims (doc 40 §11) sobre las 4 rutas y `llms.txt`
+
+- **0 coincidencias:** «pentesting continuo», «pentesting», «monitoreo», «servicio
+  gestionado», «encuentra todo», explotación/autónoma, tendencias en %, ahorro/reducción,
+  casos de éxito, EPSS/KEV/SIEM, nombres de herramientas, «ilimitado» y precios.
+- **Grafía:** sin «Vulnera», «ISOS» ni «TecDex/Tecdex» en las páginas.
+- **Coincidencias restantes:** todas son texto aprobado del doc 48 y casi siempre negaciones:
+  - «¿VULNERA reemplaza un pentest? No…», «…ni reemplaza una evaluación humana», «No
+    reemplaza un pentest manual», «no garantiza…»;
+  - «No es una IA con permiso abierto para atacar» (FAQ 7);
+  - «no sustituye una certificación», «la certificación la otorga un auditor»;
+  - «proceso continuo» (definición de gestión de vulnerabilidades en la pilar, no un claim de
+    producto);
+  - «no con un escaneo», «No se ejecutará ningún escaneo», «Un informe de pentest o un
+    escaneo…», «Confundir “escanear” con “gestionar”»;
+  - la opción «Revisar mi superficie expuesta» del formulario.
+
+### Pendiente de decisión (Mario)
+
+1. **Tabla «Las cuatro etapas» de `/como-funciona/`.** El doc 48 §2 pide «qué hace el usuario
+   y qué hace la plataforma» en cada etapa, pero no trae ese texto. Para no redactar copy
+   (y porque «la plataforma ejecuta la evaluación» chocaría con «Ejecución integrada: en
+   desarrollo»), hoy la tabla usa los textos aprobados del ciclo (Etapa / Qué ocurre). Si se
+   quieren las dos columnas, hace falta el texto aprobado.
+2. **Bloque respuesta de `/preguntas-frecuentes/`** (21 palabras, la description aprobada).
+   Aprobarlo así o aportar un texto de 40-60 palabras.
+3. **Pie:** se añadieron «Gestión de vulnerabilidades» y «Preguntas frecuentes» a la columna
+   Producto para cerrar el grafo de enlaces. El doc 48 fijaba solo cuatro enlaces en esa columna.
+
+### `ACCIÓN_MARIO` / WordPress de tecdex.net (P1-8)
+
+1. Cambiar la `description` del `@id` `https://tecdex.net/#vulnera` en el JSON-LD de
+   tecdex.net. Hoy dice «…orientada a la gestión de superficie expuesta y al pentesting
+   continuo. En desarrollo a septiembre de 2026…».
+   - Debe quedar igual que la de la web del producto: «Plataforma de TECDEX para gestionar
+     vulnerabilidades con alcance autorizado: evaluar, entender los hallazgos y seguir su
+     corrección, del hallazgo al cierre. En desarrollo a octubre de 2026.»
+   - Ojo: el doc 47 P1-8 trae una variante sin «, del hallazgo al cierre». Conviene usar una
+     sola.
+2. Actualizar el `llms.txt` de tecdex.net. Las líneas 3, 12 y 29 describen VULNERA como
+   «gestión de superficie expuesta» / «pentesting continuo» y dicen «no tiene demo pública».
+   Hay que alinearlas con el `llms.txt` de VULNERA: demostraciones guiadas, en desarrollo a
+   octubre de 2026.
+3. Purgar la caché de LiteSpeed tras ambos cambios.
+4. Tras el deploy de P1:
+   - enviar de nuevo el `sitemap.xml` en Search Console y Bing;
+   - pedir la indexación de las 3 rutas nuevas;
+   - pasar el Rich Results Test sobre `/preguntas-frecuentes/` y la home.
