@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { integrations, organization, siteConfig } from "../lib/site";
 import { Analytics } from "./components/Analytics";
+import { AttributionCapture } from "./components/AttributionCapture";
 import { ConsentBanner } from "./components/ConsentBanner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -82,6 +83,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang={siteConfig.defaultLocale} className={inter.variable}>
       <body>
         {children}
+        <AttributionCapture />
         {/* Sin GA4 configurado no hay cookies no esenciales y no se muestra el banner. */}
         {integrations.ga4Id ? (
           <>
