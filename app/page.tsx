@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { structuredData } from "../lib/structured-data";
+import { JsonLd } from "./components/JsonLd";
 import { homeFaqs } from "../lib/faqs";
 import { pageMetadata } from "../lib/seo";
 import { contact, pages, whatsappUrl } from "../lib/site";
@@ -52,6 +54,7 @@ function CheckIcon() {
 export default function Page() {
   return (
     <main id="inicio">
+      <JsonLd data={structuredData.home} />
       <SiteHeader />
 
       <section className="hero" data-location="hero">

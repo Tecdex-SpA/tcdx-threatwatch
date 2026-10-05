@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { structuredData } from "../../lib/structured-data";
+import { JsonLd } from "../components/JsonLd";
 import { pageMetadata } from "../../lib/seo";
 import { organization, pages } from "../../lib/site";
 import { ContentTable, DemoCta, PageHero, RelatedPages } from "../components/ContentPage";
@@ -47,6 +49,7 @@ const sources = [
 export default function GestionPage() {
   return (
     <main id="inicio">
+      <JsonLd data={structuredData.gestion} />
       <SiteHeader />
       <PageHero
         page={page}

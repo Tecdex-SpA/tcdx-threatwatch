@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { structuredData } from "../../lib/structured-data";
+import { JsonLd } from "../components/JsonLd";
 import { pageMetadata } from "../../lib/seo";
 import { pages } from "../../lib/site";
 import { ContentTable, DemoCta, PageHero, RelatedPages } from "../components/ContentPage";
@@ -21,6 +23,7 @@ const stages = [
 export default function ComoFuncionaPage() {
   return (
     <main id="inicio">
+      <JsonLd data={structuredData.comoFunciona} />
       <SiteHeader />
       <PageHero
         page={page}

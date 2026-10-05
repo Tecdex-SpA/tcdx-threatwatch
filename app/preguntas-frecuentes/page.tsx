@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { structuredData } from "../../lib/structured-data";
+import { JsonLd } from "../components/JsonLd";
 import { faqs } from "../../lib/faqs";
 import { pageMetadata } from "../../lib/seo";
 import { pages } from "../../lib/site";
@@ -15,6 +17,7 @@ export const metadata: Metadata = pageMetadata(page);
 export default function PreguntasPage() {
   return (
     <main id="inicio">
+      <JsonLd data={structuredData.preguntas} />
       <SiteHeader />
       <PageHero page={page} title="Preguntas frecuentes sobre VULNERA" answer={page.description} />
 
