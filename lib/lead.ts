@@ -12,3 +12,31 @@ export function isEmbedded(): boolean {
     return true;
   }
 }
+
+// Flag de un solo uso (sessionStorage) que marca un envío en curso. Garantiza que
+// generate_lead se dispare una sola vez: lo consume la página del formulario al recibir
+// la confirmación o, como respaldo, /gracias/ si carga como ventana principal con el flag.
+const PENDING_KEY = "vulnera-lead-pending";
+const PENDING_TTL_MS = 30 * 60 * 1000;
+
+export function setPendingLead(need: string): void {
+  try {
+    window.sessionStorage.setItem(PENDING_KEY, JSON.stringify({ need, at: Date.now() }));
+  } catch {
+    // Sin almacenamiento: solo funciona la confirmación vía iframe.
+  }
+}
+
+/** Devuelve y borra el envío pendiente (null si no hay o caducó). */
+export function takePendingLead(): { need: string } | null {
+  try {
+    const raw = window.sessionStorage.getItem(PENDING_KEY);
+    window.sessionStorage.removeItem(PENDING_KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw) as { need?: string; at?: number };
+    if (typeof data.at !== "number" || Date.now() - data.at > PENDING_TTL_MS) return null;
+    return { need: data.need || "sin_especificar" };
+  } catch {
+    return null;
+  }
+}

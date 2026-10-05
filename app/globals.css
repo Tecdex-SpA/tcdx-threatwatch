@@ -454,6 +454,22 @@ textarea { resize: vertical; }
 .form-check { grid-template-columns: auto 1fr !important; align-items: start; font-weight: 400 !important; }
 .form-check input { width: 17px; height: 17px; margin: 2px 0 0; accent-color: var(--primary); }
 .form-submit { width: 100%; margin-top: 4px; }
+/* Formulario integrado con Zoho CRM (P0-10) */
+.hp-field { display: none !important; }
+.contact-form label { align-content: start; }
+.field-error { color: #b42318; font-size: 12px; font-weight: 500; }
+.contact-form [aria-invalid="true"] { border-color: #b42318; box-shadow: 0 0 0 3px rgba(180,35,24,.1); }
+.captcha-field { display: grid; gap: 7px; color: var(--text); font-size: 13px; font-weight: 600; }
+.captcha-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.captcha-image { width: 200px; max-width: 100%; height: auto; border: 1px solid #cdd2d3; border-radius: 3px; background: var(--white); }
+.captcha-reload { padding: 0; border: 0; color: var(--secondary-dark); background: none; cursor: pointer; font-size: 13px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.captcha-reload:hover { color: var(--primary); }
+.captcha-field input { max-width: 220px; }
+.form-alert { margin: 0; padding: 12px 14px; border-left: 3px solid #b42318; color: #7a271a; background: #fef3f2; font-size: 13px; line-height: 1.55; }
+.form-alert a { color: inherit; font-weight: 700; text-decoration: underline; }
+.form-submit:disabled { cursor: progress; opacity: .75; transform: none; }
+.privacy-consent { margin: -6px 0 0; color: var(--muted); font-size: 12px; text-align: center; }
+.privacy-consent a { color: var(--secondary-dark); text-decoration: underline; }
 .privacy-note { margin: -3px 0 0; color: var(--muted); font-size: 11px; text-align: center; }
 
 .faq-section { background: var(--surface-alt); }

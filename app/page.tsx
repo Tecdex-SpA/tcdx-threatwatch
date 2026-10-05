@@ -4,9 +4,10 @@ import { JsonLd } from "./components/JsonLd";
 import { cycleSteps } from "../lib/cycle";
 import { homeFaqs } from "../lib/faqs";
 import { pageMetadata } from "../lib/seo";
-import { contact, pages, whatsappUrl } from "../lib/site";
+import { contact, organization, pages, whatsappUrl } from "../lib/site";
 import { AutomationTable } from "./components/AutomationTable";
 import { DashboardPreview } from "./components/DashboardPreview";
+import { DemoForm } from "./components/DemoForm";
 import { SiteFooter, SiteHeader } from "./components/SiteChrome";
 
 export const metadata: Metadata = pageMetadata(pages.home);
@@ -31,14 +32,6 @@ const audiences = [
   ["Gerencia", "Para decidir", "Riesgo priorizado y una lectura clara para decidir inversión y continuidad."],
   ["TI y seguridad", "Para resolver", "Evidencia técnica, servicios afectados y recomendación de remediación."],
   ["Cumplimiento", "Para auditar", "Trazabilidad del alcance, las autorizaciones y los resultados."],
-];
-
-const needOptions = [
-  "Evaluar mis dominios y aplicaciones",
-  "Un reporte para gerencia",
-  "Preparar una auditoría",
-  "Revisar un portal o API",
-  "Otro",
 ];
 
 function CheckIcon() {
@@ -207,33 +200,7 @@ export default function Page() {
             </div>
           </div>
 
-          <form className="contact-form" action={`mailto:${contact.email}`} method="post" encType="text/plain" data-lead-form>
-            <div className="form-row">
-              <label>Nombre<input name="nombre" autoComplete="name" required placeholder="Tu nombre" /></label>
-              <label>Empresa<input name="empresa" autoComplete="organization" required placeholder="Nombre de empresa" /></label>
-            </div>
-            <div className="form-row">
-              <label>Correo corporativo<input name="correo" type="email" autoComplete="email" required placeholder="nombre@empresa.cl" /></label>
-              <label>Teléfono<input name="telefono" type="tel" autoComplete="tel" placeholder="+56 9..." /></label>
-            </div>
-            <label>Activo o dominio a evaluar<input name="activo" placeholder="empresa.cl / api.empresa.cl" /></label>
-            <label>¿Qué necesitas?
-              <select name="necesidad" defaultValue="">
-                <option value="" disabled>Selecciona una opción</option>
-                {needOptions.map((option) => <option key={option}>{option}</option>)}
-              </select>
-            </label>
-            <label>Contexto adicional<textarea name="mensaje" rows={3} placeholder="Cuéntanos brevemente qué quieres revisar." /></label>
-            <label className="form-check">
-              <input type="checkbox" name="activos_autorizados" required />
-              <span>Solicito información para evaluar activos propios o expresamente autorizados.</span>
-            </label>
-            <button className="button primary form-submit" type="submit" data-cta="demo">Agenda tu demo</button>
-            <p className="privacy-note">
-              Ninguna evaluación se ejecuta sin tu autorización y aprobación explícita. Tus datos se
-              usarán solo para responder esta solicitud comercial.
-            </p>
-          </form>
+          <DemoForm whatsappUrl={whatsappUrl} privacyUrl={organization.privacyUrl} />
         </div>
       </section>
 

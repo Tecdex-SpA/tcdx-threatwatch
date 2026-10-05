@@ -22,9 +22,39 @@ export type ConversionEvent =
   | "click_phone"
   | "generate_lead";
 
+type Gtag = (...args: unknown[]) => void;
+
+function getGtag(): Gtag | undefined {
+  return (window as unknown as { gtag?: Gtag }).gtag;
+}
+
 export function track(event: ConversionEvent, params: Record<string, string>): void {
-  const { gtag } = window as unknown as { gtag?: (...args: unknown[]) => void };
-  gtag?.("event", event, params);
+  getGtag()?.("event", event, params);
+}
+
+/**
+ * generate_lead (P0-10): solo cuando Zoho aceptó el lead. Espera a que gtag esté
+ * disponible (hasta `waitMs`) y resuelve cuando GA4 confirma el envío o a los 1,2 s,
+ * para poder navegar después sin perder el evento.
+ */
+export async function trackLead(need: string, waitMs = 0): Promise<void> {
+  const start = Date.now();
+  while (!getGtag() && Date.now() - start < waitMs) {
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+  const gtag = getGtag();
+  if (!gtag) return;
+  await new Promise<void>((resolve) => {
+    const timer = setTimeout(resolve, 1200);
+    gtag("event", "generate_lead", {
+      location: "demo",
+      need,
+      event_callback: () => {
+        clearTimeout(timer);
+        resolve();
+      },
+    });
+  });
 }
 
 /**
@@ -33,8 +63,9 @@ export function track(event: ConversionEvent, params: Record<string, string>): v
  * - a[href^="mailto:"]         → click_email
  * - a[href^="tel:"]            → click_phone
  * - a[href*="wa.me/"]          → click_whatsapp
- * - form[data-lead-form] submit → generate_lead (con `need` = ¿Qué necesitas?)
  * `location` se toma del ancestro más cercano con data-location.
+ * generate_lead no se dispara aquí: lo dispara el formulario (trackLead) cuando Zoho
+ * confirma el lead (P0-10).
  */
 export function listenConversions(): () => void {
   const locationOf = (element: Element) =>
@@ -51,17 +82,6 @@ export function listenConversions(): () => void {
     else if (href.includes("wa.me/")) track("click_whatsapp", { location });
   };
 
-  const onSubmit = (event: SubmitEvent) => {
-    const form = event.target as HTMLFormElement;
-    if (!form.matches("[data-lead-form]")) return;
-    const need = form.elements.namedItem("necesidad") as HTMLSelectElement | null;
-    track("generate_lead", { location: locationOf(form), need: need?.value || "sin_especificar" });
-  };
-
   document.addEventListener("click", onClick, true);
-  document.addEventListener("submit", onSubmit, true);
-  return () => {
-    document.removeEventListener("click", onClick, true);
-    document.removeEventListener("submit", onSubmit, true);
-  };
+  return () => document.removeEventListener("click", onClick, true);
 }
