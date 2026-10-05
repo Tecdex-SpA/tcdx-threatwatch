@@ -4,11 +4,13 @@ import { JsonLd } from "../components/JsonLd";
 import { cycleSteps } from "../../lib/cycle";
 import { pageMetadata } from "../../lib/seo";
 import { pages } from "../../lib/site";
+import { AutomationTable } from "../components/AutomationTable";
 import { ContentTable, DemoCta, PageHero, RelatedPages } from "../components/ContentPage";
 import { ProductRoadmap } from "../components/ProductRoadmap";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 
-// Copy aprobado: doc 48 §2. No reescribir claims.
+// Copy aprobado: doc 48 §2 con los cambios del doc 50 §3 (bloque respuesta, tabla de
+// automatización y «Hoja de ruta»). No reescribir claims.
 
 const page = pages.comoFunciona;
 
@@ -24,7 +26,7 @@ export default function ComoFuncionaPage() {
       <PageHero
         page={page}
         title="Cómo funciona VULNERA"
-        answer="VULNERA organiza una evaluación de seguridad en cuatro etapas: defines el alcance autorizado, validas la propiedad de los activos, ejecutas la evaluación dentro de ese alcance y revisas los hallazgos priorizados para gestionar su corrección. Cada paso queda registrado, de modo que siempre se sabe qué se evaluó, bajo qué autorización y con qué resultado."
+        answer="VULNERA automatiza las etapas repetibles del pentesting en cuatro pasos: defines el alcance autorizado, validas la propiedad de los activos, la plataforma ejecuta reconocimiento, descubrimiento y detección, y tú revisas los hallazgos priorizados para gestionar su corrección. Cada paso queda registrado."
       />
 
       <section className="prose-section">
@@ -39,6 +41,9 @@ export default function ComoFuncionaPage() {
 
           <h2>Las cuatro etapas</h2>
           <ContentTable head={["Etapa", "Qué ocurre"]} rows={stages} />
+
+          <h2>Automatiza lo repetible. Tu equipo se concentra en lo que importa.</h2>
+          <AutomationTable />
 
           <h2>Qué recibes</h2>
           <p>
