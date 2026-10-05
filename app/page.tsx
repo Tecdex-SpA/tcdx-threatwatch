@@ -1,5 +1,6 @@
 import { contact, integrations, organization, siteConfig, whatsappUrl } from "../lib/site";
 import { CookiePreferencesButton } from "./components/ConsentBanner";
+import { DashboardPreview } from "./components/DashboardPreview";
 import { ProductStatus } from "./components/ProductStatus";
 
 // Copy aprobado: doc 48 (VULNERA_CONTENIDO_FUENTE_WEB_2026-10-04). No reescribir claims.
@@ -62,13 +63,6 @@ const needOptions = [
   "Otro",
 ];
 
-const demoSeverities = [
-  ["Crítica", "critical", 32, 2],
-  ["Alta", "high", 48, 3],
-  ["Media", "medium", 64, 5],
-  ["Baja", "low", 28, 2],
-] as const;
-
 function TecdexLogo({ className = "" }: { className?: string }) {
   return (
     <img
@@ -99,54 +93,6 @@ function WhatsAppFloat() {
         <path d="M16.001 3C9.096 3 3.5 8.596 3.5 15.5c0 2.485.71 4.807 1.94 6.77L3 29l6.9-2.4a12.44 12.44 0 0 0 6.101 1.6h.004c6.905 0 12.5-5.596 12.5-12.5S22.906 3 16.001 3zm0 22.7h-.003a10.16 10.16 0 0 1-5.176-1.418l-.371-.22-4.096 1.424 1.44-3.99-.242-.41A10.18 10.18 0 0 1 5.8 15.5c0-5.63 4.573-10.2 10.204-10.2 2.726 0 5.288 1.062 7.216 2.992a10.13 10.13 0 0 1 2.984 7.211c0 5.63-4.573 10.197-10.203 10.197zm5.593-7.643c-.306-.153-1.813-.895-2.094-.997-.281-.102-.486-.153-.69.154-.204.306-.792.996-.971 1.2-.179.204-.357.23-.663.077-.306-.153-1.293-.477-2.463-1.52-.91-.812-1.525-1.815-1.704-2.121-.179-.306-.019-.472.134-.624.137-.137.306-.357.46-.536.153-.179.204-.306.306-.51.102-.204.05-.383-.026-.536-.077-.153-.69-1.663-.945-2.278-.249-.599-.502-.518-.69-.527-.179-.008-.383-.01-.588-.01-.204 0-.536.077-.817.383-.281.306-1.073 1.049-1.073 2.559s1.098 2.968 1.25 3.173c.153.204 2.16 3.298 5.234 4.624.731.316 1.301.505 1.745.646.733.233 1.4.2 1.927.121.588-.088 1.813-.741 2.069-1.457.255-.715.255-1.328.179-1.457-.077-.128-.281-.204-.588-.357z" />
       </svg>
     </a>
-  );
-}
-
-function ProductPreview() {
-  return (
-    <div className="product-preview" aria-label="Vista de demostración de la plataforma">
-      <div className="preview-topbar">
-        <div className="preview-brand">
-          <span className="preview-mark">VU</span>
-          <strong>VULNERA</strong>
-        </div>
-        <span className="demo-label">Vista de demostración · datos ilustrativos</span>
-      </div>
-
-      <div className="preview-body">
-        <aside className="preview-nav" aria-hidden="true">
-          <span className="is-active">Resumen</span>
-          <span>Activos</span>
-          <span>Revisiones</span>
-          <span>Hallazgos</span>
-          <span>Reportes</span>
-        </aside>
-
-        <div className="preview-content">
-          <div className="metric-row">
-            <div><span>Activos</span><strong>24</strong><small>23 autorizados</small></div>
-            <div><span>Hallazgos</span><strong>12</strong><small>4 por revisar</small></div>
-            <div><span>Scope</span><strong>96%</strong><small>verificado</small></div>
-          </div>
-
-          <div className="severity-card">
-            {demoSeverities.map(([label, level, width, count]) => (
-              <div className="severity-row" key={level}>
-                <span className="severity-name">{label}</span>
-                <span className={`severity-bar severity-${level}`} style={{ width: `${width}%` }} />
-                <span className="severity-count">{count}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="finding-row">
-            <span className="finding-dot high" />
-            <div><strong>Servicio público requiere revisión</strong><small>api.empresa.cl · evidencia disponible</small></div>
-            <span className="severity-label">Alta</span>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }
 
@@ -203,7 +149,7 @@ export default function Page() {
               <span><CheckIcon /> Acompañamiento TECDEX</span>
             </div>
           </div>
-          <ProductPreview />
+          <DashboardPreview />
         </div>
       </section>
 
