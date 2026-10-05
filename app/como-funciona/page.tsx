@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { structuredData } from "../../lib/structured-data";
 import { JsonLd } from "../components/JsonLd";
+import { cycleSteps } from "../../lib/cycle";
 import { pageMetadata } from "../../lib/seo";
 import { pages } from "../../lib/site";
 import { ContentTable, DemoCta, PageHero, RelatedPages } from "../components/ContentPage";
@@ -13,12 +14,7 @@ const page = pages.comoFunciona;
 
 export const metadata: Metadata = pageMetadata(page);
 
-const stages = [
-  ["Definir el alcance", "Registras dominios, IPs, APIs y servicios que se pueden evaluar."],
-  ["Validar autorización", "Se confirma propiedad o evidencia verificable antes de cualquier revisión."],
-  ["Evaluar con control", "Se aplica el perfil acordado, respetando el alcance aprobado."],
-  ["Priorizar y cerrar", "La evidencia se convierte en decisiones, responsables y seguimiento."],
-];
+const stages = cycleSteps.map(([, title, text]) => [title, text]);
 
 export default function ComoFuncionaPage() {
   return (

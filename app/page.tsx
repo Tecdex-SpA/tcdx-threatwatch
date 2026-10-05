@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { structuredData } from "../lib/structured-data";
 import { JsonLd } from "./components/JsonLd";
+import { cycleSteps } from "../lib/cycle";
 import { homeFaqs } from "../lib/faqs";
 import { pageMetadata } from "../lib/seo";
 import { contact, pages, whatsappUrl } from "../lib/site";
@@ -25,13 +26,6 @@ const problemWith = [
   "Cada hallazgo con severidad, evidencia y recomendación.",
   "Responsables y seguimiento hasta el cierre comprobado.",
   "Trazabilidad del alcance, las autorizaciones y los resultados.",
-];
-
-const controlSteps = [
-  ["01", "Definir el alcance", "Registras dominios, IPs, APIs y servicios que se pueden evaluar."],
-  ["02", "Validar autorización", "Se confirma propiedad o evidencia verificable antes de cualquier revisión."],
-  ["03", "Evaluar con control", "Se aplica el perfil acordado, respetando el alcance aprobado."],
-  ["04", "Priorizar y cerrar", "La evidencia se convierte en decisiones, responsables y seguimiento."],
 ];
 
 const audiences = [
@@ -131,7 +125,7 @@ export default function Page() {
           </div>
 
           <div className="steps-list">
-            {controlSteps.map(([number, title, text]) => (
+            {cycleSteps.map(([number, title, text]) => (
               <article key={number}>
                 <span>{number}</span>
                 <div><h3>{title}</h3><p>{text}</p></div>
