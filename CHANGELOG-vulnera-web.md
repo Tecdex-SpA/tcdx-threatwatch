@@ -701,3 +701,34 @@ internas o de diagnóstico. Se suma a la propuesta de «modo demo» registrada e
   de P1-8.
 - Su `llms.txt` debe alinearse con el nuevo de VULNERA.
 - Purgar la caché de LiteSpeed.
+
+### Decisiones de Mario sobre P1 y P0-9 y ajustes aplicados · 2026-10-05
+
+| # | Duda | Decisión | Commit |
+|---|---|---|---|
+| 1 | «garantiza» en el barrido | Aprobado tal cual: son negaciones exigidas por el doc 50 | — |
+| 2 | Description y bloque respuesta de `/preguntas-frecuentes/` | Textos nuevos aprobados (description y bloque de 46 palabras) | `020270f` |
+| 3 | `llms.txt` «En desarrollo a octubre de 2026» | Pasa a «En acceso anticipado (octubre de 2026)», en ASCII | `e48d734` |
+| 4 | «Hoja de ruta» en `/gestion-de-vulnerabilidades/` | Aprobado | — |
+| 5 | Enlace del pie a «Acceso anticipado» | Aprobado | — |
+| 6 | CTA «Solicitar demo» de la navegación y el pie | Unificada en «Agenda tu demo», con los mismos `data-cta` y `location` | `ef718eb` |
+| 6b | Opción del formulario «Revisar mi superficie expuesta» | Pasa a «Evaluar mis dominios y aplicaciones» | `70a90cf` |
+| 7 | P1: tabla de etapas, enlaces del pie y tilde en JSON-LD | Tabla Etapa / Qué ocurre sin división usuario/plataforma; enlaces del pie y tilde aprobados | — |
+
+**Verificación tras los ajustes** (build de producción local + curl, y eventos en el navegador
+con un ID de GA4 de prueba):
+
+| Comprobación | Resultado |
+|---|---|
+| Barrido del doc 51 §4 en 4 rutas + `llms.txt` | 0 en todo, salvo «garantiza» (5, negaciones aprobadas) ✅ |
+| «superficie expuesta», «Solicitar demo», «En desarrollo a octubre» | 0 en todas las rutas y en `llms.txt` ✅ |
+| Etiqueta de demostración, checkbox `required`, «Ninguna evaluación se ejecuta sin tu autorización» | presentes ✅ |
+| `/preguntas-frecuentes/`: description nueva, bloque respuesta de 46 palabras; `FAQPage` idéntica al visible | ✅ |
+| Rutas 200, `/como-funciona` → 308 con barra, `/servicio-gestionado/` y `/precios/` → 404 | ✅ |
+| JSON-LD | sin `offers`/`aggregateRating`/`review`; `#vulnera` con la description del doc 50 §6 ✅ |
+| Cookies aceptadas | 6 CTA «Agenda tu demo» → `cta_demo_click` (nav ×2, hero, acceso-anticipado, demo, footer); `click_email`, `click_whatsapp` (demo, float), `click_phone`; `generate_lead {need: "Evaluar mis dominios y aplicaciones"}`; sin checkbox no se emite; CTA de `/como-funciona/` → `location: como-funciona` ✅ |
+| Cookies rechazadas | 0 peticiones a Google ✅ |
+| Botón de navegación «Agenda tu demo» a 1100 px (ancho mínimo de la navegación de escritorio) | una línea (42 px) ✅ |
+| Desbordamiento horizontal | ninguno a 1100 y 375 px en las 4 rutas ✅ |
+
+Con estas decisiones, Mario autoriza el push conjunto: `aef6b60` + P1 + P0-9 + estos ajustes.
