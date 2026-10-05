@@ -296,8 +296,8 @@ Las cifras 24 / 12 / 96 % solo aparecen dentro del panel etiquetado «Vista de d
 
 ## P0-8 · Miniatura del hero recreada a partir del dashboard actual · 2026-10-04
 
-**Estado:** commit en local (`e4d1585`), **sin push**. Pendiente del OK de Mario tras ver la
-comparativa entre la referencia y la miniatura nueva.
+**Estado:** **desplegada en producción** el 2026-10-04 (push autorizado por Mario tras ver la
+comparativa; ver «Despliegue P0-8» al final de esta sección).
 
 - **Archivos:**
   - `app/components/DashboardPreview.tsx` (nuevo)
@@ -355,6 +355,30 @@ comparativa entre la referencia y la miniatura nueva.
   | Revisión visual en escritorio (1440 y 1100 px) y móvil (375 px) | correcta ✅ |
 
 - **Revertir:** `git revert e4d1585`.
+
+### Despliegue P0-8
+
+- **Push:** `c9300a6..3289e01`, 3 commits (`578fac5`, `e4d1585`, `3289e01`).
+- **Deploy de Vercel:**
+  - Commit desplegado: `3289e01` (`3289e01ccf5ffca6231a4e5d7251c40d30735af2`).
+  - Entorno: Production.
+  - Deployment GitHub: `6848700209`.
+  - Estado: `success` (READY) a las 2026-10-05T00:15:08Z.
+  - URL del deploy: `https://tcdx-threatwatch-htbxlykf2-tecdex-projects.vercel.app`.
+- **Verificación contra `https://vulnera.tecdex.net/`:** curl, más el navegador para el render.
+
+  | Comprobación | Resultado |
+  |---|---|
+  | `/`, `sitemap.xml`, `robots.txt`, `manifest.webmanifest` | `HTTP/2 200` sin redirección ✅ |
+  | title / description / canonical / sitemap | sin cambios respecto al deploy de P0 ✅ |
+  | Miniatura nueva en el HTML inicial | sí ✅ |
+  | Exclusiones P0-8 (notas de desarrollo, rutas de API, `DEC-*`, aporte por herramienta, nombres de herramientas, «Pentesting continuo», `vulnera-lab`) | 0 en todas ✅ |
+  | Barrido de claims (doc 40 §11) | solo las 4 frases aprobadas ✅ |
+  | CSS servido | 0 clases del mock viejo; 55 reglas `.dash-`; arreglo de la fuente del body presente ✅ |
+  | Fuentes IBM Plex Mono / Sans Condensed | cargadas en la miniatura; el body sigue en sans-serif ✅ |
+  | GA4 | `G-4Q39F6MMQM` en el HTML; `googletagmanager` 0; con el consentimiento rechazado no se carga `gtag` ✅ |
+  | Escritorio 1440 px | miniatura de 560×449 px ✅ |
+  | Móvil 375 px | 344×540 px, sin menú lateral, `scrollWidth` 375 ✅ |
 
 ---
 
