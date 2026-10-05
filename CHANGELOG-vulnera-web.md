@@ -578,3 +578,126 @@ aprobada en lugar de redactar uno nuevo. Queda por debajo de las 40-60 palabras 
    - enviar de nuevo el `sitemap.xml` en Search Console y Bing;
    - pedir la indexación de las 3 rutas nuevas;
    - pasar el Rich Results Test sobre `/preguntas-frecuentes/` y la home.
+
+---
+
+## P0-9 · Comunicación comercial v2 · 2026-10-05
+
+**Estado:** commits en local, **sin push**, pendiente del OK de Mario.
+**Fuente:** doc 50 (texto literal), con las instrucciones del doc 51. El doc 50 reemplaza solo
+las secciones que indica; el resto del doc 48 sigue vigente.
+**Base:** se construye sobre P1, también local y sin push. P1 ya había creado
+`/como-funciona/`, `/preguntas-frecuentes/`, `llms.txt` y el JSON-LD, así que el doc 50 §3 y §6
+se aplican ahí («si ya existe»). **El push que se autorice llevará `aef6b60` + P1 + P0-9.**
+
+**Decisión de Mario (doc 50 §0):**
+- La automatización de las etapas repetibles del pentesting se comunica **en presente**,
+  aunque la ejecución integrada aún no funciona de punta a punta. Mario asume ese riesgo.
+- No se nombran herramientas.
+- Comunicación comercial en lugar de defensiva.
+- «Acceso anticipado» sustituye a «Estado del producto» en la home.
+- Límites que se mantienen: no «encuentra todas», no «reemplaza cualquier pentest», no
+  «garantiza», no «explotación autónoma», no cifras sin medir, no «falsos positivos».
+
+| # | Commit | Tarea (doc 51 §3) |
+|---|---|---|
+| 1 | `9a7f326` | Metadata comercial: home y `/como-funciona/` (doc 50 §1) |
+| 2 | `43149e5` | Hero comercial (§2.1) |
+| 3 | `f88bc24` | Bloque «Qué automatiza VULNERA» (§2.2) |
+| 4 | `dccd8d2` | Paso 03 «Automatizar la evaluación» (§2.3), con `lib/cycle.ts` como fuente única |
+| 5 | `7e2f800` | «Acceso anticipado» en la home y «Hoja de ruta» en las subpáginas (§2.4, §3) |
+| 6 | `36ede28` | Pie: bajada y uso responsable (§2.6) |
+| 7 | `74f4626` | FAQ v2 (§4) |
+| 8 | `6f52c50` | Formulario de demo (§5) |
+| 9 | `cbd3727` | `/como-funciona/`: bloque respuesta y tabla de automatización (§3) |
+| 10 | `3047259` | `llms.txt` y JSON-LD (§6) |
+| 11 | (este registro) | CHANGELOG (§8) |
+
+### Antes → después (home)
+
+| Elemento | Antes | Después |
+|---|---|---|
+| `<title>` | Gestión de vulnerabilidades y remediación \| VULNERA by TECDEX | Pentesting automatizado y gestión de vulnerabilidades \| VULNERA |
+| description | Plataforma de TECDEX para evaluar activos propios o autorizados… En desarrollo: agenda una demo guiada. | VULNERA automatiza las etapas repetibles del pentesting sobre los activos que autorizas… Agenda tu demo. |
+| Eyebrow del hero | GESTIÓN DE VULNERABILIDADES · CHILE | PENTESTING AUTOMATIZADO · CHILE |
+| Subtítulo | Evaluaciones controladas sobre dominios, aplicaciones web y APIs… | VULNERA automatiza las etapas repetibles del pentesting —reconocimiento, descubrimiento y detección—… |
+| CTA del hero | Solicitar demo guiada | Agenda tu demo |
+| Sellos | Solo activos propios o autorizados · Evidencia trazable · Acompañamiento TECDEX | Solo activos autorizados · Evaluaciones repetibles · Acompañamiento TECDEX |
+| Tras «El problema» | — | «Qué automatiza VULNERA» (tabla de dos columnas y nota) |
+| Paso 03 | Evaluar con control | Automatizar la evaluación |
+| Bloque de estado | «Estado del producto» (disponible / en desarrollo) | «Acceso anticipado» + CTA «Agenda tu demo» |
+| Formulario | «Obtén una primera lectura, sobre datos de ejemplo.» · «No se ejecutará ningún escaneo automáticamente» | «Agenda tu demo de VULNERA.» · «Ninguna evaluación se ejecuta sin tu autorización y aprobación explícita» |
+| FAQ | 5 preguntas del doc 48 | 5 primeras de la FAQ v2 |
+| Pie | «Gestión de vulnerabilidades con alcance autorizado…» · uso responsable doc 48 | «Pentesting automatizado y gestión de vulnerabilidades…» · uso responsable doc 50 |
+
+### Verificación local (build de producción + curl; doc 51 §4)
+
+| Comprobación | Resultado |
+|---|---|
+| nmap / nuclei / subfinder / zap / testssl / naabu / owasp / burp / metasploit (4 rutas + `llms.txt`) | **0** ✅ |
+| «encuentra todas», «100 %», «reemplaza cualquier pentest», «explotación autónoma» | **0** ✅ |
+| «falsos positivos» | **0** ✅ |
+| «escaneo inmediato», «resultados en minutos», plazos (minutos, horas, días, inmediato) | **0** ✅ |
+| «Estado del producto» en la home | **0** ✅ |
+| «garantiza» como subcadena | 5: todas negaciones exigidas por el propio doc 50 («no garantizan» en el uso responsable §2.6, presente en las 4 rutas; «No garantiza…» en `llms.txt` §6) ⚠️ ver abajo |
+| «pentesting continuo», «servicio gestionado», ahorro/reducción | 0 ✅ |
+| «Vista de demostración · datos ilustrativos» | presente ✅ |
+| Checkbox de activos autorizados (`required`) | presente ✅ |
+| «Ninguna evaluación se ejecuta sin tu autorización» | presente ✅ |
+| Home: title / description / canonical | doc 50 §1 · `https://vulnera.tecdex.net/` ✅ |
+| `/como-funciona/`: title / description / canonical / bloque respuesta | doc 50 §1 · con barra · doc 50 §3 (41 palabras) ✅ |
+| JSON-LD `#vulnera` | description del doc 50 §6 ✅ |
+| `FAQPage` | 8 preguntas v2, idénticas al texto visible ✅ |
+| Desbordamiento horizontal | ninguno a 1440 px ni a 375 px en las 4 rutas ✅ |
+| GA4, cookies **aceptadas** (ID de prueba local) | `cta_demo_click` con nav (×2), hero, acceso-anticipado, demo y footer; `click_email`, `click_whatsapp` (demo, float), `click_phone`; `generate_lead {location: demo, need}` ✅ |
+| GA4, cookies **rechazadas** | 0 peticiones a Google, `gtag` sin definir ✅ |
+
+### Textos del doc 50 que no se pudieron maquetar tal cual, o que quedan por decidir
+
+1. **«garantiza» en el barrido.** El doc 51 §4 exige 0 coincidencias, pero el propio doc 50
+   pide «no garantizan» (uso responsable) y «No garantiza la ausencia de vulnerabilidades…»
+   (`llms.txt`). Se maquetó el texto literal: son negaciones, no claims.
+2. **Description de `/preguntas-frecuentes/`.** El doc 50 §1 la deja «sin cambios» (doc 48),
+   pero menciona «si reemplaza un pentest» y «estado actual del producto», temas que la FAQ v2
+   ya no trata. También es el bloque respuesta de esa página. Necesita texto nuevo aprobado.
+3. **`llms.txt`.**
+   - El resumen inicial sigue diciendo «En desarrollo a octubre de 2026», que no encaja con
+     «En acceso anticipado»; el doc 50 §6 no lo toca.
+   - Las líneas nuevas se escribieron en ASCII (sin tildes), como el resto del archivo y el
+     `llms.txt` de tecdex.net.
+   - «No ejecuta pruebas fuera de un alcance autorizado» se mantiene: el doc 50 no pide quitarla.
+4. **«Hoja de ruta» también en la página pilar.** El doc 50 §3 la define para `/como-funciona/`.
+   La pilar usaba el recuadro de estado para «marcar lo que está en desarrollo» (doc 48 §3), así
+   que pasa también a «Hoja de ruta»: el recuadro de estado ya no existe.
+5. **Pie.** El enlace «Estado del producto» (`/#estado`) apuntaba a un bloque que ya no existe;
+   pasa a «Acceso anticipado» (`/#acceso-anticipado`).
+6. **Titular de la tabla en `/como-funciona/`.** La tabla de automatización lleva como H2 el
+   titular aprobado del §2.2 («Automatiza lo repetible…»).
+7. **CTA de demo en las subpáginas.** Reutilizaba el titular y el botón del bloque de demo; ahora
+   usa los del doc 50 §5 («Agenda tu demo de VULNERA.» / «Agenda tu demo»).
+8. **Sin cambios, porque el doc 50 no los menciona:**
+   - CTA de navegación y pie «Solicitar demo»;
+   - eyebrow «Demo guiada»;
+   - opciones del select del formulario, incluida «Revisar mi superficie expuesta»;
+   - texto de la cabecera de la FAQ de la home;
+   - badge «En desarrollo» de «Remediación y retest» en la miniatura (coherente con la hoja de ruta).
+
+### Para el equipo de la app (doc 50 §8)
+
+Coherente con la decisión «herramientas ocultas para el usuario»:
+- La pantalla de login lista herramientas («subfinder · nmap · nuclei · ZAP») y menciona
+  «modelo propio de falsos positivos».
+- El dashboard muestra la tarjeta «Aporte por herramienta» con nombres de motores.
+- El `<title>` de la app dice «Pentesting continuo por TecDex».
+
+Recomendación: ocultar los nombres de motores en la UI de cliente y dejarlos solo en vistas
+internas o de diagnóstico. Se suma a la propuesta de «modo demo» registrada en P0-8.
+
+### `ACCIÓN_MARIO` (WordPress de tecdex.net)
+
+- La description del `@id` `#vulnera` en tecdex.net debe pasar a la del doc 50 §6: «Plataforma
+  de TECDEX que automatiza las etapas repetibles del pentesting sobre activos autorizados y
+  gestiona cada hallazgo hasta su corrección. En acceso anticipado.» Sustituye a la propuesta
+  de P1-8.
+- Su `llms.txt` debe alinearse con el nuevo de VULNERA.
+- Purgar la caché de LiteSpeed.
