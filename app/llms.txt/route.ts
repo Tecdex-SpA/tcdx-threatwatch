@@ -9,7 +9,7 @@ const body = `# VULNERA by TECDEX
 
 > VULNERA es la plataforma de TECDEX (Servicios Tecnologicos TecDex SpA, Chile) para la
 > gestion de vulnerabilidades: evaluar activos propios o autorizados, entender los hallazgos
-> y gestionar su correccion, del hallazgo al cierre comprobado. En desarrollo a octubre de 2026.
+> y gestionar su correccion, del hallazgo al cierre comprobado. En acceso anticipado (octubre de 2026).
 
 ## Que es
 - Plataforma de gestion de vulnerabilidades y seguimiento de remediacion.
