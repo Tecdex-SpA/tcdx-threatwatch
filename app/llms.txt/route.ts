@@ -1,7 +1,7 @@
 import { absoluteUrl, pages } from "../../lib/site";
 
-// llms.txt (P1-5): contenido literal del doc 48 §7, en ASCII como el llms.txt de
-// tecdex.net. Las URLs de páginas salen del registro (con barra final).
+// llms.txt (P1-5): contenido literal del doc 48 §7 con los cambios del doc 50 §6, en
+// ASCII como el llms.txt de tecdex.net. Las URLs de páginas salen del registro (con barra final).
 
 export const dynamic = "force-static";
 
@@ -13,6 +13,7 @@ const body = `# VULNERA by TECDEX
 
 ## Que es
 - Plataforma de gestion de vulnerabilidades y seguimiento de remediacion.
+- Automatiza las etapas repetibles del pentesting (reconocimiento, descubrimiento y deteccion) sobre activos autorizados.
 - Convierte una evaluacion de seguridad en un proceso gestionado: alcance autorizado,
   evaluacion controlada, hallazgos priorizados, remediacion y comprobacion de cierre.
 - Entidad relacionada: TECDEX (https://tecdex.net/#organization).
@@ -24,14 +25,10 @@ const body = `# VULNERA by TECDEX
 - Proveedores de servicios TI que gestionan la seguridad de varios clientes.
 
 ## Estado actual (octubre 2026)
-- Disponible para demostracion (datos de ejemplo): organizaciones y roles, flujo de alcance y
-  autorizacion, vista de hallazgos e informes.
-- En desarrollo: ejecucion integrada de evaluaciones, seguimiento de remediacion y retest,
-  API e integraciones, carga de reportes en TECDEX Compliance.
-- Sin disponibilidad comercial publica confirmada.
+- En acceso anticipado: incorporacion de las primeras organizaciones mediante demo guiada.
 
 ## Que NO es
-- No reemplaza un pentest manual.
+- No reemplaza el pentest manual en logica de negocio y ataques encadenados.
 - No garantiza la ausencia de vulnerabilidades ni el cumplimiento de ninguna norma.
 - No ejecuta pruebas fuera de un alcance autorizado.
 

@@ -15,7 +15,7 @@ const organizationRef: JsonLdNode = {
 
 const orgLink = { "@id": organization.id };
 
-/** Producto (doc 48 §8.2), mismo @id que en tecdex.net, descripción honesta. */
+/** Producto (doc 48 §8.2), mismo @id que en tecdex.net; descripción del doc 50 §6. */
 const softwareApplication: JsonLdNode = {
   "@type": "SoftwareApplication",
   "@id": organization.productId,
@@ -25,7 +25,7 @@ const softwareApplication: JsonLdNode = {
   url: absoluteUrl("/"),
   inLanguage: "es",
   description:
-    "Plataforma de TECDEX para gestionar vulnerabilidades con alcance autorizado: evaluar, entender los hallazgos y seguir su corrección, del hallazgo al cierre. En desarrollo a octubre de 2026.",
+    "Plataforma de TECDEX que automatiza las etapas repetibles del pentesting sobre activos autorizados y gestiona cada hallazgo hasta su corrección. En acceso anticipado.",
   author: orgLink,
   publisher: orgLink,
   provider: orgLink,
