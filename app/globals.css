@@ -366,6 +366,8 @@ p { line-height: 1.7; }
 .breadcrumb a { color: rgba(255,255,255,.82); text-decoration: underline; text-underline-offset: 3px; }
 .breadcrumb a:hover { color: var(--gold); }
 .page-hero h1 { max-width: 900px; margin-bottom: 24px; color: var(--white); font-size: clamp(36px, 4.4vw, 56px); }
+.thanks-hero { padding: 88px 0 96px; }
+.thanks-hero .hero-actions { margin-bottom: 0; }
 .answer-block { max-width: 780px; margin: 0; padding-left: 20px; border-left: 3px solid var(--secondary); color: rgba(255,255,255,.84); font-size: clamp(16px, 1.4vw, 19px); line-height: 1.65; }
 .prose-section { padding: 72px 0 56px; background: var(--white); }
 .prose { max-width: 860px; }

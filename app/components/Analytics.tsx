@@ -4,6 +4,7 @@ import Script from "next/script";
 import { useEffect, useState } from "react";
 import { listenConversions } from "../../lib/analytics";
 import { CONSENT_CHANGE_EVENT, readConsent, type ConsentState } from "../../lib/consent";
+import { isEmbedded } from "../../lib/lead";
 
 // GA4 propio de VULNERA (P0-4). gtag.js solo se solicita tras aceptar cookies.
 // Las cookies quedan en el host (cookie_domain "none"), separadas de las de tecdex.net.
@@ -22,6 +23,8 @@ export function Analytics({ gaId }: { gaId: string }) {
   const [consent, setConsent] = useState<ConsentState | null>(null);
 
   useEffect(() => {
+    // Dentro del iframe oculto del formulario no se mide nada (evita page_view fantasma).
+    if (isEmbedded()) return;
     setConsent(readConsent());
     const onChange = (event: Event) => setConsent((event as CustomEvent<ConsentState>).detail);
     window.addEventListener(CONSENT_CHANGE_EVENT, onChange);

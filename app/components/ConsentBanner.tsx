@@ -8,11 +8,13 @@ import {
   writeConsent,
   type ConsentState,
 } from "../../lib/consent";
+import { isEmbedded } from "../../lib/lead";
 
 export function ConsentBanner({ privacyUrl }: { privacyUrl: string }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    if (isEmbedded()) return;
     setOpen(readConsent() === null);
     const reopen = () => setOpen(true);
     window.addEventListener(CONSENT_OPEN_EVENT, reopen);
