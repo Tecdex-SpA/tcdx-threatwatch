@@ -2,7 +2,16 @@
 // track() no envía nada; no hay cola previa al consentimiento.
 
 /** Valores de `location`: dónde ocurrió la interacción (atributo data-location). */
-export type TrackLocation = "hero" | "nav" | "demo" | "footer" | "float";
+export type TrackLocation =
+  | "hero"
+  | "nav"
+  | "demo"
+  | "footer"
+  | "float"
+  // CTA de demo de cada página de contenido (P1-3)
+  | "como-funciona"
+  | "gestion-de-vulnerabilidades"
+  | "preguntas-frecuentes";
 
 export type ConversionEvent =
   | "cta_demo_click"

@@ -87,8 +87,17 @@ export const pages = {
     name: "Inicio",
     title: siteConfig.title,
     description: siteConfig.description,
-    lastModified: "2026-10-04",
+    lastModified: "2026-10-05",
     priority: 1,
+  },
+  comoFunciona: {
+    path: "/como-funciona/",
+    name: "Cómo funciona",
+    title: "Cómo funciona VULNERA: alcance, autorización y hallazgos | TECDEX",
+    description:
+      "Así organiza VULNERA una evaluación de seguridad: defines el alcance, validas autorización, revisas hallazgos priorizados y sigues su corrección. Con control en cada paso.",
+    lastModified: "2026-10-05",
+    priority: 0.8,
   },
 } satisfies Record<string, SitePage>;
 

@@ -19,7 +19,7 @@ export function TecdexLogo({ className = "" }: { className?: string }) {
 
 const navLinks = [
   ["/#solucion", "Solución"],
-  ["/#como-funciona", "Cómo funciona"],
+  ["/como-funciona/", "Cómo funciona"],
   ["/#para-quien", "Para quién"],
   ["/#preguntas", "Preguntas"],
 ];
@@ -75,7 +75,7 @@ export function SiteFooter() {
           <div>
             <h3>Producto</h3>
             <a href="/#solucion">Solución</a>
-            <a href="/#como-funciona">Cómo funciona</a>
+            <a href="/como-funciona/">Cómo funciona</a>
             <a href="/#estado">Estado del producto</a>
             <a href="/#demo" data-cta="demo">Solicitar demo</a>
           </div>
