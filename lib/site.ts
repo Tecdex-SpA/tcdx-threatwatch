@@ -23,8 +23,8 @@ export const siteConfig = {
   description:
     "VULNERA automatiza las etapas repetibles del pentesting sobre los activos que autorizas y convierte cada hallazgo en un plan de corrección. Plataforma de TECDEX. Agenda tu demo.",
   ogImageAlt: "VULNERA by TECDEX",
-  /** Bajada de marca del footer (doc 48 §1) */
-  tagline: "Gestión de vulnerabilidades con alcance autorizado, del hallazgo al cierre comprobado.",
+  /** Bajada de marca del footer (doc 50 §2.6) */
+  tagline: "Pentesting automatizado y gestión de vulnerabilidades, del hallazgo al cierre comprobado.",
   themeColor: "#2B3944",
 };
 

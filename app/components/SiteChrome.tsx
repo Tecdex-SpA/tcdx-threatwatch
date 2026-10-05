@@ -58,9 +58,9 @@ export function SiteFooter() {
         <div className="container responsible-use__inner">
           <strong>Uso responsable</strong>
           <p>
-            VULNERA no garantiza la ausencia total de vulnerabilidades ni reemplaza una
-            evaluación humana. Los resultados requieren revisión técnica y solo deben obtenerse
-            sobre activos propios o autorizados.
+            VULNERA evalúa únicamente activos propios o expresamente autorizados. Sus resultados
+            apoyan las decisiones de tu equipo técnico y no garantizan la ausencia total de
+            vulnerabilidades.
           </p>
         </div>
       </section>
