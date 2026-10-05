@@ -18,10 +18,10 @@ export const siteConfig = {
   defaultLocale: "es-CL",
   /** Formato OpenGraph */
   locale: "es_CL",
-  // Metadata de la home: doc 48 §0 (texto aprobado). OG replica title/description.
-  title: "Gestión de vulnerabilidades y remediación | VULNERA by TECDEX",
+  // Metadata de la home: doc 50 §1 (comunicación comercial v2). OG replica title/description.
+  title: "Pentesting automatizado y gestión de vulnerabilidades | VULNERA",
   description:
-    "Plataforma de TECDEX para evaluar activos propios o autorizados, entender cada hallazgo y gestionar su corrección, del hallazgo al cierre. En desarrollo: agenda una demo guiada.",
+    "VULNERA automatiza las etapas repetibles del pentesting sobre los activos que autorizas y convierte cada hallazgo en un plan de corrección. Plataforma de TECDEX. Agenda tu demo.",
   ogImageAlt: "VULNERA by TECDEX",
   /** Bajada de marca del footer (doc 48 §1) */
   tagline: "Gestión de vulnerabilidades con alcance autorizado, del hallazgo al cierre comprobado.",
@@ -93,9 +93,9 @@ export const pages = {
   comoFunciona: {
     path: "/como-funciona/",
     name: "Cómo funciona",
-    title: "Cómo funciona VULNERA: alcance, autorización y hallazgos | TECDEX",
+    title: "Cómo funciona VULNERA: pentesting automatizado con alcance autorizado",
     description:
-      "Así organiza VULNERA una evaluación de seguridad: defines el alcance, validas autorización, revisas hallazgos priorizados y sigues su corrección. Con control en cada paso.",
+      "Define el alcance, valida la autorización y deja que VULNERA automatice reconocimiento, descubrimiento y detección. Tú decides qué corregir primero.",
     lastModified: "2026-10-05",
     priority: 0.8,
   },
