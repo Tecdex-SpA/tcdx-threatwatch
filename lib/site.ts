@@ -113,7 +113,7 @@ export const pages = {
     name: "Preguntas frecuentes",
     title: "Preguntas frecuentes sobre VULNERA | TECDEX",
     description:
-      "Respuestas claras sobre VULNERA: qué es, qué recibe tu empresa, si reemplaza un pentest, uso responsable y estado actual del producto.",
+      "Preguntas frecuentes sobre VULNERA: qué parte del pentesting automatiza, qué activos puedes evaluar, qué obtiene tu empresa y cómo empezar con una demo.",
     lastModified: "2026-10-05",
     priority: 0.7,
   },
