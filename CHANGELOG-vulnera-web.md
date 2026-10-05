@@ -291,3 +291,90 @@ Las cifras 24 / 12 / 96 % solo aparecen dentro del panel etiquetado «Vista de d
 ### Observaciones fuera de alcance
 
 - **Destino del formulario:** sigue siendo `mailto:` (P2-2: envío a Zoho CRM y página `/gracias`).
+
+---
+
+## P0-8 · Miniatura del hero recreada a partir del dashboard actual · 2026-10-04
+
+**Estado:** commit en local (`e4d1585`), **sin push**. Pendiente del OK de Mario tras ver la
+comparativa entre la referencia y la miniatura nueva.
+
+- **Archivos:**
+  - `app/components/DashboardPreview.tsx` (nuevo)
+  - `app/page.tsx` (se quita `ProductPreview`)
+  - `app/globals.css` (se elimina el CSS del mock viejo y se añaden las reglas `.dash*`)
+- **Referencia:** `http://localhost:8400/vulnera-lab/dashboard`, tema oscuro, leída en el
+  Chrome de Mario con su sesión. No se publicó ninguna captura: la pantalla contiene notas
+  internas, rutas de API y nombres de herramientas.
+- **Tokens extraídos de la app y aplicados:**
+
+  | Elemento | Valor |
+  |---|---|
+  | Fondo / raíl / superficie / superficie 2 | `#0E1418` / `#121A20` / `#151D23` / `#1E282F` |
+  | Líneas | `#2B3740`, `#192127` |
+  | Texto | `#E8EEF2`, `#C3CED5`, `#91A0AC`, `#8999A1` |
+  | Marca | `#5CB2B1` |
+  | Severidades | crítica `#F4574B`, alta `#F79009`, media `#EAAA08`, baja `#3FBE85`, info `#7F8F9C` |
+  | Tipografía | IBM Plex Sans Condensed (cuerpo), IBM Plex Mono (etiquetas y cifras) |
+  | Etiquetas | Mono 500, mayúsculas, espaciado 0,12 em |
+  | Radio | 3 px |
+  | Barras | 6 px sobre un carril `#2B3740` |
+  | Estado | píldora con borde |
+  | Ítem activo del menú | fondo `#1E282F` y borde turquesa |
+
+  En la miniatura los tamaños se reducen de forma proporcional.
+- **Contenido (curado y sintético):**
+  - **Menú lateral:** «VULNERA de TECDEX», Inicio, AUTORIZACIÓN (Objetivos y propiedad, Alcance, Evaluaciones, Aprobaciones), AUDITORÍAS (Auditorías, Hallazgos, Informes) y «Remediación y retest» marcado «En desarrollo».
+  - **Barra superior:** Organización demo · Rol Owner · Alcance activo 2 alcances.
+  - **Hallazgos sin revisar por severidad:** 24 en total (Crítica 2 · Alta 5 · Media 9 · Baja 6 · Info 2).
+  - **Alcance y propiedad:** 2 alcances activos, 3 objetivos con propiedad vigente, 1 verificación pendiente.
+  - **Últimas auditorías:** `example.com` (Completo, Completada, 14) y `demo.example.com` (Solo web, Completada, 10).
+- **Excluido:**
+  - Notas «sin backend / sin endpoint / sin API».
+  - Rutas de API.
+  - Códigos DEC-*.
+  - La tarjeta «Aporte por herramienta».
+  - Los nombres de herramientas y «Pentesting continuo».
+- **Etiqueta:** «Vista de demostración · datos ilustrativos», visible como `figcaption` encima de la vista.
+- **Responsive:**
+  - Escritorio: 560×449 px en el hero.
+  - Móvil 375 px: se oculta el menú lateral, las tarjetas se apilan y la tabla pierde la columna «Tipo». Sin desbordamiento horizontal (`scrollWidth` 375).
+- **Fuentes:** `next/font/google` sin preload, para no competir con el LCP del hero, y con `display: swap`.
+- **Verificación local** (build de producción + `next start` + curl):
+
+  | Comprobación | Resultado |
+  |---|---|
+  | Miniatura en el HTML inicial (SSR) | sí ✅ |
+  | «sin backend» / «sin endpoint» / «sin API» | 0 / 0 / 0 ✅ |
+  | Rutas de API (`findings/summary`, `scans?status`, `domain-verifications`, `/scans/`, `narrative`, `ScanListResponse`, `by_tool`, `GET /`) | 0 ✅ |
+  | Códigos `DEC-*` · «Aporte por herramienta» | 0 · 0 ✅ |
+  | nuclei / nmap / subfinder / zap / testssl / naabu | 0 ✅ |
+  | «Pentesting continuo» · `vulnera-lab` | 0 · 0 ✅ |
+  | Barrido de claims (doc 40 §11) | sin cambios: solo las 4 frases aprobadas ✅ |
+  | CSS viejo (`product-preview`, `metric-row`, `finding-row`, `severity-card`, `demo-label`) en el CSS compilado | 0 ✅ |
+  | Revisión visual en escritorio (1440 y 1100 px) y móvil (375 px) | correcta ✅ |
+
+- **Revertir:** `git revert e4d1585`.
+
+---
+
+## Para el equipo de la app
+
+Observaciones detectadas al preparar la miniatura (consola en `localhost:8400`, 2026-10-04).
+No afectan a la web comercial, pero chocan con la matriz de claims (doc 40 §11) y con la
+línea acordada para VULNERA.
+
+1. **Pantalla de login y `<title>` de la app.**
+   - El `<title>` es «VULNERA · Pentesting continuo por TecDex».
+   - Bajo el logo dice «Pentesting continuo. Entra con tu cuenta corporativa…».
+   - En escritorio, el panel lateral del login dice «Pentesting continuo sobre objetivos autorizados por alcance» y lista herramientas: «ORQUESTACIÓN subfinder · nmap · nuclei · ZAP».
+   - El mismo panel afirma «REDUCCIÓN modelo propio de falsos positivos», una capacidad no verificada.
+   - Grafía: «TecDex» en vez de «TECDEX».
+   - Propuesta: alinear el título y el texto del login con la web («Gestión de vulnerabilidades con alcance autorizado») y retirar los nombres de herramientas y los claims no verificados.
+2. **Propuesta: «modo demo» en la consola.** Una opción (flag de entorno o de organización) que oculte las anotaciones de desarrollo:
+   - notas «sin backend / sin endpoint / sin API»;
+   - rutas de API en las cabeceras de las tarjetas;
+   - códigos `DEC-*`;
+   - la tarjeta «Aporte por herramienta».
+
+   Así las futuras miniaturas y las demos podrán ser capturas reales del producto, en lugar de recreaciones que se desfasan con cada cambio de UI.
