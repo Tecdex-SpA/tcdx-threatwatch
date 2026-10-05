@@ -108,6 +108,15 @@ export const pages = {
     lastModified: "2026-10-05",
     priority: 0.8,
   },
+  preguntas: {
+    path: "/preguntas-frecuentes/",
+    name: "Preguntas frecuentes",
+    title: "Preguntas frecuentes sobre VULNERA | TECDEX",
+    description:
+      "Respuestas claras sobre VULNERA: qué es, qué recibe tu empresa, si reemplaza un pentest, uso responsable y estado actual del producto.",
+    lastModified: "2026-10-05",
+    priority: 0.7,
+  },
 } satisfies Record<string, SitePage>;
 
 export const routes: SitePage[] = Object.values(pages);

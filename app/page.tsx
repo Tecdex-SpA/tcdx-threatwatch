@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { homeFaqs } from "../lib/faqs";
 import { pageMetadata } from "../lib/seo";
 import { contact, pages, whatsappUrl } from "../lib/site";
 import { DashboardPreview } from "./components/DashboardPreview";
@@ -34,29 +35,6 @@ const audiences = [
   ["Gerencia", "Para decidir", "Riesgo priorizado y una lectura clara para decidir inversión y continuidad."],
   ["TI y seguridad", "Para resolver", "Evidencia técnica, servicios afectados y recomendación de remediación."],
   ["Cumplimiento", "Para auditar", "Trazabilidad del alcance, las autorizaciones y los resultados."],
-];
-
-const faqs = [
-  [
-    "¿VULNERA reemplaza un pentest?",
-    "No. Complementa el trabajo de especialistas con una forma ordenada de gestionar hallazgos, evidencia y seguimiento. Los resultados siempre deben ser revisados por responsables técnicos.",
-  ],
-  [
-    "¿Puede revisar cualquier dominio?",
-    "No. Solo se evalúan activos propios o expresamente autorizados. El flujo exige alcance, validación de propiedad y aprobación explícita antes de cualquier revisión.",
-  ],
-  [
-    "¿Qué recibe mi empresa?",
-    "Un resumen ejecutivo para gerencia y el detalle técnico para TI, con evidencia y recomendaciones asociadas a cada hallazgo. Durante la demo, sobre datos de ejemplo.",
-  ],
-  [
-    "¿Está disponible para contratar hoy?",
-    "El producto está en desarrollo. Hoy ofrecemos demostraciones guiadas. Revisa el estado del producto para ver qué está disponible y qué estamos construyendo.",
-  ],
-  [
-    "¿TECDEX puede acompañar la remediación?",
-    "TECDEX puede ayudar a definir el alcance e interpretar los hallazgos. El seguimiento de remediación y el retest dentro de la plataforma están en desarrollo.",
-  ],
 ];
 
 const needOptions = [
@@ -246,7 +224,7 @@ export default function Page() {
             <p>VULNERA está diseñado para revisiones responsables sobre activos propios o autorizados.</p>
           </div>
           <div className="faq-list">
-            {faqs.map(([question, answer]) => (
+            {homeFaqs.map(([question, answer]) => (
               <details key={question}>
                 <summary>{question}<span aria-hidden="true">+</span></summary>
                 <p>{answer}</p>

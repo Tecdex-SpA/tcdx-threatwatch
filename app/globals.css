@@ -389,6 +389,10 @@ p { line-height: 1.7; }
 .content-table tbody tr:last-child > * { border-bottom: 0; }
 .status-section--page { padding: 0 0 56px; background: var(--white); }
 .related-section { padding: 0 0 56px; background: var(--white); }
+.faq-page .faq-item { padding: 26px 0; border-bottom: 1px solid var(--border); }
+.faq-page .faq-item:first-child { padding-top: 0; }
+.faq-page .faq-item h2 { margin: 0 0 10px; font-size: clamp(20px, 2.2vw, 24px); }
+.faq-page .faq-item p { margin: 0; }
 .byline { max-width: 860px; margin-bottom: 24px; padding: 18px 20px; border-left: 3px solid var(--secondary); background: var(--surface); color: var(--text); font-size: 14px; }
 .byline p { margin: 0; line-height: 1.7; }
 .byline p + p { margin-top: 6px; }
