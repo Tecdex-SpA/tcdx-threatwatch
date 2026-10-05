@@ -63,14 +63,36 @@ export const features = {
   salesPublic: env("FEATURE_SALES_PUBLIC") === "true",
 };
 
+export type SitePage = {
+  /** Ruta con barra final (trailingSlash: true): canonical == sitemap. */
+  path: string;
+  /** Nombre corto para migas de pan (BreadcrumbList) y enlaces internos. */
+  name: string;
+  /** <title> y og:title (doc 48 §0). */
+  title: string;
+  /** <meta name="description"> y og:description (doc 48 §0). */
+  description: string;
+  /** Fecha del último cambio de contenido de la ruta (no la del build). */
+  lastModified: string;
+  priority: number;
+};
+
 /**
- * Rutas publicadas. `lastModified` es la fecha del último cambio de contenido
- * de cada ruta (no la del build): actualizarla al modificar esa página.
- * Con `trailingSlash: true` toda ruta termina en "/" (canonical == sitemap).
+ * Páginas publicadas: fuente única para metadata, sitemap y migas de pan.
+ * Al cambiar el contenido de una ruta, actualizar su `lastModified`.
  */
-export const routes: { path: string; lastModified: string; priority: number }[] = [
-  { path: "/", lastModified: "2026-10-04", priority: 1 },
-];
+export const pages = {
+  home: {
+    path: "/",
+    name: "Inicio",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    lastModified: "2026-10-04",
+    priority: 1,
+  },
+} satisfies Record<string, SitePage>;
+
+export const routes: SitePage[] = Object.values(pages);
 
 export const whatsappUrl = `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(contact.whatsappMessage)}`;
 

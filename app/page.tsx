@@ -1,7 +1,11 @@
-import { contact, whatsappUrl } from "../lib/site";
+import type { Metadata } from "next";
+import { pageMetadata } from "../lib/seo";
+import { contact, pages, whatsappUrl } from "../lib/site";
 import { DashboardPreview } from "./components/DashboardPreview";
 import { ProductStatus } from "./components/ProductStatus";
 import { SiteFooter, SiteHeader } from "./components/SiteChrome";
+
+export const metadata: Metadata = pageMetadata(pages.home);
 
 // Copy aprobado: doc 48 (VULNERA_CONTENIDO_FUENTE_WEB_2026-10-04). No reescribir claims.
 
