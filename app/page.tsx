@@ -34,7 +34,7 @@ const audiences = [
 ];
 
 const needOptions = [
-  "Revisar mi superficie expuesta",
+  "Evaluar mis dominios y aplicaciones",
   "Un reporte para gerencia",
   "Preparar una auditoría",
   "Revisar un portal o API",
