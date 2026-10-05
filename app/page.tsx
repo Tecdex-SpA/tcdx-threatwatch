@@ -62,19 +62,20 @@ export default function Page() {
         <div className="hero-orbit orbit-two" />
         <div className="container hero-grid">
           <div className="hero-copy">
-            <p className="eyebrow light">Gestión de vulnerabilidades · Chile</p>
+            <p className="eyebrow light">Pentesting automatizado · Chile</p>
             <h1>Del hallazgo al cierre comprobado, no solo al informe.</h1>
             <p className="hero-lead">
-              Evaluaciones controladas sobre dominios, aplicaciones web y APIs que tu organización
-              autoriza, con hallazgos priorizados e informes para gerencia y TI.
+              VULNERA automatiza las etapas repetibles del pentesting —reconocimiento,
+              descubrimiento y detección— sobre los activos que tu organización autoriza, y
+              convierte cada hallazgo en un plan de corrección.
             </p>
             <div className="hero-actions">
-              <a className="button primary" href="#demo" data-cta="demo">Solicitar demo guiada</a>
+              <a className="button primary" href="#demo" data-cta="demo">Agenda tu demo</a>
               <a className="button ghost" href="#como-funciona">Ver cómo funciona <span aria-hidden="true">→</span></a>
             </div>
             <div className="hero-trust">
-              <span><CheckIcon /> Solo activos propios o autorizados</span>
-              <span><CheckIcon /> Evidencia trazable</span>
+              <span><CheckIcon /> Solo activos autorizados</span>
+              <span><CheckIcon /> Evaluaciones repetibles</span>
               <span><CheckIcon /> Acompañamiento TECDEX</span>
             </div>
           </div>
