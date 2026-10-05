@@ -4,7 +4,7 @@ import { JsonLd } from "../components/JsonLd";
 import { pageMetadata } from "../../lib/seo";
 import { organization, pages } from "../../lib/site";
 import { ContentTable, DemoCta, PageHero, RelatedPages } from "../components/ContentPage";
-import { ProductStatus } from "../components/ProductStatus";
+import { ProductRoadmap } from "../components/ProductRoadmap";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 
 // Copy aprobado: doc 48 §3 (página pilar, educativa). No reescribir claims.
@@ -95,9 +95,9 @@ export default function GestionPage() {
         </div>
       </section>
 
-      <section className="status-section status-section--page" aria-label="Estado del producto">
+      <section className="status-section status-section--page" aria-label="Hoja de ruta">
         <div className="container prose-wide">
-          <ProductStatus />
+          <ProductRoadmap />
         </div>
       </section>
 

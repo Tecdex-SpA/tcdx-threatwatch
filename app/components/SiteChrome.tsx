@@ -78,7 +78,7 @@ export function SiteFooter() {
             <a href="/como-funciona/">Cómo funciona</a>
             <a href="/gestion-de-vulnerabilidades/">Gestión de vulnerabilidades</a>
             <a href="/preguntas-frecuentes/">Preguntas frecuentes</a>
-            <a href="/#estado">Estado del producto</a>
+            <a href="/#acceso-anticipado">Acceso anticipado</a>
             <a href="/#demo" data-cta="demo">Solicitar demo</a>
           </div>
           <div>

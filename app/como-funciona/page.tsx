@@ -5,7 +5,7 @@ import { cycleSteps } from "../../lib/cycle";
 import { pageMetadata } from "../../lib/seo";
 import { pages } from "../../lib/site";
 import { ContentTable, DemoCta, PageHero, RelatedPages } from "../components/ContentPage";
-import { ProductStatus } from "../components/ProductStatus";
+import { ProductRoadmap } from "../components/ProductRoadmap";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 
 // Copy aprobado: doc 48 §2. No reescribir claims.
@@ -55,9 +55,9 @@ export default function ComoFuncionaPage() {
         </div>
       </section>
 
-      <section className="status-section status-section--page" aria-label="Estado del producto">
+      <section className="status-section status-section--page" aria-label="Hoja de ruta">
         <div className="container prose-wide">
-          <ProductStatus />
+          <ProductRoadmap />
         </div>
       </section>
 

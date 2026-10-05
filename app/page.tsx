@@ -7,7 +7,6 @@ import { pageMetadata } from "../lib/seo";
 import { contact, pages, whatsappUrl } from "../lib/site";
 import { AutomationTable } from "./components/AutomationTable";
 import { DashboardPreview } from "./components/DashboardPreview";
-import { ProductStatus } from "./components/ProductStatus";
 import { SiteFooter, SiteHeader } from "./components/SiteChrome";
 
 export const metadata: Metadata = pageMetadata(pages.home);
@@ -154,9 +153,17 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="status-section" aria-label="Estado del producto">
-        <div className="container">
-          <ProductStatus />
+      <section id="acceso-anticipado" className="early-section" data-location="acceso-anticipado">
+        <div className="container early-card">
+          <div>
+            <p className="eyebrow">Acceso anticipado</p>
+            <h2>Estamos incorporando a las primeras organizaciones.</h2>
+            <p>
+              Agenda una demo, revisamos tu caso con el equipo de TECDEX y definimos juntos el
+              alcance inicial de tu evaluación.
+            </p>
+          </div>
+          <a className="button primary" href="#demo" data-cta="demo">Agenda tu demo</a>
         </div>
       </section>
 

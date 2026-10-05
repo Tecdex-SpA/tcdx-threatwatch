@@ -8,6 +8,7 @@ export type TrackLocation =
   | "demo"
   | "footer"
   | "float"
+  | "acceso-anticipado"
   // CTA de demo de cada página de contenido (P1-3)
   | "como-funciona"
   | "gestion-de-vulnerabilidades"
