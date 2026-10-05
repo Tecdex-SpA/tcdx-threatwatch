@@ -32,7 +32,8 @@ export default function ComoFuncionaPage() {
       />
 
       <section className="prose-section">
-        <div className="container prose">
+        <div className="container">
+          <div className="prose">
           <h2>¿Qué se evalúa y qué no?</h2>
           <p>
             Se evalúan únicamente los activos que tu organización registra y autoriza: dominios,
@@ -54,6 +55,7 @@ export default function ComoFuncionaPage() {
             La evaluación no inicia sin aprobación humana explícita. El flujo exige alcance,
             validación de propiedad y aprobación explícita antes de cualquier revisión.
           </p>
+          </div>
         </div>
       </section>
 

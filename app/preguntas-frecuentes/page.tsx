@@ -22,13 +22,15 @@ export default function PreguntasPage() {
       <PageHero page={page} title="Preguntas frecuentes sobre VULNERA" answer={page.description} />
 
       <section className="prose-section">
-        <div className="container prose faq-page">
+        <div className="container">
+          <div className="prose faq-page">
           {faqs.map(([question, answer]) => (
             <div className="faq-item" key={question}>
               <h2>{question}</h2>
               <p>{answer}</p>
             </div>
           ))}
+          </div>
         </div>
       </section>
 

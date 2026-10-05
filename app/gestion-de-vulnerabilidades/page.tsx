@@ -58,7 +58,8 @@ export default function GestionPage() {
       />
 
       <section className="prose-section">
-        <article className="container prose">
+        <div className="container">
+          <article className="prose">
           <h2>¿Por qué un informe no basta?</h2>
           <p>
             Un informe de pentest o un escaneo entrega una foto en el tiempo. Sin un proceso
@@ -90,7 +91,8 @@ export default function GestionPage() {
             VULNERA reúne alcance, hallazgos, remediación y evidencia en una sola plataforma,
             para que la gestión no dependa de planillas ni correos.
           </p>
-        </article>
+          </article>
+        </div>
       </section>
 
       <section className="status-section status-section--page" aria-label="Estado del producto">
