@@ -732,3 +732,47 @@ con un ID de GA4 de prueba):
 | Desbordamiento horizontal | ninguno a 1100 y 375 px en las 4 rutas ✅ |
 
 Con estas decisiones, Mario autoriza el push conjunto: `aef6b60` + P1 + P0-9 + estos ajustes.
+
+### Despliegue en producción de P1 + P0-9 · 2026-10-05
+
+- **Push:** `git push origin main`, `3289e01..634c9f1`, 26 commits (`aef6b60` + P1 + P0-9 + ajustes).
+- **Deploy de Vercel:**
+  - Commit desplegado: `634c9f1` (`634c9f132dac55f3f0b98ca32d2ec78f05693fe1`).
+  - Entorno: Production.
+  - Deployment GitHub: `6867399604`.
+  - Estado: `success` (READY) a las 2026-10-05T18:55:28Z.
+  - URL del deploy: `https://tcdx-threatwatch-4ekwq10aw-tecdex-projects.vercel.app`.
+- **Verificación contra `https://vulnera.tecdex.net/`:** curl, más el navegador para el consentimiento y el desbordamiento.
+
+  | Comprobación | Resultado |
+  |---|---|
+  | `/`, `/como-funciona/`, `/gestion-de-vulnerabilidades/`, `/preguntas-frecuentes/`, `/llms.txt`, `/sitemap.xml`, `/robots.txt` | `HTTP/2 200` sin redirección ✅ |
+  | `/como-funciona` (sin barra) | `308` → `/como-funciona/` ✅ |
+  | `/servicio-gestionado/`, `/precios/`, `/iso-27001-control-8-8/`, `/ley-21663-vulnerabilidades/` | `404` ✅ |
+  | Sitemap | 4 URLs con barra, `lastmod` 2026-10-05; `loc` == canonical ✅ |
+  | Title / description / canonical de las 4 rutas | doc 50 §1 (home, `/como-funciona/`), doc 48 §0 (pilar), aprobados 2026-10-05 (FAQ) ✅ |
+  | Bloques respuesta (SSR) | 41 / 55 / 46 palabras ✅ |
+  | Barrido del doc 51 §4 | 0 en todo, salvo «garantiza» (5, negaciones aprobadas) ✅ |
+  | «superficie expuesta», «Solicitar demo», «En desarrollo a octubre» | 0 ✅ |
+  | Etiqueta de demostración, checkbox `required`, «Ninguna evaluación se ejecuta sin tu autorización» | presentes ✅ |
+  | JSON-LD | `@id` de tecdex.net; `#vulnera` con la description del doc 50 §6; `FAQPage` = 8 preguntas idénticas al visible; `BreadcrumbList` con barra; sin `offers`/`aggregateRating`/`review` ✅ |
+  | `llms.txt` | `text/plain; charset=utf-8`; «En acceso anticipado (octubre de 2026)» ✅ |
+  | GA4 | `G-4Q39F6MMQM` en el HTML; `googletagmanager` 0 en el HTML servido ✅ |
+  | Cookies rechazadas (home y `/preguntas-frecuentes/`) | 0 peticiones a Google, `gtag` sin definir, sin cookies `_ga` ✅ |
+  | CTA de demo en la home | las 6 dicen «Agenda tu demo» ✅ |
+  | Desbordamiento horizontal | ninguno a 1440 px ni a 375 px en las 4 rutas ✅ |
+  | Fuente del body | sans-serif ✅ |
+
+- **Eventos de conversión:** no se dispararon contra la propiedad real para no registrar leads
+  falsos. Se verificaron en local con un ID de prueba (ver la tabla anterior); el código de
+  medición no cambió en este deploy.
+
+### `ACCIÓN_MARIO` tras este deploy
+
+1. Search Console y Bing: volver a enviar `sitemap.xml` y pedir la indexación de
+   `/como-funciona/`, `/gestion-de-vulnerabilidades/` y `/preguntas-frecuentes/`.
+2. Rich Results Test sobre la home y `/preguntas-frecuentes/`.
+3. WordPress de tecdex.net:
+   - la description de `#vulnera` debe pasar a la del doc 50 §6;
+   - el `llms.txt` corporativo debe alinearse;
+   - purgar la caché de LiteSpeed.
