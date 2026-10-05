@@ -776,3 +776,129 @@ Con estas decisiones, Mario autoriza el push conjunto: `aef6b60` + P1 + P0-9 + e
    - la description de `#vulnera` debe pasar a la del doc 50 §6;
    - el `llms.txt` corporativo debe alinearse;
    - purgar la caché de LiteSpeed.
+
+---
+
+## P0-10 · Formulario de demo integrado con Zoho CRM · 2026-10-05
+
+**Estado:** commits en local, **sin push**. Verificado en local; la prueba con lead real se hace
+en producción tras el OK de Mario, que debe ser avisado antes de enviarlo (opción b: Zoho solo
+acepta envíos desde `https://vulnera.tecdex.net`).
+**Fuente:** doc 52 (misión), código del formulario web de Zoho pegado por Mario y textos del doc 50 §5.
+
+| # | Commit | Tarea |
+|---|---|---|
+| 1 | `51eceb6` | Página `/gracias/` y aviso al formulario desde el iframe |
+| 2 | `d7ef792` | Formulario integrado con Zoho CRM vía iframe aislado |
+| 3 | `8b265af` | `/gracias/` como respaldo de `generate_lead` con flag de un solo uso |
+| 4 | (este registro) | CHANGELOG |
+
+### Configuración en Zoho CRM (doc 52 §3; no se cambia desde el repo)
+
+| Elemento | Valor |
+|---|---|
+| Formulario | `Formulario-VULNERA`, módulo Posibles clientes (Leads) |
+| URL de ubicación permitida | `https://vulnera.tecdex.net` (solo ese dominio) |
+| Al enviar | redirige a `https://vulnera.tecdex.net/gracias/` (`returnURL`) |
+| Propietario | regla «Asignación Automática Posible Cliente» |
+| Etiqueta | `VULNERA` |
+| Fuente (oculto) | `Formulario Web` (`Lead Source`) |
+| Estado (oculto) | `Nuevo` (`Lead Status`) |
+| Antispam | captcha estándar de Zoho (`enterdigest`) + honeypot `aG9uZXlwb3Q` |
+| Notificación | al propietario del lead: sí · al visitante: no (lo cubre `/gracias/`) |
+
+**Mapeo de campos** (los `name` son literales del código de Zoho, en `lib/zoho.ts`):
+
+| Web | `name` en Zoho | Obligatorio |
+|---|---|---|
+| Nombre | `First Name` | sí |
+| Apellidos (nuevo) | `Last Name` | sí |
+| Empresa | `Company` | sí |
+| Correo corporativo | `Email` | sí |
+| Teléfono | `Phone` | no |
+| Activo o dominio a evaluar | `Website` | no |
+| ¿Qué necesitas? + Contexto adicional | `Description` = «Necesidad: <opción>» + salto de línea + contexto | no |
+| Código de verificación | `enterdigest` (imagen de `CaptchaServlet`) | sí |
+| Ocultos | `xnQsjsdp`, `zc_gad`, `xmIwtLD`, `actionType`, `returnURL`, `Lead Source`, `Lead Status` | — |
+
+`action`: `https://crm.zoho.com/crm/WebToLeadForm` (POST, UTF-8). El checkbox de activos
+autorizados es obligatorio, se valida en el cliente y **no** se envía a Zoho.
+
+### Diseño de la integración
+
+- **Marcado propio.** Mismo diseño, tipografía y textos; de Zoho solo se usan `action`, los
+  nombres de campo, los ocultos y el captcha. Se añaden:
+  - el campo «Apellidos»;
+  - el captcha con el estilo del sitio y su «Recargar código»;
+  - «Al enviar aceptas nuestra Política de privacidad», enlazada a la política de TECDEX.
+- **Con JavaScript** el POST va a un iframe oculto `zoho-sink` con
+  `sandbox="allow-forms allow-scripts allow-same-origin"`, **sin** `allow-modals`,
+  `allow-top-navigation` ni `allow-popups`.
+  - Motivo: con captcha incorrecto, Zoho responde con una página que ejecuta
+    `alert("Invalid CAPTCHA code…")` y `history.back()` (comprobado con curl, sin crear leads).
+  - El sandbox bloquea el diálogo en inglés e impide que esa página mueva la ventana principal.
+  - El iframe se precarga con `/form-sink.html` (noindex) y se recrea tras cada intento sin
+    confirmar, para no dejar entradas en el historial del visitante.
+- **Confirmación.** Zoho redirige el iframe a `/gracias/` (mismo origen). El formulario lo
+  detecta leyendo la ruta del iframe y, además, `/gracias/` envía `postMessage`, validando el
+  origen y la fuente.
+  - **Sin confirmación a los 3 s:** «No pudimos confirmar el envío. Revisa el código de
+    verificación e inténtalo de nuevo; si persiste, escríbenos por WhatsApp.» (con enlace).
+    Se recarga y vacía el captcha y se reactiva el botón.
+  - **El éxito gana hasta los 20 s:** se oculta el aviso, se dispara `generate_lead` y se
+    navega a `/gracias/`.
+  - **A los 20 s sin confirmación:** se descarta el flag.
+- **`generate_lead`.** Solo cuando Zoho aceptó el lead, una vez, con un flag de un solo uso en
+  `sessionStorage`.
+  - Lo dispara la página del formulario.
+  - `/gracias/` como ventana principal solo lo dispara si encuentra el flag (respaldo) y lo borra.
+  - Recargas, visitas directas y envíos sin JS no cuentan.
+  - Se elimina el disparo anterior en el evento `submit`.
+- **Dentro del iframe** no se cargan GA4 ni el banner de cookies (sin page_view fantasma).
+- **Sin JavaScript:** el `<form>` servido no tiene `target`; es un POST normal y Zoho redirige
+  a `/gracias/`. Con captcha incorrecto, en ese caso extremo se vería el `alert` de Zoho.
+- **Seguridad.**
+  - El sitio no tiene CSP ni `X-Frame-Options` (solo HSTS): no hace falta abrir excepciones.
+  - Sin `mailto:` en el formulario; el correo de contacto queda como enlace aparte.
+
+### Excluido del código de Zoho (aprobado por Mario)
+
+- **Script `WebFormAnalyticsServeServlet`** (analítica de formularios de Zoho) y la variable
+  `_wFa_ajax_will_be_replaced`.
+  - **Consecuencia: el embudo del formulario en Zoho no contará VULNERA; esa medición la cubre GA4.**
+- **Iframe `captchaFrame`:** no lleva `target` ni lo usa ningún script.
+- **Scripts de validación con `alert()`** y los estilos de Zoho: los reemplazan la validación
+  y el diseño del sitio.
+
+### Verificación local (antes del push)
+
+| # | Comprobación (doc 52 §5) | Resultado |
+|---|---|---|
+| 2 | HTML servido | 0 `mailto:` dentro de `<form>`; `action` HTTPS de Zoho; sin `target` (POST normal sin JS) ✅ |
+| 3 | Validación del cliente | vacío: 6 errores en línea; correo inválido: «Ingresa un correo válido.»; sin checkbox: error; en ningún caso se envía ni se crea el flag ✅ |
+| 4 | Captcha incorrecto (POST real a Zoho, sin lead) | aviso a los 3,3 s; captcha recargado y vacío; botón reactivado; 0 `generate_lead`; URL principal sin cambios ✅ |
+| — | Sandbox | iframe de prueba con los mismos permisos: `alert()` vuelve en 0 ms sin diálogo; `history.back()` no mueve la ventana principal ✅ |
+| — | Datos enviados (evento `formdata`) | los 16 campos de Zoho; `Description` = «Necesidad: … \n contexto»; honeypot vacío ✅ |
+| — | Reintento | iframe recreado y reenvío correcto ✅ |
+| 5 | Éxito con 302 (servidor local que imita a Zoho) | sin aviso; `generate_lead` ×1 con `need`; navega a `/gracias/`; `/gracias/` no lo repite; flag consumido ✅ |
+| — | «El éxito siempre gana» (página intermedia que redirige a los 5 s) | aviso a los 3,2 s → se oculta → `generate_lead` ×1 → `/gracias/` ✅ |
+| 7 | `/gracias/` recargada o directa sin flag | 0 `generate_lead` ✅; con flag de respaldo: ×1 y lo borra ✅ |
+| 9 | Escritorio 1440 px y móvil 375 px | sin desbordamiento; captcha legible a 200 px; aviso y errores visibles ✅ |
+| 10 | Barrido del doc 51 §4 | sin cambios: 0, salvo «garantiza» ×5 (negaciones aprobadas) ✅ |
+| — | `/gracias/` y `/form-sink.html` | `noindex`; fuera del sitemap y de `llms.txt` ✅ |
+
+**Pendiente en producción** (tras el OK de Mario, avisándole antes del lead de prueba):
+1. Chrome sin el aviso «formulario no seguro» y con autocompletado.
+2. Envío correcto con el lead de prueba (Nombre «Prueba», Apellidos «VULNERA P0-10», Empresa
+   «TECDEX QA», correo de TECDEX): navega a `/gracias/` sin salir del dominio y `generate_lead` ×1.
+3. En Zoho CRM: lead con etiqueta `VULNERA`, fuente `Formulario Web`, estado `Nuevo` y
+   `Description` con «Necesidad: …».
+4. Captcha incorrecto y envío sin JS en el dominio real.
+5. Confirmar cómo responde Zoho cuando el envío es correcto (302 o página intermedia).
+
+### Mejoras posteriores (doc 52 §7, no ahora)
+
+- Correo automático de confirmación al visitante: requiere una regla de respuesta en Zoho con
+  texto de marca aprobado.
+- reCAPTCHA en lugar del captcha estándar: requiere registrar `vulnera.tecdex.net` en la
+  consola de reCAPTCHA y que Mario cargue las claves en Zoho.
