@@ -387,6 +387,13 @@ p { line-height: 1.7; }
 .content-table tbody th { color: var(--ink); font-weight: 600; white-space: nowrap; }
 .content-table td { color: var(--text); }
 .content-table tbody tr:last-child > * { border-bottom: 0; }
+/* «Qué automatiza VULNERA» (doc 50 §2.2): dos columnas sin cabecera de fila */
+.automation-scroll { max-width: 1040px; background: var(--white); }
+.automation-table { min-width: 0; table-layout: fixed; }
+.automation-table thead th:first-child { color: var(--secondary-dark); border-bottom-color: var(--secondary); }
+.automation-table thead th:last-child { color: var(--navy); border-bottom-color: var(--primary); }
+.automation-table td:first-child { color: var(--ink); font-weight: 500; }
+.automation-note { margin: 4px 0 0; padding-left: 14px; border-left: 3px solid var(--secondary); color: var(--muted); font-size: 14px; }
 .status-section--page { padding: 0 0 56px; background: var(--white); }
 .related-section { padding: 0 0 56px; background: var(--white); }
 .faq-page .faq-item { padding: 26px 0; border-bottom: 1px solid var(--border); }

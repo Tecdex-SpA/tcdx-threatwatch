@@ -4,6 +4,7 @@ import { JsonLd } from "./components/JsonLd";
 import { homeFaqs } from "../lib/faqs";
 import { pageMetadata } from "../lib/seo";
 import { contact, pages, whatsappUrl } from "../lib/site";
+import { AutomationTable } from "./components/AutomationTable";
 import { DashboardPreview } from "./components/DashboardPreview";
 import { ProductStatus } from "./components/ProductStatus";
 import { SiteFooter, SiteHeader } from "./components/SiteChrome";
@@ -104,6 +105,21 @@ export default function Page() {
               </ul>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section id="automatizacion" className="section section-surface">
+        <div className="container">
+          <div className="section-heading">
+            <p className="eyebrow">Automatización con criterio</p>
+            <h2>Automatiza lo repetible. Tu equipo se concentra en lo que importa.</h2>
+            <p>
+              VULNERA ejecuta las etapas del pentesting que se repiten en cada evaluación, dentro
+              de un alcance aprobado. Así puedes evaluar con más frecuencia y reservar a los
+              especialistas para lo que exige criterio humano.
+            </p>
+          </div>
+          <AutomationTable />
         </div>
       </section>
 
