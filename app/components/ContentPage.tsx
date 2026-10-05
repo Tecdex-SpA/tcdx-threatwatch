@@ -58,9 +58,9 @@ export function DemoCta({ location }: { location: string }) {
       <div className="container cta-card">
         <div>
           <p className="eyebrow light">Demo guiada</p>
-          <h2>Obtén una primera lectura, sobre datos de ejemplo.</h2>
+          <h2>Agenda tu demo de VULNERA.</h2>
         </div>
-        <a className="button primary" href="/#demo" data-cta="demo">Solicitar demo guiada</a>
+        <a className="button primary" href="/#demo" data-cta="demo">Agenda tu demo</a>
       </div>
     </section>
   );

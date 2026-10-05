@@ -189,16 +189,16 @@ export default function Page() {
         <div className="container contact-grid">
           <div className="contact-copy">
             <p className="eyebrow">Demo guiada</p>
-            <h2>Obtén una primera lectura, sobre datos de ejemplo.</h2>
+            <h2>Agenda tu demo de VULNERA.</h2>
             <p className="contact-lead">
-              Cuéntanos qué activos necesitas revisar. Un especialista de TECDEX evaluará el caso
-              y propondrá un alcance inicial seguro.
+              Cuéntanos qué activos necesitas evaluar. Un especialista de TECDEX revisará tu caso y
+              te contactará para coordinar la demo y el alcance inicial.
             </p>
             <ul className="contact-benefits">
+              <li><CheckIcon /><span>Revisión de tu caso</span></li>
               <li><CheckIcon /><span>Definición de alcance inicial</span></li>
-              <li><CheckIcon /><span>Validación de propiedad o autorización</span></li>
-              <li><CheckIcon /><span>Resumen ejecutivo y detalle técnico de ejemplo</span></li>
-              <li><CheckIcon /><span>Recomendaciones y próximos pasos</span></li>
+              <li><CheckIcon /><span>Validación de autorización</span></li>
+              <li><CheckIcon /><span>Demo guiada de la plataforma</span></li>
             </ul>
             <div className="direct-contact">
               <span>¿Prefieres contacto directo?</span>
@@ -228,10 +228,10 @@ export default function Page() {
               <input type="checkbox" name="activos_autorizados" required />
               <span>Solicito información para evaluar activos propios o expresamente autorizados.</span>
             </label>
-            <button className="button primary form-submit" type="submit" data-cta="demo">Solicitar demo guiada</button>
+            <button className="button primary form-submit" type="submit" data-cta="demo">Agenda tu demo</button>
             <p className="privacy-note">
-              No se ejecutará ningún escaneo automáticamente. Tus datos se usarán solo para responder
-              esta solicitud comercial.
+              Ninguna evaluación se ejecuta sin tu autorización y aprobación explícita. Tus datos se
+              usarán solo para responder esta solicitud comercial.
             </p>
           </form>
         </div>
