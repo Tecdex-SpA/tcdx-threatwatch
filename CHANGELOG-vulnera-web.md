@@ -1034,3 +1034,56 @@ En todos los envíos salieron los 16 campos anteriores más los 14 de atribució
 
 Todo en minúsculas y con guiones, sin tildes ni espacios. Ejemplo:
 `https://vulnera.tecdex.net/?utm_source=linkedin&utm_medium=social&utm_campaign=automatizacion-202610`
+
+### Despliegue en producción de P0-11 y prueba con lead real · 2026-10-06
+
+- **Push:** `git push origin main`, `927c49d..b1ca4ff`, 3 commits, autorizado por Mario.
+- **Deploy de Vercel:**
+  - Commit desplegado: `b1ca4ff` (`b1ca4ff5beeaec5a60446c0a958392fe38e93b3c`).
+  - Entorno: Production.
+  - Deployment GitHub: `6886209342`.
+  - Estado: `success` (READY) a las 2026-10-06T14:08:48Z.
+- **Verificación con curl contra `https://vulnera.tecdex.net/`:**
+  - todas las rutas responden 200;
+  - `/gracias/` y `/form-sink.html` responden 200;
+  - el barrido del doc 51 no cambia;
+  - el formulario sirve los 14 `LEADCF*` vacíos, con 0 `mailto:` y `action` HTTPS de Zoho;
+  - `__test_referrer` no aparece en ningún chunk servido (0).
+
+**Lead de prueba real**, enviado 2026-10-06T14:41:52Z desde
+`https://vulnera.tecdex.net/?utm_source=prueba&utm_medium=qa&utm_campaign=p0-11`:
+- **Pestaña y datos:** pestaña «PRUEBA P0-11 · VULNERA» en el Chrome de Mario, preparada por Claude, con cookies aceptadas. Mario escribió el captcha y envió. El panel del navegador de la app estaba oculto, por eso la prueba se hizo en Chrome.
+- **Datos del lead:** Nombre «Prueba», Apellidos «VULNERA P0-11», Empresa «TECDEX QA», contacto@tecdex.net; `Description` = «Necesidad: Evaluar mis dominios y aplicaciones\nPrueba técnica de atribución P0-11, descartar».
+- **Atribución enviada:**
+
+  | Campo | Valor |
+  |---|---|
+  | `LEADCF13` / `14` / `17` (primer clic) | prueba / qa / p0-11 |
+  | `LEADCF19` (primera landing) | `/?utm_source=prueba&utm_medium=qa&utm_campaign=p0-11` |
+  | `LEADCF5` / `6` / `9` (último clic) | prueba / qa / p0-11 |
+  | `LEADCF11` (última landing) | igual |
+  | `LEADCF15` / `LEADCF7` (referrer) | vacíos (entrada directa con UTM) |
+  | `LEADCF8` / `LEADCF10` (term / content) | vacíos |
+  | `LEADCF20` (GA Client ID) | `1761080799.1784427085` |
+  | `LEADCF31` (gclid) | vacío |
+
+- **Respuesta de Zoho: redirección HTTP 302 directa a `/gracias/`.** El iframe pasó de `/form-sink.html` a `/gracias/` en 2,85 s, sin ninguna carga intermedia de otro origen ni aviso de «no confirmado».
+- **Llegada a `/gracias/`:**
+  - el formulario detectó `/gracias/` en el iframe y navegó la página principal a `https://vulnera.tecdex.net/gracias/`, sin salir del dominio;
+  - el `postMessage` `vulnera-lead-ok` llegó 1 ms después y se ignoró, porque el envío ya estaba confirmado.
+- **`generate_lead`: exactamente 1**, en la página del formulario, con `{location: "demo", need: "Evaluar mis dominios y aplicaciones"}`. 0 en `/gracias/`. Flag consumido.
+- **Comprobación de doble envío:**
+  - el registro mostró 2 eventos `formdata` por 1 `submit`;
+  - se comprobó con el registro de red de Chrome, apuntando el formulario a `/form-sink.html` (sin Zoho), que sale **un único POST** al destino;
+  - el segundo `formdata` lo genera la medición mejorada de GA4 (`form_start` / `form_submit`), que lee el formulario al enviarse;
+  - **no hay doble lead.** Esa comprobación envió a GA4 un par de eventos `form_start` / `form_submit` de prueba con destino `/form-sink.html`.
+- **Pendiente de Mario:** confirmar en Zoho CRM que el lead tiene los 14 campos con estos valores, etiqueta `VULNERA`, fuente `Formulario Web` y estado `Nuevo`, y descartarlo. También filtrar en GA4 los eventos de prueba.
+
+**Envío sin JavaScript con captcha incorrecto** (sin lead):
+- **Con curl:** se reprodujo el POST exacto que haría un navegador sin JS, con los 30 campos del HTML servido, los 14 `LEADCF` vacíos y `Description` desde el textarea. Zoho responde 200 con su página de error (`alert("Invalid CAPTCHA code…")` + `history.back()`).
+- **En Chrome:** la home se cargó en un iframe aislado sin permiso de scripts, equivalente a un navegador sin JS.
+  - El formulario se sirve sin `target`, así que el envío es un POST normal.
+  - Tras enviar, el documento pasa a la página de Zoho, que **se ve en blanco** («Zoho CRM - Webforms»): sin JS no se ejecutan ni el `alert` ni el `history.back()`.
+  - La web no se rompe ni se crea ningún lead.
+  - Limitación conocida: el visitante sin JS que se equivoca de captcha queda en una página vacía de Zoho y debe pulsar «Atrás». Esa página la controla Zoho.
+- **Limpieza:** se retiraron de Chrome el iframe de prueba, el registro, el consentimiento aceptado para la prueba y la atribución de prueba, y se cerró la pestaña de Claude. Queda abierta una pestaña «Compartir en Whatsapp» que abrió el enlace de WhatsApp de la web; no se tocó.
