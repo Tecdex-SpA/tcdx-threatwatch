@@ -13,7 +13,7 @@
   --muted: #777777;
   --border: #d8d8d8;
   --gold: #fbc962;
-  --container: 1280px;
+  --container: 1140px;
   --font-heading: Roboto, -apple-system, "Segoe UI", Arial, sans-serif;
   --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   --font-nav: var(--font-inter), Inter, -apple-system, "Segoe UI", Arial, sans-serif;
@@ -34,9 +34,7 @@ input, select, textarea, button { font: inherit; }
 a { color: inherit; text-decoration: none; }
 button, input, select, textarea { font-family: inherit; }
 img { max-width: 100%; }
-.container { width: 100%; max-width: var(--container); margin: 0 auto; padding-left: 24px; padding-right: 24px; }
-@media (min-width: 640px) { .container { padding-left: 32px; padding-right: 32px; } }
-@media (min-width: 1024px) { .container { padding-left: 40px; padding-right: 40px; } }
+.container { width: min(var(--container), calc(100% - 48px)); margin: 0 auto; }
 
 h1, h2, h3, p { margin-top: 0; }
 h1, h2, h3 {
@@ -544,7 +542,7 @@ textarea { resize: vertical; }
 
 @media (max-width: 767px) {
   html { scroll-padding-top: 64px; }
-  .container { padding-left: 16px; padding-right: 16px; }
+  .container { width: min(100% - 32px, var(--container)); }
   .header-main { min-height: 64px; }
   .header-logo { width: 150px; }
   .brand-divider { height: 28px; }
@@ -586,7 +584,6 @@ textarea { resize: vertical; }
 }
 
 @media (max-width: 420px) {
-  .container { padding-left: 12px; padding-right: 12px; }
   .header-logo { width: 132px; }
 }
 
