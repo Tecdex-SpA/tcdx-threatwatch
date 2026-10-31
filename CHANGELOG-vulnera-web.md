@@ -1219,3 +1219,34 @@ Tras la corrección:
 
 **Sigue pendiente** pasar el Rich Results Test de Google sobre las URL públicas después del deploy:
 es el único que comprueba la elegibilidad con los criterios internos de Google, que no son públicos.
+
+### Hotfix · Enlace muerto en las fuentes de la guía 1 · 2026-10-31
+
+Barrido completo de las 6 rutas servidas: 18 enlaces externos comprobados, **1 roto**.
+
+| Enlace | Resultado | Qué es |
+|---|---|---|
+| `http://www.pentest-standard.org/` (PTES) | **Caído** — sin respuesta HTTP en http ni https, 30 s de espera, dos intentos, y tampoco carga en navegador; el DNS sí resuelve a 96.126.116.56 | Error real |
+| `https://www.iso.org/standard/27001` | 403 a `curl`, **carga bien en navegador** | Falso positivo: bloqueo de bots |
+| `https://www.bcn.cl/leychile/navegar?idNorma=1202434` | 401 a `curl`, **carga bien en navegador** (Ley 21.663, última versión 01-MAR-2025) | Falso positivo: bloqueo de bots |
+| `https://vulnera.tecdex.net/pentesting-automatizado/` y `/owasp-top-10/` | 404 | Esperado: son los `canonical` a producción, existirán tras el deploy |
+
+**Corregido:** la fuente PTES se cita ahora **sin enlace**, con la nota «sitio fuera de servicio al
+31 de octubre de 2026», y su URL sale del `citation` del `Article` (quedan 5). El tipo `Source`
+admite `href` opcional y `GuideByline` renderiza texto plano cuando no hay enlace.
+
+**No se tocó el cuerpo del texto:** la afirmación «el estándar PTES lo detalla en siete, desde los
+acuerdos previos hasta el informe final» sigue igual y no depende del enlace. Tampoco se inventó una
+URL sustituta: el Wayback Machine no tiene copias de `pentest-standard.org` (consultadas las API de
+disponibilidad y CDX).
+
+### Otras comprobaciones del mismo barrido (sin hallazgos)
+
+| Qué | Resultado |
+|---|---|
+| Móvil (375×812), ambas guías | La página **no desborda** (`scrollWidth == clientWidth == 375`); las 5 tablas tienen scroll propio dentro de `.table-scroll` |
+| Errores de consola | Ninguno en las dos guías |
+| `<time datetime>` | React lo emite como `dateTime`; el navegador lo parsea como `datetime` (comprobado en el DOM: `getAttribute('datetime')` devuelve la fecha). Correcto, los nombres de atributo son insensibles a mayúsculas en HTML |
+| JSON-LD de las 6 rutas | Parsea en todas; tipos correctos por ruta |
+| Fechas visibles vs. JSON-LD | Coinciden en ambas guías (2026-10-31) |
+| Largo de `title`/`description` | Las dos guías dentro de límite (55/137 y 51/127). La home, `/como-funciona/` y el pilar exceden los 60 caracteres de `title`, pero es **copy aprobado** (docs 48 y 50): no se toca sin decisión de Mario |

@@ -4,7 +4,8 @@
 // visible y el de `FAQPage` no puedan separarse (doc 58 PASO 3).
 
 export type Faq = [question: string, answer: string];
-export type Source = [label: string, href: string];
+/** `href` vacío = fuente citada sin enlace (sitio fuera de servicio). */
+export type Source = [label: string, href?: string];
 
 /** Fecha del deploy de P1-9: alimenta la línea de autoría, el JSON-LD y el sitemap. */
 export const guideDates = {
@@ -44,7 +45,11 @@ export const pentestingSources: Source[] = [
     "NIST, SP 800-115: Technical Guide to Information Security Testing and Assessment (2008, versión final vigente)",
     "https://csrc.nist.gov/pubs/sp/800/115/final",
   ],
-  ["Penetration Testing Execution Standard (PTES)", "http://www.pentest-standard.org/"],
+  // pentest-standard.org no responde (comprobado el 2026-10-31 por curl y por
+  // navegador; el DNS resuelve, no hay respuesta HTTP). Se cita sin enlace en vez
+  // de mandar al lector a un sitio caído. La afirmación del cuerpo («PTES lo
+  // detalla en siete secciones») no depende del enlace.
+  ["Penetration Testing Execution Standard (PTES) — sitio fuera de servicio al 31 de octubre de 2026"],
   [
     "OWASP Foundation, Web Security Testing Guide (versión estable 4.2; la 5.0 está en desarrollo)",
     "https://owasp.org/www-project-web-security-testing-guide/",

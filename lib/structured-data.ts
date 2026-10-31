@@ -165,7 +165,7 @@ export const structuredData = {
       ],
       citation: [
         "https://csrc.nist.gov/pubs/sp/800/115/final",
-        "http://www.pentest-standard.org/",
+        // Sin la URL de PTES: no responde (2026-10-31) y `citation` debe resolver.
         "https://owasp.org/www-project-web-security-testing-guide/",
         "https://www.ncsc.gov.uk/guidance/penetration-testing",
         "https://www.cisecurity.org/controls/penetration-testing",

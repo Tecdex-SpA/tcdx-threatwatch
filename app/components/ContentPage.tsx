@@ -113,8 +113,8 @@ export function GuideByline({
       </p>
       <ul className="source-list">
         {sources.map(([label, href]) => (
-          <li key={href}>
-            <a href={href} target="_blank" rel="noopener">{label}</a>
+          <li key={label}>
+            {href ? <a href={href} target="_blank" rel="noopener">{label}</a> : label}
           </li>
         ))}
       </ul>
