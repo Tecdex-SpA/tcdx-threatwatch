@@ -1087,3 +1087,98 @@ Todo en minúsculas y con guiones, sin tildes ni espacios. Ejemplo:
   - La web no se rompe ni se crea ningún lead.
   - Limitación conocida: el visitante sin JS que se equivoca de captcha queda en una página vacía de Zoho y debe pulsar «Atrás». Esa página la controla Zoho.
 - **Limpieza:** se retiraron de Chrome el iframe de prueba, el registro, el consentimiento aceptado para la prueba y la atribución de prueba, y se cerró la pestaña de Claude. Queda abierta una pestaña «Compartir en Whatsapp» que abrió el enlace de WhatsApp de la web; no se tocó.
+
+---
+
+## Tanda P1-9 — Guías SEO del clúster del pilar · 2026-10-31
+
+**Estado:** commits en la rama `feat/p1-9-guias-seo`, **sin push y sin PR**, pendiente del OK de
+Mario. Contenido literal de los docs 56 (`/pentesting-automatizado/`) y 57 (`/owasp-top-10/`);
+instrucciones de maquetación, barrido ampliado y criterios de aceptación del doc 58 §3, §4 y §7.
+
+**Origen del encargo:** Mario pidió «parte P2» y señaló la carpeta
+`~/TECDEX.Producto-Vulnera Pentestig`. En esa carpeta **no está el doc 47 ni ninguna lista «P2»**:
+lo que hay listo para ejecutar es P1-9 (docs 56, 57 y 58, los tres marcados `PROPOSED`) y la
+propuesta de formulario progresivo del doc 54. Se ejecutó P1-9 por ser la única pieza con
+especificación completa. Las 5 decisiones del doc 58 §6 se aplicaron en la opción recomendada
+(migas con el pilar, guías en el pie y no en el menú, sin índice `/guias/`); la **aprobación del
+texto de las guías (decisión 1) sigue siendo de Mario** y por eso no hay push.
+
+**Método de verificación:** `next build` + `next start -p 3100` y curl al HTML servido, sin JS.
+
+### Archivos
+
+| Archivo | Qué |
+|---|---|
+| `app/pentesting-automatizado/page.tsx` | Guía 1 (nueva), copy literal del doc 56 §2 |
+| `app/owasp-top-10/page.tsx` | Guía 2 (nueva), copy literal del doc 57 §2 |
+| `lib/guides.ts` | Nuevo. FAQ, fuentes y fechas de las guías: fuente única del texto visible y del `FAQPage` |
+| `lib/site.ts` | Registro `guides`; `SitePage` admite `ogTitle`, `changeFrequency` y `parent`; `corePages` separa las 4 páginas de P1 de las guías |
+| `lib/seo.ts` | `articleMetadata()`: `og:type=article`, `og:title` propio, `publishedTime`/`modifiedTime` |
+| `lib/structured-data.ts` | `Article` + `FAQPage` + `BreadcrumbList` de cada guía; migas de 3 niveles |
+| `lib/faqs.ts` | Remate hacia la guía 1 en la primera pregunta, **solo** en `/preguntas-frecuentes/` |
+| `app/components/ContentPage.tsx` | Migas de 3 niveles, `id="respuesta-directa"`, `GuideFaq`, `GuideByline`, `GuideCards` |
+| `app/components/SiteChrome.tsx` | Dos enlaces nuevos en la columna Producto del pie |
+| `app/gestion-de-vulnerabilidades/`, `app/como-funciona/`, `app/preguntas-frecuentes/` | Enlaces cruzados del doc 58 PASO 4 |
+| `app/llms.txt/route.ts`, `app/sitemap.ts` | Dos entradas nuevas; `changefreq` por página |
+| `app/globals.css` | Estilos de las guías (fichas, FAQ, notas de tabla, lista de fuentes) |
+
+### Criterios de aceptación (doc 58 PASO 7)
+
+| # | Criterio | Resultado |
+|---|---|---|
+| 1 | 200 en las 2 rutas; la variante sin barra redirige | **OK** — 200 y 308 a la canónica |
+| 2 | H1, respuesta directa, ≥1 tabla, FAQ y JSON-LD en el HTML servido | **OK** — 3 y 2 tablas; FAQ en el DOM, sin `<details>` |
+| 3 | `canonical` propio, `robots: index, follow`, title y description literales | **OK** — 55/137 y 51/127 caracteres |
+| 4 | 0 enlaces internos rotos en las 6 rutas | **OK** — 12 destinos internos, 0 rotos |
+| 5 | Barrido de claims: 0 coincidencias fuera de excepciones | **OK en las 2 guías nuevas** (ver abajo) |
+| 6 | El CTA de las guías dispara el mismo evento que el pilar | **OK** — `data-cta="demo"` y `DemoCta` con `location` propio |
+| 7 | Rich Results Test y validator.schema.org con 0 errores | **No ejecutado**: requieren una URL pública. Queda para después del deploy |
+| 8 | Sin regresiones de accesibilidad ni rendimiento (Lighthouse móvil) | **No ejecutado.** Comprobado en su lugar: jerarquía de encabezados sin saltos, `<thead>` y `th scope` en todas las tablas, 0 `img` sin `alt`, 0 externos sin `noopener`, 0 `nofollow` |
+
+### Barrido de claims (doc 51 §4 + doc 58 §4, sobre el HTML servido)
+
+33 coincidencias en las 6 rutas y `llms.txt`; 28 son excepciones válidas (la misma oración niega o
+pregunta). Las 5 restantes están **todas en páginas anteriores, ninguna en las guías nuevas**:
+
+| Ruta | ID | Frase | Lectura |
+|---|---|---|---|
+| `/como-funciona/` | C12 | «Retest automático para comprobar el cierre…» | Está dentro del bloque «Hoja de ruta», que es justamente donde debe estar |
+| `/gestion-de-vulnerabilidades/` | C4 | H2 «Gestión de vulnerabilidades y cumplimiento» | Título de sección sobre la materia; el cuerpo dice que el sistema de gestión vive en TECDEX Compliance |
+| `/` | C4 | Tarjeta «Cumplimiento · Para auditar» | Ídem; no afirma que VULNERA certifique |
+| `/llms.txt` | C4 | «## Normativa y cumplimiento» | Encabezado de sección |
+
+Coinciden con el resultado del barrido de P0-9 y no son regresiones de esta tanda.
+
+### Decisión de fechas
+
+El doc 58 obliga a usar la fecha real del deploy en las 4 ubicaciones. Como la tanda se maqueta el
+2026-10-31, quedó **2026-10-31** en la línea de autoría, `datePublished`, `dateModified`, el
+`lastmod` del sitemap y la respuesta de la FAQ «¿Cuál es la versión vigente del OWASP Top 10?»
+(«Al 31 de octubre de 2026…»). **Si el push ocurre otro día, hay que actualizar `guideDates` en
+`lib/guides.ts` y el texto de esa respuesta**, o las fechas dejarán de coincidir.
+
+### Verificaciones propias de esta tanda
+
+- **Edición del OWASP Top 10 (doc 58 REC-036):** verificada el 2026-10-31. `top10.owasp.org/2025/`
+  responde 200, `/2026/` responde 404 y la página del proyecto en owasp.org sigue listando la
+  edición 2025. La guía se publica con la edición correcta.
+- **Fuentes citadas:** las 11 URL de ambas guías responden 200, **salvo una**:
+  `http://www.pentest-standard.org/` (PTES) **no responde** (DNS resuelve a 96.126.116.56, pero no
+  hay respuesta HTTP ni en http ni en https, con y sin `User-Agent`, 25 s de espera). El doc 56 la
+  verificó el 2026-10-09. **Decisión de Mario:** publicar igual (la afirmación «PTES lo detalla en
+  siete secciones» no depende del enlace), reemplazar la URL por una referencia estable, o dejar la
+  cita sin enlace. No se modificó el texto porque esta tanda maqueta, no reescribe.
+
+### Fuera de los commits
+
+El cambio de `app/globals.css` que amplía el contenedor (1140→1280) **sigue sin commitear**,
+como en P0 (decisión 8 del doc 49). Se guardó en stash durante la tanda y se restauró después.
+
+### Pendiente antes del push
+
+1. OK de Mario al texto de las guías (doc 58 §6, decisión 1).
+2. Abrir el PR hacia `main` (el doc 58 pide PR, no push directo).
+3. Revisar la fecha si el deploy no es el 2026-10-31.
+4. Tras el deploy: Rich Results Test y validator.schema.org; solicitar indexación de las 2 rutas en
+   Search Console; enviar las 2 URL en Bing; volver a enviar el `sitemap.xml`.
