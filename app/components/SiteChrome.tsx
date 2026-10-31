@@ -77,6 +77,8 @@ export function SiteFooter() {
             <a href="/#solucion">Solución</a>
             <a href="/como-funciona/">Cómo funciona</a>
             <a href="/gestion-de-vulnerabilidades/">Gestión de vulnerabilidades</a>
+            <a href="/pentesting-automatizado/">Pentesting automatizado</a>
+            <a href="/owasp-top-10/">OWASP Top 10</a>
             <a href="/preguntas-frecuentes/">Preguntas frecuentes</a>
             <a href="/#acceso-anticipado">Acceso anticipado</a>
             <a href="/#demo" data-cta="demo">Agenda tu demo</a>

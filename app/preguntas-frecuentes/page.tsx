@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { structuredData } from "../../lib/structured-data";
 import { JsonLd } from "../components/JsonLd";
-import { faqs } from "../../lib/faqs";
+import { faqs, pentestingGuideNote } from "../../lib/faqs";
 import { pageMetadata } from "../../lib/seo";
 import { pages } from "../../lib/site";
-import { DemoCta, PageHero, RelatedPages } from "../components/ContentPage";
+import { DemoCta, GuideCards, PageHero, RelatedPages } from "../components/ContentPage";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 
 // Copy aprobado: FAQ v2 (doc 50 §4). Description y bloque respuesta aprobados por
@@ -28,10 +28,20 @@ export default function PreguntasPage() {
       <section className="prose-section">
         <div className="container">
           <div className="prose faq-page">
-          {faqs.map(([question, answer]) => (
+          {faqs.map(([question, answer], index) => (
             <div className="faq-item" key={question}>
               <h2>{question}</h2>
-              <p>{answer}</p>
+              <p>
+                {answer}
+                {index === 0 ? (
+                  <>
+                    {" "}
+                    {pentestingGuideNote.before}
+                    <a href={pentestingGuideNote.href}>{pentestingGuideNote.linkText}</a>
+                    {pentestingGuideNote.after}
+                  </>
+                ) : null}
+              </p>
             </div>
           ))}
           </div>
@@ -43,6 +53,8 @@ export default function PreguntasPage() {
           <RelatedPages current={page} />
         </div>
       </section>
+
+      <GuideCards title="Guías" />
 
       <DemoCta location="preguntas-frecuentes" />
       <SiteFooter />

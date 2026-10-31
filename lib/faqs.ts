@@ -39,3 +39,22 @@ export const faqs: [question: string, answer: string][] = [
 
 /** Bloque resumido de la home: las 5 primeras. */
 export const homeFaqs = faqs.slice(0, 5);
+
+/**
+ * Remate hacia la guía de pentesting automatizado (P1-9, doc 58 PASO 4.2a).
+ * Solo en `/preguntas-frecuentes/`: la home mantiene la respuesta aprobada del doc 50.
+ * La página lo renderiza con enlace y el JSON-LD con el mismo texto plano.
+ */
+export const pentestingGuideNote = {
+  before: "Más detalle en la guía de ",
+  linkText: "pentesting automatizado",
+  href: "/pentesting-automatizado/",
+  after: ".",
+};
+
+const noteText = `${pentestingGuideNote.before}${pentestingGuideNote.linkText}${pentestingGuideNote.after}`;
+
+/** Las mismas 8 preguntas, con el remate añadido a la primera. */
+export const faqPageFaqs: [question: string, answer: string][] = faqs.map(([question, answer], index) =>
+  index === 0 ? [question, `${answer} ${noteText}`] : [question, answer],
+);

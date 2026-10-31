@@ -3,7 +3,7 @@ import { structuredData } from "../../lib/structured-data";
 import { JsonLd } from "../components/JsonLd";
 import { pageMetadata } from "../../lib/seo";
 import { organization, pages } from "../../lib/site";
-import { ContentTable, DemoCta, PageHero, RelatedPages } from "../components/ContentPage";
+import { ContentTable, DemoCta, GuideCards, PageHero, RelatedPages } from "../components/ContentPage";
 import { ProductRoadmap } from "../components/ProductRoadmap";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 
@@ -15,7 +15,7 @@ export const metadata: Metadata = pageMetadata(page);
 
 /** Autoría y fechas (P1-7). Actualizar `revised` al revisar el contenido. */
 const published = { iso: "2026-10-05", label: "5 de octubre de 2026" };
-const revised = { iso: "2026-10-05", label: "5 de octubre de 2026" };
+const revised = { iso: "2026-10-31", label: "31 de octubre de 2026" };
 
 const stages = [
   ["Alcance", "Se define qué activos se pueden evaluar y bajo qué autorización", "¿Qué estamos mirando y con permiso de quién?"],
@@ -70,9 +70,18 @@ export default function GestionPage() {
 
           <h2>Las etapas de la gestión de vulnerabilidades</h2>
           <ContentTable head={["Etapa", "Qué ocurre", "Pregunta que responde"]} rows={stages} />
+          <p>
+            Si quieres entender qué parte de la evaluación se puede automatizar y qué parte requiere
+            a un especialista, lee la guía de{" "}
+            <a href="/pentesting-automatizado/">pentesting automatizado</a>.
+          </p>
 
           <h2>Buenas prácticas</h2>
           <ul>{goodPractices.map((item) => <li key={item}>{item}</li>)}</ul>
+          <p>
+            Para priorizar en aplicaciones web, el <a href="/owasp-top-10/">OWASP Top 10</a> es la
+            referencia más usada: explicamos sus diez categorías para empresas.
+          </p>
 
           <h2>Errores comunes</h2>
           <ul>{commonMistakes.map((item) => <li key={item}>{item}</li>)}</ul>
@@ -125,6 +134,8 @@ export default function GestionPage() {
           <RelatedPages current={page} />
         </div>
       </section>
+
+      <GuideCards />
 
       <DemoCta location="gestion-de-vulnerabilidades" />
       <SiteFooter />
