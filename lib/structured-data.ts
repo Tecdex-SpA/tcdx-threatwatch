@@ -145,7 +145,12 @@ export const structuredData = {
   comoFunciona: graph([organizationRef, breadcrumb(pages.comoFunciona)]),
   gestion: graph([organizationRef, breadcrumb(pages.gestion)]),
   preguntas: graph([organizationRef, breadcrumb(pages.preguntas), faqPage]),
+  // `organizationRef` va en el grafo porque Google exige `author.name` y
+  // `publisher.name`: un `@id` suelto apuntando a tecdex.net no le resuelve.
+  // Es la misma referencia (@id + name) del doc 48 §8.1 que usan las demás rutas,
+  // no una entidad nueva.
   pentestingAutomatizado: graph([
+    organizationRef,
     guideArticle(pentestingGuide, {
       headline: "Pentesting automatizado: qué es y en qué se diferencia del pentest manual",
       about: [productLink, { "@type": "Thing", name: "Pentesting automatizado" }],
@@ -171,6 +176,7 @@ export const structuredData = {
     breadcrumb(pentestingGuide),
   ]),
   owaspTop10: graph([
+    organizationRef,
     guideArticle(owaspGuide, {
       headline: "OWASP Top 10 explicado para empresas",
       about: [

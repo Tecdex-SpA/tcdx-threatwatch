@@ -1133,7 +1133,7 @@ texto de las guías (decisión 1) sigue siendo de Mario** y por eso no hay push.
 | 4 | 0 enlaces internos rotos en las 6 rutas | **OK** — 12 destinos internos, 0 rotos |
 | 5 | Barrido de claims: 0 coincidencias fuera de excepciones | **OK en las 2 guías nuevas** (ver abajo) |
 | 6 | El CTA de las guías dispara el mismo evento que el pilar | **OK** — `data-cta="demo"` y `DemoCta` con `location` propio |
-| 7 | Rich Results Test y validator.schema.org con 0 errores | **No ejecutado**: requieren una URL pública. Queda para después del deploy |
+| 7 | Rich Results Test y validator.schema.org con 0 errores | **Validado el 2026-10-31 por otra vía** (ver «Validación del JSON-LD») |
 | 8 | Sin regresiones de accesibilidad ni rendimiento (Lighthouse móvil) | **No ejecutado.** Comprobado en su lugar: jerarquía de encabezados sin saltos, `<thead>` y `th scope` en todas las tablas, 0 `img` sin `alt`, 0 externos sin `noopener`, 0 `nofollow` |
 
 ### Barrido de claims (doc 51 §4 + doc 58 §4, sobre el HTML servido)
@@ -1182,3 +1182,40 @@ como en P0 (decisión 8 del doc 49). Se guardó en stash durante la tanda y se r
 3. Revisar la fecha si el deploy no es el 2026-10-31.
 4. Tras el deploy: Rich Results Test y validator.schema.org; solicitar indexación de las 2 rutas en
    Search Console; enviar las 2 URL en Bing; volver a enviar el `sitemap.xml`.
+
+### Validación del JSON-LD · 2026-10-31
+
+La preview de Vercel del PR (`tcdx-threatwatch-4fl2pzgcv-tecdex-projects.vercel.app`) está
+**protegida por el SSO de Vercel**: responde 302 a `vercel.com/sso-api`, así que ni el Rich Results
+Test ni validator.schema.org pueden leerla. Para no dejar el criterio 7 sin cubrir, la validación se
+hizo contra el HTML servido localmente:
+
+1. **Vocabulario schema.org** (`schemaorg-current-https.jsonld`, 985 clases y 1.651 propiedades):
+   se recorrió el grafo completo de cada guía comprobando que cada `@type` existe y que cada
+   propiedad existe y está declarada para su tipo. **0 errores y 0 avisos** en ambas rutas.
+2. **Requisitos de Google** para `Article`, `FAQPage` y `BreadcrumbList`.
+
+**Fallo encontrado y corregido.** El `Article` de las dos guías declaraba `author` y `publisher`
+como referencia suelta `{"@id": "https://tecdex.net/#organization"}`, sin ningún nodo con ese `@id`
+en el grafo de la página. Google solo resuelve los `@id` definidos en el marcado de la propia
+página: habría informado «Missing field name (in author)» y las guías no habrían sido elegibles
+para el resultado enriquecido de artículo. Las rutas de P1 no tenían el problema porque sus grafos
+sí incluyen `organizationRef`.
+
+Corregido añadiendo `organizationRef` (el mismo `@type` + `@id` + `name` del doc 48 §8.1) al grafo
+de cada guía. **No es una entidad nueva** y por tanto no contradice el doc 58 PASO 3: es la misma
+referencia que ya usaban la home, el pilar, `/como-funciona/` y `/preguntas-frecuentes/`.
+
+Tras la corrección:
+
+| Comprobación | `/pentesting-automatizado/` | `/owasp-top-10/` |
+|---|---|---|
+| Vocabulario schema.org | 0 errores, 0 avisos | 0 errores, 0 avisos |
+| `headline`, `image`, `datePublished`, `dateModified` | OK | OK |
+| `author` y `publisher` resuelven en la página | Sí (`name: TECDEX`) | Sí (`name: TECDEX`) |
+| `BreadcrumbList` con `name` + `item` en los 3 niveles | OK | OK |
+| `FAQPage` idéntico al texto visible | 6 preguntas, 0 discrepancias | 5 preguntas, 0 discrepancias |
+| Elegibilidad de resultado enriquecido (Article) | **Pasa** | **Pasa** |
+
+**Sigue pendiente** pasar el Rich Results Test de Google sobre las URL públicas después del deploy:
+es el único que comprueba la elegibilidad con los criterios internos de Google, que no son públicos.
