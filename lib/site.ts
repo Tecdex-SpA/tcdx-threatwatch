@@ -75,6 +75,12 @@ export type SitePage = {
   /** Fecha del último cambio de contenido de la ruta (no la del build). */
   lastModified: string;
   priority: number;
+  /** og:title propio cuando el doc lo separa del <title> (guías, doc 58 PASO 2). */
+  ogTitle?: string;
+  /** changefreq del sitemap; por defecto "weekly". */
+  changeFrequency?: "weekly" | "monthly";
+  /** Nivel intermedio de las migas de pan (P1-9: el pilar). */
+  parent?: SitePage;
 };
 
 /**
@@ -96,7 +102,7 @@ export const pages = {
     title: "Cómo funciona VULNERA: pentesting automatizado con alcance autorizado",
     description:
       "Define el alcance, valida la autorización y deja que VULNERA automatice reconocimiento, descubrimiento y detección. Tú decides qué corregir primero.",
-    lastModified: "2026-10-05",
+    lastModified: "2026-10-31",
     priority: 0.8,
   },
   gestion: {
@@ -105,7 +111,7 @@ export const pages = {
     title: "Qué es la gestión de vulnerabilidades y cómo hacerla | VULNERA",
     description:
       "Guía práctica de gestión de vulnerabilidades para empresas: del hallazgo a la remediación comprobada. Qué es, etapas, buenas prácticas y errores comunes.",
-    lastModified: "2026-10-05",
+    lastModified: "2026-10-31",
     priority: 0.8,
   },
   preguntas: {
@@ -114,12 +120,48 @@ export const pages = {
     title: "Preguntas frecuentes sobre VULNERA | TECDEX",
     description:
       "Preguntas frecuentes sobre VULNERA: qué parte del pentesting automatiza, qué activos puedes evaluar, qué obtiene tu empresa y cómo empezar con una demo.",
-    lastModified: "2026-10-05",
+    lastModified: "2026-10-31",
     priority: 0.7,
   },
 } satisfies Record<string, SitePage>;
 
-export const routes: SitePage[] = Object.values(pages);
+/**
+ * Guías del clúster del pilar (P1-9, docs 56 a 58). Cuelgan de
+ * `/gestion-de-vulnerabilidades/` en las migas de pan y en el grafo de enlaces.
+ * Van en el sitemap y en `llms.txt`, pero no en el menú principal (doc 58 PASO 4.4).
+ */
+export const guides = {
+  pentestingAutomatizado: {
+    path: "/pentesting-automatizado/",
+    name: "Pentesting automatizado",
+    title: "Pentesting automatizado: qué es y diferencias | VULNERA",
+    description:
+      "Qué es el pentesting automatizado, qué etapas se automatizan y en qué se diferencia del pentest manual y del escaneo de vulnerabilidades.",
+    ogTitle: "Pentesting automatizado: qué es y en qué se diferencia del pentest manual",
+    lastModified: "2026-10-31",
+    changeFrequency: "monthly",
+    priority: 0.7,
+    parent: pages.gestion,
+  },
+  owaspTop10: {
+    path: "/owasp-top-10/",
+    name: "OWASP Top 10",
+    title: "OWASP Top 10 2025 explicado para empresas | VULNERA",
+    description:
+      "Las 10 categorías del OWASP Top 10 2025 explicadas para empresas: qué es cada riesgo, un ejemplo, su impacto y cómo prevenirlo.",
+    ogTitle: "OWASP Top 10 (edición 2025) explicado para empresas",
+    lastModified: "2026-10-31",
+    changeFrequency: "monthly",
+    priority: 0.7,
+    parent: pages.gestion,
+  },
+} satisfies Record<string, SitePage>;
+
+/** Páginas del menú y de «Páginas relacionadas» (las 4 de P1, sin las guías). */
+export const corePages: SitePage[] = Object.values(pages);
+
+/** Todo lo que entra al sitemap y a `llms.txt`. */
+export const routes: SitePage[] = [...corePages, ...Object.values(guides)];
 
 export const whatsappUrl = `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(contact.whatsappMessage)}`;
 

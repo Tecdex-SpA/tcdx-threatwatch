@@ -26,3 +26,25 @@ export function pageMetadata(page: SitePage): Metadata {
     },
   };
 }
+
+/**
+ * Metadata de las guías (P1-9, doc 58 PASO 2): igual que `pageMetadata`, pero
+ * con `og:type=article`, su `og:title` propio y las fechas de publicación y
+ * revisión. El `<title>` ya trae «| VULNERA»: se emite como absoluto.
+ */
+export function articleMetadata(
+  page: SitePage,
+  dates: { published: string; modified: string },
+): Metadata {
+  const base = pageMetadata(page);
+  return {
+    ...base,
+    openGraph: {
+      ...base.openGraph,
+      type: "article",
+      title: page.ogTitle ?? page.title,
+      publishedTime: dates.published,
+      modifiedTime: dates.modified,
+    },
+  };
+}
