@@ -13,7 +13,10 @@ export type TrackLocation =
   // CTA de demo de cada página de contenido (P1-3)
   | "como-funciona"
   | "gestion-de-vulnerabilidades"
-  | "preguntas-frecuentes";
+  | "preguntas-frecuentes"
+  // Guías del clúster (P1-9)
+  | "pentesting-automatizado"
+  | "owasp-top-10";
 
 export type ConversionEvent =
   | "cta_demo_click"
