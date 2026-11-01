@@ -1,4 +1,4 @@
-import { absoluteUrl, pages } from "../../lib/site";
+import { absoluteUrl, guides, pages } from "../../lib/site";
 
 // llms.txt (P1-5): contenido literal del doc 48 §7 con los cambios del doc 50 §6, en
 // ASCII como el llms.txt de tecdex.net. Las URLs de páginas salen del registro (con barra final).
@@ -41,6 +41,8 @@ const body = `# VULNERA by TECDEX
 - Inicio: ${absoluteUrl(pages.home.path)}
 - Como funciona: ${absoluteUrl(pages.comoFunciona.path)}
 - Gestion de vulnerabilidades (guia): ${absoluteUrl(pages.gestion.path)}
+- Pentesting automatizado (guia): ${absoluteUrl(guides.pentestingAutomatizado.path)}
+- OWASP Top 10 explicado para empresas (guia): ${absoluteUrl(guides.owaspTop10.path)}
 - Preguntas frecuentes: ${absoluteUrl(pages.preguntas.path)}
 
 ## Contacto

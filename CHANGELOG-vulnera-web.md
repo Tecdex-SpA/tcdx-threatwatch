@@ -1034,3 +1034,219 @@ En todos los envíos salieron los 16 campos anteriores más los 14 de atribució
 
 Todo en minúsculas y con guiones, sin tildes ni espacios. Ejemplo:
 `https://vulnera.tecdex.net/?utm_source=linkedin&utm_medium=social&utm_campaign=automatizacion-202610`
+
+### Despliegue en producción de P0-11 y prueba con lead real · 2026-10-06
+
+- **Push:** `git push origin main`, `927c49d..b1ca4ff`, 3 commits, autorizado por Mario.
+- **Deploy de Vercel:**
+  - Commit desplegado: `b1ca4ff` (`b1ca4ff5beeaec5a60446c0a958392fe38e93b3c`).
+  - Entorno: Production.
+  - Deployment GitHub: `6886209342`.
+  - Estado: `success` (READY) a las 2026-10-06T14:08:48Z.
+- **Verificación con curl contra `https://vulnera.tecdex.net/`:**
+  - todas las rutas responden 200;
+  - `/gracias/` y `/form-sink.html` responden 200;
+  - el barrido del doc 51 no cambia;
+  - el formulario sirve los 14 `LEADCF*` vacíos, con 0 `mailto:` y `action` HTTPS de Zoho;
+  - `__test_referrer` no aparece en ningún chunk servido (0).
+
+**Lead de prueba real**, enviado 2026-10-06T14:41:52Z desde
+`https://vulnera.tecdex.net/?utm_source=prueba&utm_medium=qa&utm_campaign=p0-11`:
+- **Pestaña y datos:** pestaña «PRUEBA P0-11 · VULNERA» en el Chrome de Mario, preparada por Claude, con cookies aceptadas. Mario escribió el captcha y envió. El panel del navegador de la app estaba oculto, por eso la prueba se hizo en Chrome.
+- **Datos del lead:** Nombre «Prueba», Apellidos «VULNERA P0-11», Empresa «TECDEX QA», contacto@tecdex.net; `Description` = «Necesidad: Evaluar mis dominios y aplicaciones\nPrueba técnica de atribución P0-11, descartar».
+- **Atribución enviada:**
+
+  | Campo | Valor |
+  |---|---|
+  | `LEADCF13` / `14` / `17` (primer clic) | prueba / qa / p0-11 |
+  | `LEADCF19` (primera landing) | `/?utm_source=prueba&utm_medium=qa&utm_campaign=p0-11` |
+  | `LEADCF5` / `6` / `9` (último clic) | prueba / qa / p0-11 |
+  | `LEADCF11` (última landing) | igual |
+  | `LEADCF15` / `LEADCF7` (referrer) | vacíos (entrada directa con UTM) |
+  | `LEADCF8` / `LEADCF10` (term / content) | vacíos |
+  | `LEADCF20` (GA Client ID) | `1761080799.1784427085` |
+  | `LEADCF31` (gclid) | vacío |
+
+- **Respuesta de Zoho: redirección HTTP 302 directa a `/gracias/`.** El iframe pasó de `/form-sink.html` a `/gracias/` en 2,85 s, sin ninguna carga intermedia de otro origen ni aviso de «no confirmado».
+- **Llegada a `/gracias/`:**
+  - el formulario detectó `/gracias/` en el iframe y navegó la página principal a `https://vulnera.tecdex.net/gracias/`, sin salir del dominio;
+  - el `postMessage` `vulnera-lead-ok` llegó 1 ms después y se ignoró, porque el envío ya estaba confirmado.
+- **`generate_lead`: exactamente 1**, en la página del formulario, con `{location: "demo", need: "Evaluar mis dominios y aplicaciones"}`. 0 en `/gracias/`. Flag consumido.
+- **Comprobación de doble envío:**
+  - el registro mostró 2 eventos `formdata` por 1 `submit`;
+  - se comprobó con el registro de red de Chrome, apuntando el formulario a `/form-sink.html` (sin Zoho), que sale **un único POST** al destino;
+  - el segundo `formdata` lo genera la medición mejorada de GA4 (`form_start` / `form_submit`), que lee el formulario al enviarse;
+  - **no hay doble lead.** Esa comprobación envió a GA4 un par de eventos `form_start` / `form_submit` de prueba con destino `/form-sink.html`.
+- **Pendiente de Mario:** confirmar en Zoho CRM que el lead tiene los 14 campos con estos valores, etiqueta `VULNERA`, fuente `Formulario Web` y estado `Nuevo`, y descartarlo. También filtrar en GA4 los eventos de prueba.
+
+**Envío sin JavaScript con captcha incorrecto** (sin lead):
+- **Con curl:** se reprodujo el POST exacto que haría un navegador sin JS, con los 30 campos del HTML servido, los 14 `LEADCF` vacíos y `Description` desde el textarea. Zoho responde 200 con su página de error (`alert("Invalid CAPTCHA code…")` + `history.back()`).
+- **En Chrome:** la home se cargó en un iframe aislado sin permiso de scripts, equivalente a un navegador sin JS.
+  - El formulario se sirve sin `target`, así que el envío es un POST normal.
+  - Tras enviar, el documento pasa a la página de Zoho, que **se ve en blanco** («Zoho CRM - Webforms»): sin JS no se ejecutan ni el `alert` ni el `history.back()`.
+  - La web no se rompe ni se crea ningún lead.
+  - Limitación conocida: el visitante sin JS que se equivoca de captcha queda en una página vacía de Zoho y debe pulsar «Atrás». Esa página la controla Zoho.
+- **Limpieza:** se retiraron de Chrome el iframe de prueba, el registro, el consentimiento aceptado para la prueba y la atribución de prueba, y se cerró la pestaña de Claude. Queda abierta una pestaña «Compartir en Whatsapp» que abrió el enlace de WhatsApp de la web; no se tocó.
+
+---
+
+## Tanda P1-9 — Guías SEO del clúster del pilar · 2026-10-31
+
+**Estado:** commits en la rama `feat/p1-9-guias-seo`, **sin push y sin PR**, pendiente del OK de
+Mario. Contenido literal de los docs 56 (`/pentesting-automatizado/`) y 57 (`/owasp-top-10/`);
+instrucciones de maquetación, barrido ampliado y criterios de aceptación del doc 58 §3, §4 y §7.
+
+**Origen del encargo:** Mario pidió «parte P2» y señaló la carpeta
+`~/TECDEX.Producto-Vulnera Pentestig`. En esa carpeta **no está el doc 47 ni ninguna lista «P2»**:
+lo que hay listo para ejecutar es P1-9 (docs 56, 57 y 58, los tres marcados `PROPOSED`) y la
+propuesta de formulario progresivo del doc 54. Se ejecutó P1-9 por ser la única pieza con
+especificación completa. Las 5 decisiones del doc 58 §6 se aplicaron en la opción recomendada
+(migas con el pilar, guías en el pie y no en el menú, sin índice `/guias/`); la **aprobación del
+texto de las guías (decisión 1) sigue siendo de Mario** y por eso no hay push.
+
+**Método de verificación:** `next build` + `next start -p 3100` y curl al HTML servido, sin JS.
+
+### Archivos
+
+| Archivo | Qué |
+|---|---|
+| `app/pentesting-automatizado/page.tsx` | Guía 1 (nueva), copy literal del doc 56 §2 |
+| `app/owasp-top-10/page.tsx` | Guía 2 (nueva), copy literal del doc 57 §2 |
+| `lib/guides.ts` | Nuevo. FAQ, fuentes y fechas de las guías: fuente única del texto visible y del `FAQPage` |
+| `lib/site.ts` | Registro `guides`; `SitePage` admite `ogTitle`, `changeFrequency` y `parent`; `corePages` separa las 4 páginas de P1 de las guías |
+| `lib/seo.ts` | `articleMetadata()`: `og:type=article`, `og:title` propio, `publishedTime`/`modifiedTime` |
+| `lib/structured-data.ts` | `Article` + `FAQPage` + `BreadcrumbList` de cada guía; migas de 3 niveles |
+| `lib/faqs.ts` | Remate hacia la guía 1 en la primera pregunta, **solo** en `/preguntas-frecuentes/` |
+| `app/components/ContentPage.tsx` | Migas de 3 niveles, `id="respuesta-directa"`, `GuideFaq`, `GuideByline`, `GuideCards` |
+| `app/components/SiteChrome.tsx` | Dos enlaces nuevos en la columna Producto del pie |
+| `app/gestion-de-vulnerabilidades/`, `app/como-funciona/`, `app/preguntas-frecuentes/` | Enlaces cruzados del doc 58 PASO 4 |
+| `app/llms.txt/route.ts`, `app/sitemap.ts` | Dos entradas nuevas; `changefreq` por página |
+| `app/globals.css` | Estilos de las guías (fichas, FAQ, notas de tabla, lista de fuentes) |
+
+### Criterios de aceptación (doc 58 PASO 7)
+
+| # | Criterio | Resultado |
+|---|---|---|
+| 1 | 200 en las 2 rutas; la variante sin barra redirige | **OK** — 200 y 308 a la canónica |
+| 2 | H1, respuesta directa, ≥1 tabla, FAQ y JSON-LD en el HTML servido | **OK** — 3 y 2 tablas; FAQ en el DOM, sin `<details>` |
+| 3 | `canonical` propio, `robots: index, follow`, title y description literales | **OK** — 55/137 y 51/127 caracteres |
+| 4 | 0 enlaces internos rotos en las 6 rutas | **OK** — 12 destinos internos, 0 rotos |
+| 5 | Barrido de claims: 0 coincidencias fuera de excepciones | **OK en las 2 guías nuevas** (ver abajo) |
+| 6 | El CTA de las guías dispara el mismo evento que el pilar | **OK** — `data-cta="demo"` y `DemoCta` con `location` propio |
+| 7 | Rich Results Test y validator.schema.org con 0 errores | **Validado el 2026-10-31 por otra vía** (ver «Validación del JSON-LD») |
+| 8 | Sin regresiones de accesibilidad ni rendimiento (Lighthouse móvil) | **No ejecutado.** Comprobado en su lugar: jerarquía de encabezados sin saltos, `<thead>` y `th scope` en todas las tablas, 0 `img` sin `alt`, 0 externos sin `noopener`, 0 `nofollow` |
+
+### Barrido de claims (doc 51 §4 + doc 58 §4, sobre el HTML servido)
+
+33 coincidencias en las 6 rutas y `llms.txt`; 28 son excepciones válidas (la misma oración niega o
+pregunta). Las 5 restantes están **todas en páginas anteriores, ninguna en las guías nuevas**:
+
+| Ruta | ID | Frase | Lectura |
+|---|---|---|---|
+| `/como-funciona/` | C12 | «Retest automático para comprobar el cierre…» | Está dentro del bloque «Hoja de ruta», que es justamente donde debe estar |
+| `/gestion-de-vulnerabilidades/` | C4 | H2 «Gestión de vulnerabilidades y cumplimiento» | Título de sección sobre la materia; el cuerpo dice que el sistema de gestión vive en TECDEX Compliance |
+| `/` | C4 | Tarjeta «Cumplimiento · Para auditar» | Ídem; no afirma que VULNERA certifique |
+| `/llms.txt` | C4 | «## Normativa y cumplimiento» | Encabezado de sección |
+
+Coinciden con el resultado del barrido de P0-9 y no son regresiones de esta tanda.
+
+### Decisión de fechas
+
+El doc 58 obliga a usar la fecha real del deploy en las 4 ubicaciones. Como la tanda se maqueta el
+2026-10-31, quedó **2026-10-31** en la línea de autoría, `datePublished`, `dateModified`, el
+`lastmod` del sitemap y la respuesta de la FAQ «¿Cuál es la versión vigente del OWASP Top 10?»
+(«Al 31 de octubre de 2026…»). **Si el push ocurre otro día, hay que actualizar `guideDates` en
+`lib/guides.ts` y el texto de esa respuesta**, o las fechas dejarán de coincidir.
+
+### Verificaciones propias de esta tanda
+
+- **Edición del OWASP Top 10 (doc 58 REC-036):** verificada el 2026-10-31. `top10.owasp.org/2025/`
+  responde 200, `/2026/` responde 404 y la página del proyecto en owasp.org sigue listando la
+  edición 2025. La guía se publica con la edición correcta.
+- **Fuentes citadas:** las 11 URL de ambas guías responden 200, **salvo una**:
+  `http://www.pentest-standard.org/` (PTES) **no responde** (DNS resuelve a 96.126.116.56, pero no
+  hay respuesta HTTP ni en http ni en https, con y sin `User-Agent`, 25 s de espera). El doc 56 la
+  verificó el 2026-10-09. **Decisión de Mario:** publicar igual (la afirmación «PTES lo detalla en
+  siete secciones» no depende del enlace), reemplazar la URL por una referencia estable, o dejar la
+  cita sin enlace. No se modificó el texto porque esta tanda maqueta, no reescribe.
+
+### Fuera de los commits
+
+El cambio de `app/globals.css` que amplía el contenedor (1140→1280) **sigue sin commitear**,
+como en P0 (decisión 8 del doc 49). Se guardó en stash durante la tanda y se restauró después.
+
+### Pendiente antes del push
+
+1. OK de Mario al texto de las guías (doc 58 §6, decisión 1).
+2. Abrir el PR hacia `main` (el doc 58 pide PR, no push directo).
+3. Revisar la fecha si el deploy no es el 2026-10-31.
+4. Tras el deploy: Rich Results Test y validator.schema.org; solicitar indexación de las 2 rutas en
+   Search Console; enviar las 2 URL en Bing; volver a enviar el `sitemap.xml`.
+
+### Validación del JSON-LD · 2026-10-31
+
+La preview de Vercel del PR (`tcdx-threatwatch-4fl2pzgcv-tecdex-projects.vercel.app`) está
+**protegida por el SSO de Vercel**: responde 302 a `vercel.com/sso-api`, así que ni el Rich Results
+Test ni validator.schema.org pueden leerla. Para no dejar el criterio 7 sin cubrir, la validación se
+hizo contra el HTML servido localmente:
+
+1. **Vocabulario schema.org** (`schemaorg-current-https.jsonld`, 985 clases y 1.651 propiedades):
+   se recorrió el grafo completo de cada guía comprobando que cada `@type` existe y que cada
+   propiedad existe y está declarada para su tipo. **0 errores y 0 avisos** en ambas rutas.
+2. **Requisitos de Google** para `Article`, `FAQPage` y `BreadcrumbList`.
+
+**Fallo encontrado y corregido.** El `Article` de las dos guías declaraba `author` y `publisher`
+como referencia suelta `{"@id": "https://tecdex.net/#organization"}`, sin ningún nodo con ese `@id`
+en el grafo de la página. Google solo resuelve los `@id` definidos en el marcado de la propia
+página: habría informado «Missing field name (in author)» y las guías no habrían sido elegibles
+para el resultado enriquecido de artículo. Las rutas de P1 no tenían el problema porque sus grafos
+sí incluyen `organizationRef`.
+
+Corregido añadiendo `organizationRef` (el mismo `@type` + `@id` + `name` del doc 48 §8.1) al grafo
+de cada guía. **No es una entidad nueva** y por tanto no contradice el doc 58 PASO 3: es la misma
+referencia que ya usaban la home, el pilar, `/como-funciona/` y `/preguntas-frecuentes/`.
+
+Tras la corrección:
+
+| Comprobación | `/pentesting-automatizado/` | `/owasp-top-10/` |
+|---|---|---|
+| Vocabulario schema.org | 0 errores, 0 avisos | 0 errores, 0 avisos |
+| `headline`, `image`, `datePublished`, `dateModified` | OK | OK |
+| `author` y `publisher` resuelven en la página | Sí (`name: TECDEX`) | Sí (`name: TECDEX`) |
+| `BreadcrumbList` con `name` + `item` en los 3 niveles | OK | OK |
+| `FAQPage` idéntico al texto visible | 6 preguntas, 0 discrepancias | 5 preguntas, 0 discrepancias |
+| Elegibilidad de resultado enriquecido (Article) | **Pasa** | **Pasa** |
+
+**Sigue pendiente** pasar el Rich Results Test de Google sobre las URL públicas después del deploy:
+es el único que comprueba la elegibilidad con los criterios internos de Google, que no son públicos.
+
+### Hotfix · Enlace muerto en las fuentes de la guía 1 · 2026-10-31
+
+Barrido completo de las 6 rutas servidas: 18 enlaces externos comprobados, **1 roto**.
+
+| Enlace | Resultado | Qué es |
+|---|---|---|
+| `http://www.pentest-standard.org/` (PTES) | **Caído** — sin respuesta HTTP en http ni https, 30 s de espera, dos intentos, y tampoco carga en navegador; el DNS sí resuelve a 96.126.116.56 | Error real |
+| `https://www.iso.org/standard/27001` | 403 a `curl`, **carga bien en navegador** | Falso positivo: bloqueo de bots |
+| `https://www.bcn.cl/leychile/navegar?idNorma=1202434` | 401 a `curl`, **carga bien en navegador** (Ley 21.663, última versión 01-MAR-2025) | Falso positivo: bloqueo de bots |
+| `https://vulnera.tecdex.net/pentesting-automatizado/` y `/owasp-top-10/` | 404 | Esperado: son los `canonical` a producción, existirán tras el deploy |
+
+**Corregido:** la fuente PTES se cita ahora **sin enlace**, con la nota «sitio fuera de servicio al
+31 de octubre de 2026», y su URL sale del `citation` del `Article` (quedan 5). El tipo `Source`
+admite `href` opcional y `GuideByline` renderiza texto plano cuando no hay enlace.
+
+**No se tocó el cuerpo del texto:** la afirmación «el estándar PTES lo detalla en siete, desde los
+acuerdos previos hasta el informe final» sigue igual y no depende del enlace. Tampoco se inventó una
+URL sustituta: el Wayback Machine no tiene copias de `pentest-standard.org` (consultadas las API de
+disponibilidad y CDX).
+
+### Otras comprobaciones del mismo barrido (sin hallazgos)
+
+| Qué | Resultado |
+|---|---|
+| Móvil (375×812), ambas guías | La página **no desborda** (`scrollWidth == clientWidth == 375`); las 5 tablas tienen scroll propio dentro de `.table-scroll` |
+| Errores de consola | Ninguno en las dos guías |
+| `<time datetime>` | React lo emite como `dateTime`; el navegador lo parsea como `datetime` (comprobado en el DOM: `getAttribute('datetime')` devuelve la fecha). Correcto, los nombres de atributo son insensibles a mayúsculas en HTML |
+| JSON-LD de las 6 rutas | Parsea en todas; tipos correctos por ruta |
+| Fechas visibles vs. JSON-LD | Coinciden en ambas guías (2026-10-31) |
+| Largo de `title`/`description` | Las dos guías dentro de límite (55/137 y 51/127). La home, `/como-funciona/` y el pilar exceden los 60 caracteres de `title`, pero es **copy aprobado** (docs 48 y 50): no se toca sin decisión de Mario |

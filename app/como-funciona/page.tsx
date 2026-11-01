@@ -44,6 +44,10 @@ export default function ComoFuncionaPage() {
 
           <h2>Automatiza lo repetible. Tu equipo se concentra en lo que importa.</h2>
           <AutomationTable />
+          <p>
+            ¿Por qué esta división? Lo explicamos en la guía de{" "}
+            <a href="/pentesting-automatizado/">pentesting automatizado</a>.
+          </p>
 
           <h2>Qué recibes</h2>
           <p>
