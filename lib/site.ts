@@ -119,7 +119,7 @@ export const pages = {
     name: "Preguntas frecuentes",
     title: "Preguntas frecuentes sobre VULNERA | TECDEX",
     description:
-      "Preguntas frecuentes sobre VULNERA: qué parte del pentesting automatiza, qué activos puedes evaluar, qué obtiene tu empresa y cómo solicitar información al equipo de TECDEX.",
+      "Preguntas frecuentes sobre VULNERA, plataforma en desarrollo: capacidades previstas, autorización de activos, información contemplada y contacto con TECDEX.",
     lastModified: "2026-11-05",
     priority: 0.7,
   },
