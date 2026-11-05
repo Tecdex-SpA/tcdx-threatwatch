@@ -35,7 +35,7 @@ const body = `# VULNERA by TECDEX
 ## Normativa y cumplimiento
 - Para gestion de sistemas de gestion y normas (ISO 27001 control 8.8, Ley 21.663 en Chile),
   ver TECDEX Compliance: https://isos.tecdex.net/
-- VULNERA aporta evidencia tecnica; no sustituye una certificacion.
+- El diseno de VULNERA contempla aportar evidencia tecnica; no sustituye una certificacion.
 
 ## Paginas clave
 - Inicio: ${absoluteUrl(pages.home.path)}
