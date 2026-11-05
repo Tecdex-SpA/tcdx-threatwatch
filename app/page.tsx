@@ -60,7 +60,7 @@ export default function Page() {
             </div>
             <div className="hero-trust">
               <span><CheckIcon /> Solo activos autorizados</span>
-              <span><CheckIcon /> Evaluaciones repetibles</span>
+              <span><CheckIcon /> Diseño para evaluaciones repetibles</span>
               <span><CheckIcon /> Acompañamiento TECDEX</span>
             </div>
           </div>
@@ -83,7 +83,7 @@ export default function Page() {
               </ul>
             </div>
             <div>
-              <h3 className="problem-title problem-title--with">Con VULNERA</h3>
+              <h3 className="problem-title problem-title--with">Propuesta VULNERA</h3>
               <ul className="problem-list problem-list--with">
                 {problemWith.map((item) => <li key={item}>{item}</li>)}
               </ul>
@@ -165,8 +165,8 @@ export default function Page() {
             <p>
               Si tu objetivo es demostrar la gestión de vulnerabilidades técnicas ante una auditoría
               —por ejemplo, el control 8.8 de ISO 27001 o las exigencias de la Ley 21.663—, el sistema
-              de gestión vive en TECDEX Compliance. VULNERA aporta la evidencia técnica; TECDEX
-              Compliance la vincula a tus controles.
+              de gestión vive en TECDEX Compliance. VULNERA se desarrolla para aportar evidencia técnica; TECDEX
+              Compliance está diseñado para vincularla a tus controles.
             </p>
             <small>VULNERA aporta evidencia; no sustituye una certificación ISO.</small>
           </div>
