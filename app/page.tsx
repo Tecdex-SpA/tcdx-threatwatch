@@ -50,11 +50,9 @@ export default function Page() {
         <div className="container hero-grid">
           <div className="hero-copy">
             <p className="eyebrow light">Pentesting automatizado · Chile</p>
-            <h1>Del hallazgo al cierre comprobado, no solo al informe.</h1>
+            <h1>Información sobre hallazgos y recomendaciones de remediación. No implica validación del cierre.</h1>
             <p className="hero-lead">
-              VULNERA automatiza las etapas repetibles del pentesting —reconocimiento,
-              descubrimiento y detección— sobre los activos que tu organización autoriza, y
-              convierte cada hallazgo en un plan de corrección.
+              VULNERA está en desarrollo para apoyar evaluaciones técnicas autorizadas. La demostración pública utiliza datos sintéticos.
             </p>
             <div className="hero-actions">
               <a className="button primary" href="#demo" data-cta="demo">Solicitar información</a>
@@ -150,7 +148,7 @@ export default function Page() {
         <div className="container early-card">
           <div>
             <p className="eyebrow">Acceso anticipado</p>
-            <h2>Estamos incorporando a las primeras organizaciones.</h2>
+            <h2>El servicio aún no está habilitado para contratación. Puedes solicitar información.</h2>
             <p>
               Solicita información sobre VULNERA. El equipo de TECDEX revisará tu consulta y
               te explicará el estado del producto y las opciones disponibles.
