@@ -25,7 +25,7 @@ const body = `# VULNERA by TECDEX
 - Proveedores de servicios TI que gestionan la seguridad de varios clientes.
 
 ## Estado actual (octubre 2026)
-- En acceso anticipado: incorporacion de las primeras organizaciones mediante demo guiada.
+- Informacion comercial disponible mediante el formulario de contacto. No se ofrece una demo que aun no existe.
 
 ## Que NO es
 - No reemplaza el pentest manual en logica de negocio y ataques encadenados.
