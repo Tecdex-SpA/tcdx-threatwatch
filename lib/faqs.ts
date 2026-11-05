@@ -33,7 +33,7 @@ export const faqs: [question: string, answer: string][] = [
   ],
   [
     "¿Qué pasa con mis datos?",
-    "Cada organización tiene su espacio, con datos separados y acceso por roles. Solo se evalúa lo que autorizas.",
+    "La arquitectura contempla organizaciones y permisos por rol. Su validación integral es un requisito previo a habilitar el servicio. Solo se evalúa lo que autorizas.",
   ],
 ];
 
