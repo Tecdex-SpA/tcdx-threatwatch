@@ -17,7 +17,7 @@ export const faqs: [question: string, answer: string][] = [
   ],
   [
     "¿Cómo empiezo?",
-    "Agenda una demo. Revisamos tu caso, definimos un alcance inicial y te mostramos cómo se vería la gestión de vulnerabilidades de tu organización en VULNERA.",
+    "Solicita información al equipo TECDEX. Revisaremos tu consulta, explicaremos el estado actual de VULNERA y cómo se gestionan las autorizaciones y el alcance de una posible evaluación.",
   ],
   [
     "¿Tengo apoyo para interpretar los resultados?",
