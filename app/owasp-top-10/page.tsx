@@ -236,10 +236,9 @@ export default function OwaspTopTenPage() {
 
             <h2>Cómo lo aborda VULNERA</h2>
             <p>
-              VULNERA ayuda a detectar y gestionar vulnerabilidades web del tipo que describe el OWASP
-              Top 10 en aplicaciones y APIs propias o autorizadas. Automatiza el reconocimiento, el
-              descubrimiento y la detección, y convierte cada hallazgo en una decisión priorizada, con
-              evidencia, recomendación y responsable.
+              VULNERA está en desarrollo para apoyar evaluaciones técnicas autorizadas de
+              aplicaciones web y APIs. El diseño contempla registrar hallazgos y recomendaciones
+              de remediación, sin implicar validación del cierre.
             </p>
             <p>
               No cubre todas las categorías del Top 10: las de diseño, lógica y procesos internos,
@@ -252,7 +251,7 @@ export default function OwaspTopTenPage() {
               {" · "}
               <a href="/">Conoce VULNERA</a>
               {" · "}
-              <a href="/#demo" data-cta="demo">Agenda tu demo</a>
+              <a href="/#demo" data-cta="demo">Solicitar información</a>
             </p>
 
             <GuideFaq items={owaspFaqs} />

@@ -4,24 +4,24 @@
 
 export const faqs: [question: string, answer: string][] = [
   [
-    "¿Qué parte del pentesting automatiza VULNERA?",
-    "Las etapas repetibles: reconocimiento, descubrimiento de servicios y detección de vulnerabilidades conocidas. Así evalúas con más frecuencia y reservas a los especialistas para lo que exige criterio humano, como la lógica de negocio o los ataques encadenados.",
+    "¿Qué parte del pentesting está prevista automatizar en VULNERA?",
+    "El diseño contempla apoyar etapas repetibles, como reconocimiento, descubrimiento y detección de vulnerabilidades conocidas, siempre dentro de un alcance autorizado. El servicio aún está en desarrollo y no sustituye el criterio humano.",
   ],
   [
-    "¿Qué activos puedo evaluar?",
-    "Tus dominios, subdominios, aplicaciones web y APIs. Cada evaluación parte confirmando que el activo es tuyo o que tienes autorización: trabajas con respaldo y sin riesgos legales.",
+    "¿Qué activos se contempla evaluar?",
+    "Se contemplan dominios, subdominios, aplicaciones web y APIs propios o expresamente autorizados. Antes de cualquier evaluación, deberán validarse propiedad o autorización y alcance exacto; esto no elimina por sí solo los riesgos técnicos o legales.",
   ],
   [
-    "¿Qué obtiene mi empresa?",
-    "Una lectura clara del riesgo para gerencia y el detalle accionable para TI: cada hallazgo con severidad, evidencia y recomendación de corrección.",
+    "¿Qué información se contempla entregar?",
+    "Se contempla presentar hallazgos con severidad, evidencia y recomendaciones, con vistas para gerencia y equipos técnicos. La disponibilidad de esos entregables está pendiente de validación integral.",
   ],
   [
     "¿Cómo empiezo?",
-    "Agenda una demo. Revisamos tu caso, definimos un alcance inicial y te mostramos cómo se vería la gestión de vulnerabilidades de tu organización en VULNERA.",
+    "Solicita información al equipo TECDEX. Revisaremos tu consulta, explicaremos el estado actual de VULNERA y cómo se gestionan las autorizaciones y el alcance de una posible evaluación.",
   ],
   [
     "¿Tengo apoyo para interpretar los resultados?",
-    "Sí. El equipo de TECDEX te ayuda a definir el alcance, interpretar los hallazgos y priorizar qué corregir primero.",
+    "Puedes solicitar orientación al equipo TECDEX sobre alcance, hallazgos y prioridades. Las funciones automatizadas de VULNERA aún no están habilitadas como servicio.",
   ],
   [
     "¿Por qué no basta con un informe de seguridad?",
@@ -29,11 +29,11 @@ export const faqs: [question: string, answer: string][] = [
   ],
   [
     "¿Me sirve para auditorías ISO 27001 o la Ley 21.663?",
-    "Sí, como fuente de evidencia de tu gestión de vulnerabilidades técnicas. El sistema de gestión completo lo llevas en TECDEX Compliance, la plataforma hermana de VULNERA.",
+    "El diseño contempla aportar evidencia técnica útil para la gestión de vulnerabilidades, pero VULNERA aún no está habilitada como servicio y no certifica cumplimiento. TECDEX Compliance aborda la gestión de controles y evidencias.",
   ],
   [
     "¿Qué pasa con mis datos?",
-    "Cada organización tiene su espacio, con datos separados y acceso por roles. Solo se evalúa lo que autorizas.",
+    "La arquitectura contempla organizaciones y permisos por rol. Su validación integral es un requisito previo a habilitar el servicio. Solo se evalúa lo que autorizas.",
   ],
 ];
 

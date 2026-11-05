@@ -8,7 +8,7 @@ import { CONSENT_CHANGE_EVENT, readConsent } from "../../lib/consent";
 import { LEAD_OK_MESSAGE, setPendingLead, takePendingLead } from "../../lib/lead";
 import { freshCaptchaUrl, zohoForm } from "../../lib/zoho";
 
-// Formulario de demo integrado con Zoho CRM (P0-10, doc 52). Marcado y estilos propios;
+// Formulario de contacto integrado con Zoho CRM (P0-10, doc 52). Marcado y estilos propios;
 // de Zoho solo se usan action, nombres de campo, ocultos y captcha.
 //
 // Con JS el POST va a un iframe oculto y aislado (sandbox sin allow-modals ni
@@ -408,7 +408,7 @@ export function DemoForm({
         ) : null}
 
         <button className="button primary form-submit" type="submit" data-cta="demo" disabled={status === "sending"} aria-busy={status === "sending"}>
-          {status === "sending" ? "Enviando…" : "Agenda tu demo"}
+          {status === "sending" ? "Enviando…" : "Solicitar información"}
         </button>
         <p className="privacy-consent">
           Al enviar aceptas nuestra{" "}

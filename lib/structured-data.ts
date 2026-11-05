@@ -31,7 +31,7 @@ const softwareApplication: JsonLdNode = {
   url: absoluteUrl("/"),
   inLanguage: "es",
   description:
-    "Plataforma de TECDEX que automatiza las etapas repetibles del pentesting sobre activos autorizados y gestiona cada hallazgo hasta su corrección. En acceso anticipado.",
+    "Plataforma de TECDEX en desarrollo para apoyar evaluaciones técnicas autorizadas y recomendaciones de remediación. Aún no habilitada para contratación.",
   author: orgLink,
   publisher: orgLink,
   provider: orgLink,

@@ -21,10 +21,10 @@ export const siteConfig = {
   // Metadata de la home: doc 50 §1 (comunicación comercial v2). OG replica title/description.
   title: "Pentesting automatizado y gestión de vulnerabilidades | VULNERA",
   description:
-    "VULNERA automatiza las etapas repetibles del pentesting sobre los activos que autorizas y convierte cada hallazgo en un plan de corrección. Plataforma de TECDEX. Agenda tu demo.",
+    "VULNERA está en desarrollo para apoyar evaluaciones técnicas de activos autorizados. Servicio aún no habilitado para contratación. Solicita información a TECDEX.",
   ogImageAlt: "VULNERA by TECDEX",
   /** Bajada de marca del footer (doc 50 §2.6) */
-  tagline: "Pentesting automatizado y gestión de vulnerabilidades, del hallazgo al cierre comprobado.",
+  tagline: "Pentesting automatizado y gestión de vulnerabilidades | TECDEX",
   themeColor: "#2B3944",
 };
 
@@ -93,7 +93,7 @@ export const pages = {
     name: "Inicio",
     title: siteConfig.title,
     description: siteConfig.description,
-    lastModified: "2026-10-05",
+    lastModified: "2026-11-05",
     priority: 1,
   },
   comoFunciona: {
@@ -101,8 +101,8 @@ export const pages = {
     name: "Cómo funciona",
     title: "Cómo funciona VULNERA: pentesting automatizado con alcance autorizado",
     description:
-      "Define el alcance, valida la autorización y deja que VULNERA automatice reconocimiento, descubrimiento y detección. Tú decides qué corregir primero.",
-    lastModified: "2026-10-31",
+      "Conoce el flujo previsto de VULNERA: alcance autorizado, validación de propiedad y evaluaciones técnicas en desarrollo. Servicio aún no habilitado.",
+    lastModified: "2026-11-05",
     priority: 0.8,
   },
   gestion: {
@@ -119,8 +119,8 @@ export const pages = {
     name: "Preguntas frecuentes",
     title: "Preguntas frecuentes sobre VULNERA | TECDEX",
     description:
-      "Preguntas frecuentes sobre VULNERA: qué parte del pentesting automatiza, qué activos puedes evaluar, qué obtiene tu empresa y cómo empezar con una demo.",
-    lastModified: "2026-10-31",
+      "Preguntas frecuentes sobre VULNERA, plataforma en desarrollo: capacidades previstas, autorización de activos, información contemplada y contacto con TECDEX.",
+    lastModified: "2026-11-05",
     priority: 0.7,
   },
 } satisfies Record<string, SitePage>;
@@ -138,7 +138,7 @@ export const guides = {
     description:
       "Qué es el pentesting automatizado, qué etapas se automatizan y en qué se diferencia del pentest manual y del escaneo de vulnerabilidades.",
     ogTitle: "Pentesting automatizado: qué es y en qué se diferencia del pentest manual",
-    lastModified: "2026-10-31",
+    lastModified: "2026-11-05",
     changeFrequency: "monthly",
     priority: 0.7,
     parent: pages.gestion,
@@ -150,7 +150,7 @@ export const guides = {
     description:
       "Las 10 categorías del OWASP Top 10 2025 explicadas para empresas: qué es cada riesgo, un ejemplo, su impacto y cómo prevenirlo.",
     ogTitle: "OWASP Top 10 (edición 2025) explicado para empresas",
-    lastModified: "2026-10-31",
+    lastModified: "2026-11-05",
     changeFrequency: "monthly",
     priority: 0.7,
     parent: pages.gestion,

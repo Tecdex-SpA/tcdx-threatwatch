@@ -26,7 +26,7 @@ export default function ComoFuncionaPage() {
       <PageHero
         page={page}
         title="Cómo funciona VULNERA"
-        answer="VULNERA automatiza las etapas repetibles del pentesting en cuatro pasos: defines el alcance autorizado, validas la propiedad de los activos, la plataforma ejecuta reconocimiento, descubrimiento y detección, y tú revisas los hallazgos priorizados para gestionar su corrección. Cada paso queda registrado."
+        answer="VULNERA está en desarrollo para apoyar evaluaciones técnicas autorizadas. Su flujo previsto incluye definir alcance, verificar propiedad y aprobación humana antes de cualquier ejecución. Los resultados y la trazabilidad requieren validación integral antes de habilitar el servicio."
       />
 
       <section className="prose-section">
@@ -42,17 +42,17 @@ export default function ComoFuncionaPage() {
           <h2>Las cuatro etapas</h2>
           <ContentTable head={["Etapa", "Qué ocurre"]} rows={stages} />
 
-          <h2>Automatiza lo repetible. Tu equipo se concentra en lo que importa.</h2>
+          <h2>Automatización prevista con control humano.</h2>
           <AutomationTable />
           <p>
             ¿Por qué esta división? Lo explicamos en la guía de{" "}
             <a href="/pentesting-automatizado/">pentesting automatizado</a>.
           </p>
 
-          <h2>Qué recibes</h2>
+          <h2>Información contemplada en el diseño</h2>
           <p>
-            Un resumen ejecutivo para gerencia y el detalle técnico para TI, con evidencia y
-            recomendación por hallazgo.
+            Se contempla ofrecer un resumen ejecutivo y detalle técnico con hallazgos y
+            recomendaciones. Estos entregables aún no están habilitados como servicio.
           </p>
 
           <h2>Control y autorización</h2>

@@ -64,10 +64,10 @@ export function DemoCta({ location }: { location: string }) {
     <section className="cta-section" data-location={location}>
       <div className="container cta-card">
         <div>
-          <p className="eyebrow light">Demo guiada</p>
-          <h2>Agenda tu demo de VULNERA.</h2>
+          <p className="eyebrow light">Información de VULNERA</p>
+          <h2>Solicita información sobre VULNERA.</h2>
         </div>
-        <a className="button primary" href="/#demo" data-cta="demo">Agenda tu demo</a>
+        <a className="button primary" href="/#demo" data-cta="demo">Solicitar información</a>
       </div>
     </section>
   );

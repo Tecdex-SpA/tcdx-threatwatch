@@ -36,14 +36,14 @@ export function SiteHeader() {
 
         <nav className="desktop-nav" aria-label="Navegación principal">
           {navLinks.map(([href, label]) => <a key={href} href={href}>{label}</a>)}
-          <a className="nav-button" href="/#demo" data-cta="demo">Agenda tu demo</a>
+          <a className="nav-button" href="/#demo" data-cta="demo">Solicitar información</a>
         </nav>
 
         <details className="mobile-nav">
           <summary aria-label="Abrir menú"><span /><span /><span /></summary>
           <nav aria-label="Navegación móvil">
             {navLinks.map(([href, label]) => <a key={href} href={href}>{label}</a>)}
-            <a href="/#demo" data-cta="demo">Agenda tu demo</a>
+            <a href="/#demo" data-cta="demo">Solicitar información</a>
           </nav>
         </details>
       </div>
@@ -81,7 +81,7 @@ export function SiteFooter() {
             <a href="/owasp-top-10/">OWASP Top 10</a>
             <a href="/preguntas-frecuentes/">Preguntas frecuentes</a>
             <a href="/#acceso-anticipado">Acceso anticipado</a>
-            <a href="/#demo" data-cta="demo">Agenda tu demo</a>
+            <a href="/#demo" data-cta="demo">Solicitar información</a>
           </div>
           <div>
             <h3>TECDEX</h3>

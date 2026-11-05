@@ -10,7 +10,7 @@ export type Source = [label: string, href?: string];
 /** Fecha del deploy de P1-9: alimenta la línea de autoría, el JSON-LD y el sitemap. */
 export const guideDates = {
   published: { iso: "2026-10-31", label: "31 de octubre de 2026" },
-  revised: { iso: "2026-10-31", label: "31 de octubre de 2026" },
+  revised: { iso: "2026-11-05", label: "5 de noviembre de 2026" },
 };
 
 export const pentestingFaqs: Faq[] = [
