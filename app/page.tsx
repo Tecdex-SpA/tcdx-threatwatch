@@ -168,7 +168,7 @@ export default function Page() {
               de gestión vive en TECDEX Compliance. VULNERA se desarrolla para aportar evidencia técnica; TECDEX
               Compliance está diseñado para vincularla a tus controles.
             </p>
-            <small>VULNERA aporta evidencia; no sustituye una certificación ISO.</small>
+            <small>El diseño de VULNERA contempla aportar evidencia técnica; no sustituye una certificación ISO.</small>
           </div>
           <a className="button primary" href="https://isos.tecdex.net/" target="_blank" rel="noopener">
             Conocer TECDEX Compliance <span aria-hidden="true">→</span>
