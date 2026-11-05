@@ -24,7 +24,7 @@ const problemWithout = [
 const problemWith = [
   "Un lugar para el alcance, los hallazgos y su corrección.",
   "Cada hallazgo con severidad, evidencia y recomendación.",
-  "Responsables y seguimiento hasta el cierre comprobado.",
+  "Seguimiento previsto de hallazgos y acciones de remediación.",
   "Trazabilidad del alcance, las autorizaciones y los resultados.",
 ];
 
@@ -96,11 +96,11 @@ export default function Page() {
         <div className="container">
           <div className="section-heading">
             <p className="eyebrow">Automatización con criterio</p>
-            <h2>Automatiza lo repetible. Tu equipo se concentra en lo que importa.</h2>
+            <h2>Automatización prevista con control humano.</h2>
             <p>
-              VULNERA ejecuta las etapas del pentesting que se repiten en cada evaluación, dentro
-              de un alcance aprobado. Así puedes evaluar con más frecuencia y reservar a los
-              especialistas para lo que exige criterio humano.
+              VULNERA está en desarrollo para apoyar etapas repetibles de evaluaciones
+              técnicas autorizadas. El objetivo es facilitar el seguimiento y reservar
+              a especialistas las decisiones que requieren criterio humano.
             </p>
           </div>
           <AutomationTable />
