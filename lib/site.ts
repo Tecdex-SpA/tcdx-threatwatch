@@ -21,7 +21,7 @@ export const siteConfig = {
   // Metadata de la home: doc 50 §1 (comunicación comercial v2). OG replica title/description.
   title: "Pentesting automatizado y gestión de vulnerabilidades | VULNERA",
   description:
-    "VULNERA automatiza las etapas repetibles del pentesting sobre los activos que autorizas y convierte cada hallazgo en un plan de corrección. Plataforma de TECDEX. Agenda tu demo.",
+    "VULNERA automatiza las etapas repetibles del pentesting sobre los activos que autorizas y convierte cada hallazgo en un plan de corrección. Plataforma de TECDEX. Solicita información.",
   ogImageAlt: "VULNERA by TECDEX",
   /** Bajada de marca del footer (doc 50 §2.6) */
   tagline: "Pentesting automatizado y gestión de vulnerabilidades, del hallazgo al cierre comprobado.",
@@ -93,7 +93,7 @@ export const pages = {
     name: "Inicio",
     title: siteConfig.title,
     description: siteConfig.description,
-    lastModified: "2026-10-05",
+    lastModified: "2026-11-05",
     priority: 1,
   },
   comoFunciona: {
@@ -119,8 +119,8 @@ export const pages = {
     name: "Preguntas frecuentes",
     title: "Preguntas frecuentes sobre VULNERA | TECDEX",
     description:
-      "Preguntas frecuentes sobre VULNERA: qué parte del pentesting automatiza, qué activos puedes evaluar, qué obtiene tu empresa y cómo empezar con una demo.",
-    lastModified: "2026-10-31",
+      "Preguntas frecuentes sobre VULNERA: qué parte del pentesting automatiza, qué activos puedes evaluar, qué obtiene tu empresa y cómo solicitar información al equipo de TECDEX.",
+    lastModified: "2026-11-05",
     priority: 0.7,
   },
 } satisfies Record<string, SitePage>;
