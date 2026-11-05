@@ -57,7 +57,7 @@ export default function Page() {
               convierte cada hallazgo en un plan de corrección.
             </p>
             <div className="hero-actions">
-              <a className="button primary" href="#demo" data-cta="demo">Agenda tu demo</a>
+              <a className="button primary" href="#demo" data-cta="demo">Solicitar información</a>
               <a className="button ghost" href="#como-funciona">Ver cómo funciona <span aria-hidden="true">→</span></a>
             </div>
             <div className="hero-trust">
@@ -152,11 +152,11 @@ export default function Page() {
             <p className="eyebrow">Acceso anticipado</p>
             <h2>Estamos incorporando a las primeras organizaciones.</h2>
             <p>
-              Agenda una demo, revisamos tu caso con el equipo de TECDEX y definimos juntos el
-              alcance inicial de tu evaluación.
+              Solicita información sobre VULNERA. El equipo de TECDEX revisará tu consulta y
+              te explicará el estado del producto y las opciones disponibles.
             </p>
           </div>
-          <a className="button primary" href="#demo" data-cta="demo">Agenda tu demo</a>
+          <a className="button primary" href="#demo" data-cta="demo">Solicitar información</a>
         </div>
       </section>
 
@@ -181,17 +181,17 @@ export default function Page() {
       <section id="demo" className="section contact-section" data-location="demo">
         <div className="container contact-grid">
           <div className="contact-copy">
-            <p className="eyebrow">Demo guiada</p>
-            <h2>Agenda tu demo de VULNERA.</h2>
+            <p className="eyebrow">Contacto</p>
+            <h2>Solicita información sobre VULNERA.</h2>
             <p className="contact-lead">
-              Cuéntanos qué activos necesitas evaluar. Un especialista de TECDEX revisará tu caso y
-              te contactará para coordinar la demo y el alcance inicial.
+              Cuéntanos qué necesitas conocer. El equipo de TECDEX revisará tu solicitud y
+              te contactará para responder tus consultas.
             </p>
             <ul className="contact-benefits">
               <li><CheckIcon /><span>Revisión de tu caso</span></li>
-              <li><CheckIcon /><span>Definición de alcance inicial</span></li>
-              <li><CheckIcon /><span>Validación de autorización</span></li>
-              <li><CheckIcon /><span>Demo guiada de la plataforma</span></li>
+              <li><CheckIcon /><span>Orientación sobre alcance y autorizaciones</span></li>
+              <li><CheckIcon /><span>Información del proceso de autorización</span></li>
+              <li><CheckIcon /><span>Estado y próximos pasos del producto</span></li>
             </ul>
             <div className="direct-contact">
               <span>¿Prefieres contacto directo?</span>
