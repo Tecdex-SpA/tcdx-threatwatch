@@ -4,6 +4,6 @@
 export const cycleSteps: [number: string, title: string, text: string][] = [
   ["01", "Definir el alcance", "Registras dominios, IPs, APIs y servicios que se pueden evaluar."],
   ["02", "Validar autorización", "Se confirma propiedad o evidencia verificable antes de cualquier revisión."],
-  ["03", "Automatizar la evaluación", "VULNERA ejecuta reconocimiento, descubrimiento y detección dentro del alcance aprobado."],
+  ["03", "Automatizar la evaluación", "VULNERA está en desarrollo para apoyar evaluaciones técnicas autorizadas."],
   ["04", "Priorizar y cerrar", "La evidencia se convierte en decisiones, responsables y seguimiento."],
 ];
