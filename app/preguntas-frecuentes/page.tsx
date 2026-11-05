@@ -22,7 +22,7 @@ export default function PreguntasPage() {
       <PageHero
         page={page}
         title="Preguntas frecuentes sobre VULNERA"
-        answer="Respuestas directas sobre VULNERA: qué parte del pentesting automatiza, qué activos puedes evaluar, qué obtiene tu empresa, cómo empezar y cómo se relaciona con auditorías ISO 27001 y la Ley 21.663. Si tu duda no está aquí, agenda una demo y la revisamos con tu caso."
+        answer="Respuestas directas sobre VULNERA: qué parte del pentesting automatiza, qué activos puedes evaluar, qué obtiene tu empresa, cómo empezar y cómo se relaciona con auditorías ISO 27001 y la Ley 21.663. Si tu duda no está aquí, solicita información y revisaremos tu consulta."
       />
 
       <section className="prose-section">
