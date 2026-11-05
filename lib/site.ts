@@ -138,7 +138,7 @@ export const guides = {
     description:
       "Qué es el pentesting automatizado, qué etapas se automatizan y en qué se diferencia del pentest manual y del escaneo de vulnerabilidades.",
     ogTitle: "Pentesting automatizado: qué es y en qué se diferencia del pentest manual",
-    lastModified: "2026-10-31",
+    lastModified: "2026-11-05",
     changeFrequency: "monthly",
     priority: 0.7,
     parent: pages.gestion,
@@ -150,7 +150,7 @@ export const guides = {
     description:
       "Las 10 categorías del OWASP Top 10 2025 explicadas para empresas: qué es cada riesgo, un ejemplo, su impacto y cómo prevenirlo.",
     ogTitle: "OWASP Top 10 (edición 2025) explicado para empresas",
-    lastModified: "2026-10-31",
+    lastModified: "2026-11-05",
     changeFrequency: "monthly",
     priority: 0.7,
     parent: pages.gestion,
