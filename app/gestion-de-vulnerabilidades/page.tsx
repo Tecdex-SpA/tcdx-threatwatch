@@ -92,13 +92,13 @@ export default function GestionPage() {
             21.663 en Chile piden evidencia de que este proceso existe y se mantiene. Ese sistema
             de gestión vive en{" "}
             <a href="https://isos.tecdex.net/" target="_blank" rel="noopener">TECDEX Compliance</a>;
-            VULNERA aporta la evidencia técnica que lo alimenta.
+            el diseño de VULNERA contempla aportar evidencia técnica para ese proceso.
           </p>
 
           <h2>Cómo ayuda VULNERA</h2>
           <p>
-            VULNERA reúne alcance, hallazgos, remediación y evidencia en una sola plataforma,
-            para que la gestión no dependa de planillas ni correos.
+            VULNERA está en desarrollo con el objetivo de reunir alcance, hallazgos y
+            recomendaciones de remediación. Su disponibilidad depende de validación integral.
           </p>
           </article>
         </div>
