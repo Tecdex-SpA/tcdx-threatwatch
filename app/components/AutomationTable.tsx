@@ -15,7 +15,7 @@ export function AutomationTable() {
         <table className="content-table automation-table">
           <thead>
             <tr>
-              <th scope="col">VULNERA automatiza</th>
+              <th scope="col">Automatización prevista en VULNERA</th>
               <th scope="col">Tu equipo o tu especialista decide</th>
             </tr>
           </thead>
